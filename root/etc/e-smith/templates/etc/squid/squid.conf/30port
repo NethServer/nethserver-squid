@@ -1,0 +1,10 @@
+# Squid normally listens to port 3128
+{
+   my $port = squid{'TCPPort'} || "3128";
+   my $mode = squid{'Mode'} || "manual";
+   if ($mode eq 'transparent') {
+       $OUT.="http_port $port transparent\n";
+   } else {
+       $OUT.="http_port $port\n";
+   }
+}

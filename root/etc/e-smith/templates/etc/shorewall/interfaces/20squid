@@ -1,0 +1,6 @@
+{
+    $mode = $squid{'Mode'} || 'manual';
+    if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
+        $OUT.="-\tlo\t-";
+    }
+}

@@ -1,0 +1,2 @@
+acl NO-CACHE-SITES dstdomain "/etc/squid/no-cache"
+no_cache deny NO-CACHE-SITES

@@ -9,6 +9,9 @@
     my $ndb = esmith::NetworksDB->open_ro();
     my @localAccess = $ndb->local_access_spec();
     foreach my $net (@localAccess) {
+        next unless ($net ne "127.0.0.1");
+        my @tmp = split('/',$net);
+        $net = esmith::util::computeLocalNetworkShortSpec($tmp[0],$tmp[1]);
         $OUT.="acl localnet src $net\n";
     }
 }

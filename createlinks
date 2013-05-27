@@ -21,6 +21,7 @@
 #
 
 use strict;
+use esmith::Build::CreateLinks  qw(:all);
 
 #--------------------------------------------------
 # actions for nethserver-squid-update event
@@ -30,5 +31,18 @@ my $event = "nethserver-squid-update";
 
 event_actions($event, 'initialize-default-databases' => '00');
 templates2events("/etc/squid/squid.conf",  $event);
+templates2events("/etc/squid/no-cache",  $event);
 event_services($event, 'squid' => 'restart');
+
+#--------------------------------------------------
+# actions for nethserver-squid-save event
+#--------------------------------------------------
+
+my $event = "nethserver-squid-save";
+
+event_actions($event, 'initialize-default-databases' => '00',
+                      'firewall-adjust' => 10);
+templates2events("/etc/squid/squid.conf",  $event);
+templates2events("/etc/squid/no-cache",  $event);
+event_services($event, 'squid' => 'reload');
 

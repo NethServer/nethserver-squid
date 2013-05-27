@@ -1,0 +1,8 @@
+{
+    my $nocache = $squid{'NoCache'} || "";
+    return "" unless ($nocache ne "");
+    my @list = split(',',$nocache);
+    foreach my $site (@list) {
+        $OUT.="$site\n";
+    }
+}

@@ -1,10 +1,21 @@
-# Squid normally listens to port 3128
 {
-   my $port = squid{'TCPPort'} || "3128";
-   my $mode = squid{'Mode'} || "manual";
+   my $portlist = $squid{'TCPPorts'} || "3128,3129,3130";
+   my @ports = split(',',$portlist);
+   my $mode = $squid{'Mode'} || "manual";
+   $OUT.="# Always enable manual proxy\n";
+   $OUT.="http_port ".$ports[0]."\n";
    if ($mode eq 'transparent') {
-       $OUT.="http_port $port transparent\n";
-   } else {
-       $OUT.="http_port $port\n";
+       $OUT.="# Enable trasparent proxy\n";
+       $OUT.="http_port ".$ports[1]." tproxy\n";
+   } elsif ($mode eq 'transparent_ssl') {
+       $OUT.="# Enable trasparent proxy\n";
+       $OUT.="http_port ".$ports[1]." tproxy\n";
+$OUT.="
+# Enable ssl man-in-the-middle with default self-signed certs
+https_port ".$ports[2]." tproxy ssl-bump generate-host-certificates=on dynamic_cert_mem_cache_size=4MB  cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tls/private/NSRV.key
+always_direct allow all
+ssl_bump server-first all
+sslproxy_cert_error allow all
+sslproxy_cert_adapt setCommonName ssl::certDomainMismatch";
    }
 }

@@ -1,0 +1,11 @@
+{
+    my $parent = $squid{'ParentProxy'} || "";
+    return "" unless ($parent ne "");
+    my @tmp = split(':',$parent);
+    if (!defined($tmp[1])) {
+        $tmp[1] = "3128"
+    }
+    $OUT.="\n# Parent proxy \n";
+    $OUT.="cache_peer ".$tmp[0]." parent ".$tmp[1]." 0 no-query no-digest\n";
+    $OUT.="never_direct allow all\n";
+}

@@ -1,0 +1,7 @@
+{
+    $mode = $squid{'Mode'} || 'manual';
+    if ($mode eq 'transparent') {
+        $OUT.="# Squid: accept connection from firewall to external sites\n";
+        $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80";
+    }
+}

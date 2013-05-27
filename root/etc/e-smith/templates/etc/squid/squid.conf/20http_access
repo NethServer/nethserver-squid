@@ -20,10 +20,25 @@ http_access deny manager
 # INSERT YOUR OWN RULE(S) HERE TO ALLOW ACCESS FROM YOUR CLIENTS
 #
 
-# Example rule allowing access from your local networks.
-# Adapt localnet in the ACL section to list your (internal) IP networks
-# from where browsing should be allowed
-http_access allow localnet
+{
+   my $mode = $squid{'Mode'} || "manual";
+   my $fqdn = "$SystemName.$DomainName";
+   if ($mode eq 'authenticated') {
+       $OUT.="
+# Authentication required
+auth_param basic program /usr/lib64/squid/basic_pam_auth
+auth_param basic children 5
+auth_param basic realm $fqdn
+auth_param basic credentialsttl 8 hours
+auth_param basic casesensitive on
+acl checkpw proxy_auth REQUIRED
+http_access allow checkpw all
+";
+   } else {
+# Allow all local networks
+       $OUT.="http_access allow localnet\n";
+   }
+}
 http_access allow localhost
 
 # And finally deny all other access to this proxy

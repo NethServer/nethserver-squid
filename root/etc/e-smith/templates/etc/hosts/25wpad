@@ -1,0 +1,5 @@
+{
+    my $status = $squid{'status'} || 'disabled';
+    return "" unless ($status eq 'enabled');
+    $OUT.="dhcp-option=252,http://$SystemName.$DomainName/wpad.dat\n";
+}

@@ -1,0 +1,7 @@
+{
+     my $LocalNetmask = $ndb->green()->prop('netmask') || '';
+     my $LocalIP = $ndb->green()->prop('ipaddr') || '';
+
+     $OUT.="    if (isInNet(host, \"$LocalIP\", \"$LocalNetmask\"))\n";
+     $OUT.="        return \"DIRECT\";\n";
+}

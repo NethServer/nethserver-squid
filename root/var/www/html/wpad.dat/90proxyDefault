@@ -1,0 +1,11 @@
+{    
+    my $enabled = $squid{status} || 'disabled';
+    my $portlist = $squid{'TCPPorts'} || "3128,3129,3130";
+    my @ports = split(',',$portlist);
+
+    my $target = ($enabled eq 'enabled') ?
+	"PROXY proxy.$DomainName:".$ports[0] :
+	"DIRECT";
+
+    $OUT = '	return "' . $target . '";';
+}

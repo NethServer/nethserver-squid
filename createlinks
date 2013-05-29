@@ -32,7 +32,7 @@ my $event = "nethserver-squid-update";
 event_actions($event, 'initialize-default-databases' => '00');
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/no-cache",  $event);
-templates2events("/etc/dnsmasq/dnsmasq.conf",  $event);
+templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);
 templates2events("/var/www/html/wpad.dat",  $event);
 event_services($event, 'squid' => 'reload');
@@ -49,7 +49,7 @@ event_actions($event, 'initialize-default-databases' => '00',
                       'firewall-adjust' => 10);
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/no-cache",  $event);
-templates2events("/etc/dnsmasq/dnsmasq.conf",  $event);
+templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);
 templates2events("/var/www/html/wpad.dat",  $event);
 event_services($event, 'squid' => 'reload');

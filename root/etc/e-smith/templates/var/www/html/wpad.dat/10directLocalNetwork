@@ -1,4 +1,6 @@
 {
+     use esmith::NetworksDB;
+     $ndb = esmith::NetworksDB->open_ro or warn("Could not open NetworksDB");
      my $LocalNetmask = $ndb->green()->prop('netmask') || '';
      my $LocalIP = $ndb->green()->prop('ipaddr') || '';
 

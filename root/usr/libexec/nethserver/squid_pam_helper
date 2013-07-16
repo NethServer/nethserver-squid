@@ -1,0 +1,5 @@
+#!/usr/bin/suidperl
+$ENV{'BASH_ENV'} = '';
+$ENV{'PATH'} = '/bin:/usr/bin:/usr/sbin:/sbin';
+$< = $>; # set real to effective uid
+system('/usr/lib64/squid/basic_pam_auth');

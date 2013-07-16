@@ -26,7 +26,7 @@ http_access deny manager
    if ($mode eq 'authenticated') {
        $OUT.="
 # Authentication required
-auth_param basic program /usr/lib64/squid/basic_pam_auth
+auth_param basic program /usr/libexec/nethserver/squid_pam_helper
 auth_param basic children 5
 auth_param basic realm $fqdn
 auth_param basic credentialsttl 8 hours

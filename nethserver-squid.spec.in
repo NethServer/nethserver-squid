@@ -36,6 +36,11 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Jul 19 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.2-1.ns6
+- Restart squid on nethserver-squid-save and nethserver-squid-update events #1733
+- Use perl setuid wrapper for pam authentitcation #1773
+- Add bypass rules for trasparent proxy (without web ui) #2072
+
 * Tue Jul 16 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.1-1.ns6
 - Add missing translations #1773
 

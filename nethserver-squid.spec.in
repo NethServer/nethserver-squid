@@ -36,6 +36,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Jul 26 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.3-1.ns6
+- Change /etc/squid.conf permissions #1959
+- Change wpad template fragment order in /etc/hosts #17
+
 * Fri Jul 19 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.2-1.ns6
 - Restart squid on nethserver-squid-save and nethserver-squid-update events #1733
 - Use perl setuid wrapper for pam authentitcation #1773

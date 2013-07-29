@@ -1,6 +1,8 @@
 {
     my $status = $squid{'status'} || 'disabled';
     return "" unless ($status eq 'enabled');
-    $OUT.="dhcp-option=252,http://$SystemName.$DomainName/wpad.dat\n";
+    $OUT.="#\n";
+    $OUT.="# 25wpad - Web Proxy Automatic Discovery (WPAD)\n";
+    $OUT.="#\n";
+    $OUT.="dhcp-option=252,http://$SystemName.$DomainName/wpad.dat\n\n\n";
 }
-

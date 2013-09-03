@@ -1,6 +1,9 @@
 {
     $mode = $squid{'Mode'} || 'manual';
-    if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
-        $OUT.="-\tlo\t-";
+    $status = $squid{'status'} || 'disabled';
+    if ($status eq 'enabled') {
+        if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
+            $OUT.="-\tlo\t-";
+        }
     }
 }

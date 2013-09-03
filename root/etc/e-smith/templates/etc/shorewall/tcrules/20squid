@@ -12,19 +12,21 @@
         $bypass = ":!$bypass";
     }
     $mode = $squid{'Mode'} || 'manual';
-    my $green_ip = $ndb->green->prop('ipaddr');
-    if ($mode eq 'transparent') {
-        if ($red ne '') {
-            $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t80\n";
+    $status = $squid{'status'} || 'disabled';
+    if ($status eq 'enabled') {
+        my $green_ip = $ndb->green->prop('ipaddr');
+        if ($mode eq 'transparent') {
+            if ($red ne '') {
+                $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t80\n";
+            }
+            $OUT.="TPROXY($tproxy_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t80\n";
+        } elsif ($mode eq 'transparent_ssl') {
+            if ($red ne '') {
+                $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t80\n";
+                $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t443\n";
+            }
+            $OUT.="TPROXY($tproxy_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t80\n";
+            $OUT.="TPROXY($https_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t443\n";
         }
-        $OUT.="TPROXY($tproxy_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t80\n";
-    } elsif ($mode eq 'transparent_ssl') {
-        if ($red ne '') {
-            $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t80\n";
-            $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t443\n";
-        }
-        $OUT.="TPROXY($tproxy_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t80\n";
-        $OUT.="TPROXY($https_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t443\n";
-
     }
 }

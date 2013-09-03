@@ -21,7 +21,7 @@ namespace NethServer\Module\Proxy;
  */
 
 /**
- * TODO: add component description here
+ * Handle bypass proxy rules by IP address
  *
  * @author Davide Principi <davide.principi@nethesis.it>
  * @since 1.0
@@ -64,6 +64,11 @@ class Bypass extends \Nethgui\Controller\TableController
         ;
 
         parent::initialize();
+    }
+
+    public function onParametersSaved(\Nethgui\Module\ModuleInterface $currentAction, $changes, $parameters)
+    {
+        $this->getPlatform()->signalEvent("nethserver-squid-save@post-process");
     }
 
 }

@@ -2,9 +2,11 @@
     $status = $squid{'status'} || 'disabled';
     $mode = $squid{'Mode'} || 'manual';
     if ($status eq 'enabled') {
-        if ($mode eq 'transparent') {
-            $OUT.="# Squid: accept connection from firewall to external sites\n";
-            $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80";
+        if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
+            $OUT.="# Squid: accept HTTP/S traffic from/to firewall\n";
+            $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
+            $OUT.="ACCEPT\tloc\t\$FW\ttcp\t80\n";
+            $OUT.="ACCEPT\tloc\t\$FW\ttcp\t443";
         }
     }
 }

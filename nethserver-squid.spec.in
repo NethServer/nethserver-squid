@@ -36,6 +36,11 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Wed Oct 16 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.4-1.ns6
+- Add proxy bypass rules #2072
+- Allow web traffic when Squid mode is transparent and disabled #2111
+- Db defaults: remove Runlevels prop #2067
+
 * Fri Jul 26 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.3-1.ns6
 - Change /etc/squid.conf permissions #1959
 - Change wpad template fragment order in /etc/hosts #17

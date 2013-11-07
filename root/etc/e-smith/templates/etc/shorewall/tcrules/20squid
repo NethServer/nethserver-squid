@@ -1,7 +1,6 @@
 {
     use esmith::NetworksDB;
     my $ndb = esmith::NetworksDB->open_ro();
-    my $red = $ndb->get_by_role('red') || '';
     my $portlist = $squid{'TCPPorts'} || "3128,3129,3130";
     my @ports = split(',',$portlist);
     my $http_port = $ports[0];
@@ -16,14 +15,14 @@
     if ($status eq 'enabled') {
         my $green_ip = $ndb->green->prop('ipaddr');
         if ($mode eq 'transparent') {
-            if ($red ne '') {
-                $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t80\n";
+            foreach ($ndb->get_by_role('red')) {
+                $OUT.="DIVERT\t".$_->key."\t0.0.0.0/0\ttcp\t-\t80\n";
             }
             $OUT.="TPROXY($tproxy_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t80\n";
         } elsif ($mode eq 'transparent_ssl') {
-            if ($red ne '') {
-                $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t80\n";
-                $OUT.="DIVERT\t".$red->key."\t0.0.0.0/0\ttcp\t-\t443\n";
+            foreach ($ndb->get_by_role('red')) {
+                $OUT.="DIVERT\t".$_->key."\t0.0.0.0/0\ttcp\t-\t80\n";
+                $OUT.="DIVERT\t".$_->key."\t0.0.0.0/0\ttcp\t-\t443\n";
             }
             $OUT.="TPROXY($tproxy_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t80\n";
             $OUT.="TPROXY($https_port)\t".$ndb->green->key."$bypass\t!$green_ip\ttcp\t443\n";

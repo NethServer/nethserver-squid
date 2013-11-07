@@ -3,7 +3,8 @@
     $status = $squid{'status'} || 'disabled';
     if ($status eq 'enabled') {
         if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
-            $OUT.="Tproxy\t1\t-\t-\tlo\t-\ttproxy";
+            $OUT.="Tproxy\t$number\t-\t-\tlo\t-\ttproxy";
+            $number++;
         }
     }
 }

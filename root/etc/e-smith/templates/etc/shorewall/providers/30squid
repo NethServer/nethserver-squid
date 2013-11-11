@@ -1,0 +1,15 @@
+{
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    my $number = 1;
+    my $providers =  $ndb->get_all_by_prop('type' => 'provider');
+    $providers++; # first line after providers
+    $mode = $squid{'Mode'} || 'manual';
+    $status = $squid{'status'} || 'disabled';
+    if ($status eq 'enabled') {
+        if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
+            $OUT.="Tproxy\t$providers\t-\t-\tlo\t-\ttproxy";
+            $number++;
+        }
+    }
+}

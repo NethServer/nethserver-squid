@@ -35,6 +35,7 @@ templates2events("/etc/squid/no-cache",  $event);
 templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);
 templates2events("/var/www/html/wpad.dat",  $event);
+templates2events("/etc/sysconfig/squid",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
 event_services($event, 'dnsmasq' => 'reload');
@@ -52,7 +53,29 @@ templates2events("/etc/squid/no-cache",  $event);
 templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);
 templates2events("/var/www/html/wpad.dat",  $event);
+templates2events("/etc/sysconfig/squid",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
 event_services($event, 'dnsmasq' => 'reload');
 
+#
+# nethserver-samba-save event
+#
+event_templates("nethserver-samba-save", qw(
+    /etc/squid/squid.conf
+    /etc/sysconfig/squid
+));
+event_services("nethserver-samba-save", qw(
+   squid reload
+));
+
+#
+# nethserver-samba-update event
+#
+event_templates("nethserver-samba-update", qw(
+    /etc/squid/squid.conf
+    /etc/sysconfig/squid
+));
+event_services("nethserver-samba-update", qw(
+    squid reload
+));

@@ -26,17 +26,27 @@ http_access deny manager
    if ($mode eq 'authenticated') {
        $OUT.="
 # Authentication required
+# BASIC
 auth_param basic program /usr/libexec/nethserver/squid_pam_helper
 auth_param basic children 5
 auth_param basic realm $fqdn
 auth_param basic credentialsttl 8 hours
-auth_param basic casesensitive on
-acl checkpw proxy_auth REQUIRED
-http_access allow checkpw all
-";
+auth_param basic casesensitive on";
+       
+       if(defined $smb && $smb{'ServerRole'} eq 'ADS') {
+	   $OUT.="\n
+# Negotiate (SPNEGO/GSSAPI)
+auth_param negotiate program /usr/lib64/squid/negotiate_kerberos_auth
+auth_param negotiate children 10
+auth_param negotiate keep_alive on";
+       }
+
+       $OUT.="\n
+acl authenticated proxy_auth REQUIRED
+http_access allow authenticated";
    } else {
 # Allow all local networks
-       $OUT.="http_access allow localnet\n";
+       $OUT.="http_access allow localnet";
    }
 }
 http_access allow localhost

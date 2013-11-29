@@ -29,7 +29,11 @@ use esmith::Build::CreateLinks  qw(:all);
 
 my $event = "nethserver-squid-update";
 
-event_actions($event, 'initialize-default-databases' => '00');
+event_actions($event, qw(
+   initialize-default-databases 00
+   nethserver-squid-conf 20
+));
+
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/no-cache",  $event);
 templates2events("/etc/dnsmasq.conf",  $event);
@@ -46,8 +50,10 @@ event_services($event, 'dnsmasq' => 'reload');
 
 my $event = "nethserver-squid-save";
 
-event_actions($event, 'initialize-default-databases' => '00',
-                      'firewall-adjust' => 10);
+event_actions($event, qw(
+   firewall-adjust 30
+));
+
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/no-cache",  $event);
 templates2events("/etc/dnsmasq.conf",  $event);
@@ -59,23 +65,20 @@ event_services($event, 'httpd' => 'reload');
 event_services($event, 'dnsmasq' => 'reload');
 
 #
-# nethserver-samba-save event
+# nethserver-samba-{save,update,adsjoin) events
 #
-event_templates("nethserver-samba-save", qw(
-    /etc/squid/squid.conf
-    /etc/sysconfig/squid
-));
-event_services("nethserver-samba-save", qw(
-   squid reload
-));
+foreach (qw(
+    nethserver-samba-save
+    nethserver-samba-update
+    nethserver-samba-adsjoin
+)) {
+    event_templates($_, qw(
+        /etc/squid/squid.conf
+        /etc/sysconfig/squid
+    ));
+    event_services($_, qw(
+       squid restart
+    ));
+}
 
-#
-# nethserver-samba-update event
-#
-event_templates("nethserver-samba-update", qw(
-    /etc/squid/squid.conf
-    /etc/sysconfig/squid
-));
-event_services("nethserver-samba-update", qw(
-    squid reload
-));
+

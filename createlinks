@@ -81,4 +81,15 @@ foreach (qw(
     ));
 }
 
-
+#
+# Invalidate credentials cache when user account state changes
+#
+foreach (qw(
+    password-modify
+    user-lock
+    user-unlock
+)) {
+    event_services($_, qw(
+       squid reload
+));
+}

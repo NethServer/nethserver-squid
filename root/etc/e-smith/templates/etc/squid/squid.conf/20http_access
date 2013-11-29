@@ -24,14 +24,16 @@ http_access deny manager
    my $mode = $squid{'Mode'} || "manual";
    my $fqdn = "$SystemName.$DomainName";
    if ($mode eq 'authenticated') {
-       $OUT.="
-# Authentication required
-# BASIC
-auth_param basic program /usr/libexec/nethserver/squid_pam_helper
+       $OUT .= "# Authentication required\n";
+       if(defined $slapd && $slapd{'status'} eq 'enabled') {
+	   $OUT.="\n
+# BASIC (LDAP)
+auth_param basic program /usr/lib64/squid/basic_ldap_auth -b ou=People,dc=directory,dc=nh localhost
 auth_param basic children 5
 auth_param basic realm $fqdn
-auth_param basic credentialsttl 8 hours
+auth_param basic credentialsttl 1 hours
 auth_param basic casesensitive on";
+       } 
        
        if(defined $smb && $smb{'ServerRole'} eq 'ADS') {
 	   $OUT.="\n

@@ -36,6 +36,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Wed Dec 18 2013 Davide Principi <davide.principi@nethesis.it> - 1.1.0-1.ns6
+- Kerberos keytab file is missing for new services - Bug #2407 [NethServer]
+- Squid GSSAPI/GSS-Negotiate (Kerberos) authentication - Feature #1987 [NethServer]
+
 * Wed Oct 16 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.4-1.ns6
 - Add proxy bypass rules #2072
 - Allow web traffic when Squid mode is transparent and disabled #2111

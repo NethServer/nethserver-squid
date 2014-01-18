@@ -5,7 +5,7 @@
 $L['authenticated_label'] = 'Autenticato';
 $L['manual_label'] = 'Manuale';
 $L['Mode_label'] = 'Modalità';
-$L['ParentProxy_label'] = 'Parent proxy';
+$L['ParentProxy_label'] = 'Proxy di secondo livello';
 $L['ProxyAdvanced_label'] = 'Opzioni avanzate';
 $L['proxy_label'] = 'proxy';
 $L['Squid_status'] = 'Stato Squid';

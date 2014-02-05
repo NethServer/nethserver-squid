@@ -37,6 +37,12 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Wed Feb 05 2014 Davide Principi <davide.principi@nethesis.it> - 1.1.1-1.ns6
+- NethCamp 2014 - Task #2618 [NethServer]
+- Kerberos keytab file is missing for new services - Bug #2407 [NethServer]
+- Squid GSSAPI/GSS-Negotiate (Kerberos) authentication - Feature #1987 [NethServer]
+- Update all inline help documentation - Task #1780 [NethServer]
+
 * Wed Dec 18 2013 Davide Principi <davide.principi@nethesis.it> - 1.1.0-1.ns6
 - Kerberos keytab file is missing for new services - Bug #2407 [NethServer]
 - Squid GSSAPI/GSS-Negotiate (Kerberos) authentication - Feature #1987 [NethServer]

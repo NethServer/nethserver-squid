@@ -1,0 +1,3 @@
+# And finally deny all other access to this proxy
+http_access deny all
+

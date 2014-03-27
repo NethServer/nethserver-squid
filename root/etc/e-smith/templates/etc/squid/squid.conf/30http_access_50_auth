@@ -1,0 +1,11 @@
+{
+   my $mode = $squid{'Mode'} || "manual";
+   if ($mode eq 'authenticated') {
+      $OUT.="# Authentication required\n";
+      $OUT.="http_access allow authenticated";
+   } else {
+      $OUT.="# NO authentication, Allow all local networks\n";
+      $OUT.="http_access allow localnet";
+   }
+}
+

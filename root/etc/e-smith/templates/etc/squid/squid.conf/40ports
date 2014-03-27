@@ -19,3 +19,4 @@ sslproxy_cert_error allow all
 sslproxy_cert_adapt setCommonName ssl::certDomainMismatch";
    }
 }
+

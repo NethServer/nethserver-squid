@@ -1,25 +1,3 @@
-#
-# Recommended minimum Access Permission configuration:
-#
-# Deny requests to certain unsafe ports
-http_access deny !Safe_ports
-
-# Deny CONNECT to other than secure SSL ports
-http_access deny CONNECT !SSL_ports
-
-# Only allow cachemgr access from localhost
-http_access allow localhost manager
-http_access deny manager
-
-# We strongly recommend the following be uncommented to protect innocent
-# web applications running on the proxy server who think the only
-# one who can access services on "localhost" is a local user
-#http_access deny to_localhost
-
-#
-# INSERT YOUR OWN RULE(S) HERE TO ALLOW ACCESS FROM YOUR CLIENTS
-#
-
 {
    my $mode = $squid{'Mode'} || "manual";
    my $fqdn = "$SystemName.$DomainName";
@@ -51,16 +29,7 @@ auth_param ntlm children 30\n";
 	   }
        } 
 
-       $OUT.="
-acl authenticated proxy_auth REQUIRED
-http_access allow authenticated";
-   } else {
-# Allow all local networks
-       $OUT.="http_access allow localnet";
+       $OUT.="acl authenticated proxy_auth REQUIRED\n";
    }
 }
-http_access allow localhost
-
-# And finally deny all other access to this proxy
-http_access deny all
 

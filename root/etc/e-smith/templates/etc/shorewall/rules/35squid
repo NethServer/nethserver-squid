@@ -1,12 +1,36 @@
 {
-    $status = $squid{'status'} || 'disabled';
-    $mode = $squid{'Mode'} || 'manual';
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    my $status = $squid{'status'} || 'disabled';
+    my $mode = $squid{'Mode'} || 'manual';
+    my $block = $squid{'PortBlock'} || 'disabled';
+    
+    my %zones;
+    foreach my $i ($ndb->interfaces) {
+        my $role = $i->prop('role') || '';
+        next if ($role eq '' || $role eq 'red' || $role eq 'slave' || $role eq 'bridged' || $role eq 'alias');
+        my $zone = substr($role, 0, 5); #truncate zone name to 5 chars
+        if ($role eq 'green') { # rename green to loc
+            $zone = 'loc';
+        }
+        $zones{$zone} = ''; # avoid duplicate policies
+    }
+
+
     if ($status eq 'enabled') {
         if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
-            $OUT.="# Squid: accept HTTP/S traffic from/to firewall\n";
+            $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall\n#\n";
             $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t80\n";
-            $OUT.="ACCEPT\tloc\t\$FW\ttcp\t443";
+            $OUT.="ACCEPT\tloc\t\$FW\ttcp\t443\n";
         }
     }
+    
+    if ($block eq 'enabled') {
+        # generate rules for all zones
+        foreach my $z (keys %zones) {
+            $OUT .= "#\n# Block HTTP/HTTPS from $z to net\n#\n";
+            $OUT .= "REJECT $z\t\tnet\ttcp\t80,443\n";
+        }
+   }
 }

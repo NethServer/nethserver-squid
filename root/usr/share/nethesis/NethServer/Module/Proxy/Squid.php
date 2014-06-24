@@ -41,19 +41,10 @@ class Squid extends \Nethgui\Controller\AbstractController
 
         $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'squid', 'status'));
         $this->declareParameter('Mode', $this->createValidator()->memberOf($this->modes), array('configuration', 'squid', 'Mode'));
-        $this->declareParameter('ParentProxy', Validate::ANYTHING, array('configuration', 'squid', 'ParentProxy'));
+        $this->declareParameter('ParentProxy', Validate::IPv4_OR_EMPTY, array('configuration', 'squid', 'ParentProxy'));
+        $this->declareParameter('PortBlock', Validate::SERVICESTATUS, array('configuration', 'squid', 'PortBlock'));
     }
 
-
-    public function prepareView(\Nethgui\View\ViewInterface $view)
-    {
-        parent::prepareView($view);
-        $view['ModeDatasource'] = array_map(function($fmt) use ($view) {
-                                return array($fmt, $view->translate($fmt . '_label'));
-        }, $this->modes);
-
-    }
-    
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-squid-save@post-process');

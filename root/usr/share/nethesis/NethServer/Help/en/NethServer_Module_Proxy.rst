@@ -41,7 +41,7 @@ Filter
 ======
 
 The content filter is used to control web browsing and
-site blocking using some variables such as keywords, ip
+site blocking using some variables such as keywords, IP
 address, internal users, or evaluating the content of the web page,
 or file extensions. With this tool it is possible for example to enable
 access only on some desired sites (such as those of interest

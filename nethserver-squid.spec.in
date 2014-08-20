@@ -37,6 +37,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Wed Aug 20 2014 Davide Principi <davide.principi@nethesis.it> - 1.2.0-1.ns6
+- Proxy: block ports 80 (http) and 443 (https) - Feature #2777 [NethServer]
+- Web proxy: refactor squid.conf template - Enhancement #2704 [NethServer]
+
 * Wed Feb 05 2014 Davide Principi <davide.principi@nethesis.it> - 1.1.1-1.ns6
 - NethCamp 2014 - Task #2618 [NethServer]
 - Kerberos keytab file is missing for new services - Bug #2407 [NethServer]

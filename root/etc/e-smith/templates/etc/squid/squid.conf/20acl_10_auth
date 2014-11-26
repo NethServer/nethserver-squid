@@ -1,8 +1,8 @@
 {
    use esmith::NetworksDB;
    my $ndb = esmith::NetworksDB->open_ro();
-   my $green_mode = $squid{'GreenMode'} || "none";
-   my $blue_mode = $squid{'BlueMode'} || "none";
+   my $green_mode = $squid{'GreenMode'} || "manual";
+   my $blue_mode = $squid{'BlueMode'} || "manual";
    my $fqdn = "$SystemName.$DomainName";
    if ($green_mode eq 'authenticated' || (defined($ndb->blue()) && $blue_mode eq 'authenticated')) {
        $OUT .= "# Authentication required\n\n";

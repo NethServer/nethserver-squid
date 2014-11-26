@@ -2,8 +2,8 @@
     use esmith::NetworksDB;
     my $ndb = esmith::NetworksDB->open_ro();
     my $status = $squid{'status'} || 'disabled';
-    my $green_mode = $squid{'GreenMode'} || 'none';
-    my $blue_mode = $squid{'BlueMode'} || 'none';
+    my $green_mode = $squid{'GreenMode'} || 'manual';
+    my $blue_mode = $squid{'BlueMode'} || 'manual';
     my $block = $squid{'PortBlock'} || 'disabled';
     
     my %zones;

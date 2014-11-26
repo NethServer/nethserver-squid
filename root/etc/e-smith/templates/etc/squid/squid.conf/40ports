@@ -3,8 +3,8 @@
    my $ndb = esmith::NetworksDB->open_ro();
    my $portlist = $squid{'TCPPorts'} || "3128,3129,3130";
    my @ports = split(',',$portlist);
-   my $green_mode = $squid{'GreenMode'} || "none";
-   my $blue_mode = $squid{'BlueMode'} || "none";
+   my $green_mode = $squid{'GreenMode'} || "manual";
+   my $blue_mode = $squid{'BlueMode'} || "manual";
 
    $OUT.="# Always enable manual proxy\n";
    $OUT.="http_port ".$ports[0]."\n";

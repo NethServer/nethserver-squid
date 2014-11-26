@@ -38,7 +38,8 @@ Blocca porte HTTP e HTTPS
 
 Proxy di secondo livello
     Inserire l'IP e la porta del parent proxy. La sintassi corretta è
-    Indirizzo_IP:porta .
+    Indirizzo_IP:porta.
+    *NON inserire* l'indirizzo IP di questo server.
 
 Filtro
 ======

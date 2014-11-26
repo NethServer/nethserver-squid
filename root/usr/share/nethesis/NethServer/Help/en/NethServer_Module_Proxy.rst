@@ -35,7 +35,8 @@ Block HTTP and HTTPS ports
 
 Parent proxy
     Enter the IP address and port of the parent proxy. The correct syntax is
-    IP_Address:port .
+    IP_Address:port.
+    *DO NOT* enter the IP address of this server.
 
 Filter
 ======

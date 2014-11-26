@@ -2,7 +2,8 @@
     use esmith::NetworksDB;
     my $ndb = esmith::NetworksDB->open_ro();
     my $status = $squid{'status'} || 'disabled';
-    my $mode = $squid{'Mode'} || 'manual';
+    my $green_mode = $squid{'GreenMode'} || 'none';
+    my $blue_mode = $squid{'BlueMode'} || 'none';
     my $block = $squid{'PortBlock'} || 'disabled';
     
     my %zones;
@@ -18,14 +19,25 @@
 
 
     if ($status eq 'enabled') {
-        if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
-            $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall\n#\n";
+        if ($green_mode eq 'transparent' || $green_mode eq 'transparent_ssl') {
+            $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall and green\n#\n";
             $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t80\n";
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t443\n";
         }
+        if (defined($ndb->blue())) {
+            $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall and blue\n#\n";
+            $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
+            $OUT.="ACCEPT\tblue\t\$FW\ttcp\t80\n";
+            $OUT.="ACCEPT\tblue\t\$FW\ttcp\t443\n";
+
+            my $ports = $squid{'TCPPorts'} || '';
+            foreach( split(/,/,$ports) {
+                $OUT.="ACCEPT\tblue\t\$FW\ttcp\t$_\n";
+            }
+        }
     }
-    
+
     if ($block eq 'enabled') {
         # generate rules for all zones
         foreach my $z (keys %zones) {
@@ -33,4 +45,5 @@
             $OUT .= "REJECT $z\t\tnet\ttcp\t80,443\n";
         }
    }
+    
 }

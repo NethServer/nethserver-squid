@@ -1,14 +1,19 @@
 {
+   use esmith::NetworksDB;
+   my $ndb = esmith::NetworksDB->open_ro();
    my $portlist = $squid{'TCPPorts'} || "3128,3129,3130";
    my @ports = split(',',$portlist);
-   my $mode = $squid{'Mode'} || "manual";
+   my $green_mode = $squid{'GreenMode'} || "none";
+   my $blue_mode = $squid{'BlueMode'} || "none";
+
    $OUT.="# Always enable manual proxy\n";
    $OUT.="http_port ".$ports[0]."\n";
-   if ($mode eq 'transparent') {
-       $OUT.="# Enable trasparent proxy\n";
+
+   if ($green_mode eq 'transparent' || (defined($ndb->blue()) && $blue_mode eq 'transparent')) {
+       $OUT.="# Enable transparent proxy\n";
        $OUT.="http_port ".$ports[1]." tproxy\n";
-   } elsif ($mode eq 'transparent_ssl') {
-       $OUT.="# Enable trasparent proxy\n";
+   } elsif ($green_mode eq 'transparent_ssl' || (defined($ndb->blue()) && $blue_mode eq 'transparent_ssl')) {
+       $OUT.="# Enable transparent proxy\n";
        $OUT.="http_port ".$ports[1]." tproxy\n";
 $OUT.="
 # Enable ssl man-in-the-middle with default self-signed certs

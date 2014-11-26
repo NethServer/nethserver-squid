@@ -1,11 +1,26 @@
 {
-   my $mode = $squid{'Mode'} || "manual";
-   if ($mode eq 'authenticated') {
-      $OUT.="# Authentication required\n";
-      $OUT.="http_access allow authenticated";
+   use esmith::NetworksDB;
+   my $ndb = esmith::NetworksDB->open_ro();
+   my $green_mode = $squid{'GreenMode'} || "none";
+   my $blue_mode = $squid{'BlueMode'} || "none";
+
+   if ($green_mode eq 'authenticated') {
+      $OUT.="# Authentication required on green and trusted networks\n";
+      $OUT.="http_access allow localnet authenticated\n";
    } else {
-      $OUT.="# NO authentication, Allow all local networks\n";
-      $OUT.="http_access allow localnet";
+      $OUT.="# No authentication on green and trusted networks\n";
+      $OUT.="http_access allow localnet\n";
    }
+  
+   if (defined($ndb->blue())) { 
+       if ($blue_mode eq 'authenticated') {
+          $OUT.="# Authentication required on blue\n";
+          $OUT.="http_access allow blue authenticated\n";
+       } else {
+          $OUT.="# No authentication on blue\n";
+          $OUT.="http_access allow blue\n";
+       }
+   }
+
 }
 

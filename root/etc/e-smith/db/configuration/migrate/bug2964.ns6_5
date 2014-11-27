@@ -3,8 +3,10 @@
     # bug2964 -- enable web proxy support on blue
     #            
 
-    my $mode = $DB->get_prop_and_delete('squid', 'Mode');
-    $DB->set_prop('squid','GreenMode',$mode);
+    my $mode = $DB->get_prop_and_delete('squid', 'Mode') || '';
+    if ($mode ne '') {
+        $DB->set_prop('squid','GreenMode',$mode);
+    }
 
     '';
 }

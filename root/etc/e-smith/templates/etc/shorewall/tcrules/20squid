@@ -29,8 +29,8 @@
             } elsif ($green_mode eq 'transparent_ssl') {
                 foreach my $r ($ndb->get_by_role('red')) {
                     my $red = $r->key;
-                    $OUT.="DIVERT\t$net\t0.0.0.0/0\ttcp\t-\t80\n";
-                    $OUT.="DIVERT\t$net\t0.0.0.0/0\ttcp\t-\t443\n";
+                    $OUT.="DIVERT\t$red\t0.0.0.0/0\ttcp\t-\t80\n";
+                    $OUT.="DIVERT\t$red\t0.0.0.0/0\ttcp\t-\t443\n";
                 }
                 $OUT.="TPROXY($tproxy_port)\t$net$bypass\t!$ip\ttcp\t80\n";
                 $OUT.="TPROXY($https_port)\t$net$bypass\t!$ip\ttcp\t443\n";
@@ -42,17 +42,17 @@
             my $ip = $_->prop('ipaddr') || next;
             my $mask = $_->prop('netmask') || next;
             my $net = esmith::util::computeLocalNetworkShortSpec($ip,$mask);
-            if ($green_mode eq 'transparent') {
+            if ($blue_mode eq 'transparent') {
                 foreach my $r ($ndb->get_by_role('red')) {
                     my $red = $r->key;
-                    $OUT.="DIVERT\t$net\t0.0.0.0/0\ttcp\t-\t80\n";
+                    $OUT.="DIVERT\t$red\t0.0.0.0/0\ttcp\t-\t80\n";
                 }
                 $OUT.="TPROXY($tproxy_port)\t$net$bypass\t!$ip\ttcp\t80\n";
-            } elsif ($green_mode eq 'transparent_ssl') {
+            } elsif ($blue_mode eq 'transparent_ssl') {
                 foreach my $r ($ndb->get_by_role('red')) {
                     my $red = $r->key;
-                    $OUT.="DIVERT\t$net\t0.0.0.0/0\ttcp\t-\t80\n";
-                    $OUT.="DIVERT\t$net\t0.0.0.0/0\ttcp\t-\t443\n";
+                    $OUT.="DIVERT\t$red\t0.0.0.0/0\ttcp\t-\t80\n";
+                    $OUT.="DIVERT\t$red\t0.0.0.0/0\ttcp\t-\t443\n";
                 }
                 $OUT.="TPROXY($tproxy_port)\t$net$bypass\t!$ip\ttcp\t80\n";
                 $OUT.="TPROXY($https_port)\t$net$bypass\t!$ip\ttcp\t443\n";

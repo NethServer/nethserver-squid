@@ -1,8 +1,12 @@
+#
+# 20squid
+#
 {
-    $mode = $squid{'Mode'} || 'manual';
+    $green_mode = $squid{'GreenMode'} || 'manual';
+    $blue_mode = $squid{'BlueMode'} || 'manual';
     $status = $squid{'status'} || 'disabled';
     if ($status eq 'enabled') {
-        if ($mode eq 'transparent' || $mode eq 'transparent_ssl') {
+        if ($green_mode eq 'transparent' || $green_mode eq 'transparent_ssl' || $blue_mode eq 'transparent' || $blue_mode eq 'transparent_ssl') {
             $OUT.="-\tlo\t-";
         }
     }

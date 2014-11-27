@@ -25,14 +25,14 @@
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t80\n";
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t443\n";
         }
-        if (defined($ndb->blue())) {
+        if (defined($ndb->blue()) && (($blue_mode eq 'transparent' || $blue_mode eq 'transparent_ssl'))) {
             $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall and blue\n#\n";
             $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
             $OUT.="ACCEPT\tblue\t\$FW\ttcp\t80\n";
             $OUT.="ACCEPT\tblue\t\$FW\ttcp\t443\n";
 
             my $ports = $squid{'TCPPorts'} || '';
-            foreach( split(/,/,$ports) {
+            foreach( split(/,/,$ports) ) {
                 $OUT.="ACCEPT\tblue\t\$FW\ttcp\t$_\n";
             }
         }

@@ -1,1 +1,1 @@
-shutdown_lifetime 1
+shutdown_lifetime 1 seconds

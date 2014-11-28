@@ -1,0 +1,8 @@
+{
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    if (defined($ndb->blue())) {
+        $OUT .= "# Block access to green from other networks\n";
+        $OUT .= "http_access deny self blue localnet_dst\n";
+    }
+}

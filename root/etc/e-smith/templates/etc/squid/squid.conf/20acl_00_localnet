@@ -9,6 +9,7 @@
         my @tmp = split('/',$net);
         $net = esmith::util::computeLocalNetworkShortSpec($tmp[0],$tmp[1]);
         $OUT.="acl localnet src $net\n";
+        $OUT.="acl localnet_dst src $net\n";
     }
     foreach ( $ndb->blue() ) {
         my $ip = $_->prop('ipaddr') || next;

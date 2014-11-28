@@ -1,0 +1,21 @@
+#
+# Skip url rewriter for local addresses
+#
+{
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    my $blue = '';
+    foreach ($ndb->green()) {
+        my $ip = $_->prop('ipaddr') || next;
+        $OUT .= "acl self dst $ip\n";
+    }
+    foreach ($ndb->blue()) {
+        my $ip = $_->prop('ipaddr') || next;
+        $OUT .= "acl self dst $ip\n";
+        $blue = ' blue ';
+    }
+
+    $OUT .= "acl self_port port 80\n";
+    $OUT .= "acl self_port port 443\n";
+    $OUT .= "url_rewrite_access deny self localnet $blue self_port\n";
+}

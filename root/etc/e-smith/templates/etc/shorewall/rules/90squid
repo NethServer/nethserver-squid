@@ -1,3 +1,6 @@
+#
+# 90squid
+#
 {
     use esmith::NetworksDB;
     my $ndb = esmith::NetworksDB->open_ro();
@@ -19,13 +22,21 @@
 
 
     if ($status eq 'enabled') {
-        if ($green_mode eq 'transparent' || $green_mode eq 'transparent_ssl') {
+        if ($green_mode =~ /transparent/) {
             $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall and green\n#\n";
             $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t80\n";
             $OUT.="ACCEPT\tloc\t\$FW\ttcp\t443\n";
+
+            $OUT .="?COMMENT transparent proxy on green for port 80\n";
+            $OUT.="REDIRECT\tloc\t3129\ttcp\t80\n";
+            if ($green_mode =~ /ssl/) {
+                $OUT .="?COMMENT transparent proxy on green for port 443\n";
+                $OUT.="REDIRECT\tloc\t3129\ttcp\t443\n";
+            }
+
         }
-        if (defined($ndb->blue()) && (($blue_mode eq 'transparent' || $blue_mode eq 'transparent_ssl'))) {
+        if (defined($ndb->blue()) && $blue_mode =~ /transparent/) {
             $OUT.="#\n# Squid: accept HTTP/S traffic from/to firewall and blue\n#\n";
             $OUT.="ACCEPT\t\$FW\tnet\ttcp\t80\n";
             $OUT.="ACCEPT\tblue\t\$FW\ttcp\t80\n";
@@ -34,6 +45,14 @@
             my $ports = $squid{'TCPPorts'} || '';
             foreach( split(/,/,$ports) ) {
                 $OUT.="ACCEPT\tblue\t\$FW\ttcp\t$_\n";
+            }
+
+
+            $OUT .="?COMMENT transparent proxy on blue for port 80\n";
+            $OUT.="REDIRECT\tblue\t3129\ttcp\t80\n";
+            if ($blue_mode =~ /ssl/) {
+                $OUT .="?COMMENT transparent proxy on blue for port 443\n";
+                $OUT.="REDIRECT\tloc\t3129\ttcp\t443\n";
             }
         }
     }

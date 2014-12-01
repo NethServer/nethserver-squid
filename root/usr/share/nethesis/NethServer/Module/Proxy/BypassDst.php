@@ -44,7 +44,7 @@ class BypassDst extends \Nethgui\Controller\TableController
         );
 
         $this
-            ->setTableAdapter($this->getPlatform()->getTableAdapter('proxy', 'bypass-dst'))
+            ->setTableAdapter($this->getPlatform()->getTableAdapter('fwrules', 'bypass-dst'))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\Proxy\BypassDst\Modify('update')) 
             ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))

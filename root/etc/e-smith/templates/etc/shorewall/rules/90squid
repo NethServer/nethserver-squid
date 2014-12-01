@@ -7,7 +7,7 @@
     use NethServer::Firewall;
     my $fw = new NethServer::Firewall();
     my $ndb = esmith::NetworksDB->open_ro();
-    my $pdb = esmith::ConfigDB->open_ro('proxy');
+    my $pdb = esmith::ConfigDB->open_ro('fwrules');
     my $status = $squid{'status'} || 'disabled';
     my $green_mode = $squid{'GreenMode'} || 'manual';
     my $blue_mode = $squid{'BlueMode'} || 'manual';

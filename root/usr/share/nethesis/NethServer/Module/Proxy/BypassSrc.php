@@ -44,7 +44,7 @@ class BypassSrc extends \Nethgui\Controller\TableController
         );
 
         $this
-            ->setTableAdapter($this->getPlatform()->getTableAdapter('proxy', 'bypass-src'))
+            ->setTableAdapter($this->getPlatform()->getTableAdapter('fwrules', 'bypass-src'))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\Proxy\BypassSrc\Modify('update')) 
             ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))

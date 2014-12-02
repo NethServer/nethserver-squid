@@ -4,8 +4,9 @@
     #
 
     # Add DNS aliases only if acting as resolver
-    my $role = $dns{role} || "";
-    if ($role eq 'resolver') {
+    use NethServer::Service;
+    my $s = new NethServer::Service('dnsmasq');
+    if( $s->is_owned() && $s->is_enabled() ) {
         push @hostnames, map { join('.', $_, $DomainName) } qw(wpad proxy) ;
     }
     '';

@@ -95,6 +95,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         parent::prepareView($view);
+        if($this->getIdentifier() != 'delete') {
+             $view->setTemplate('NethServer\Template\Proxy\BypassModify');
+        } else {
+             $view->setTemplate('Nethgui\Template\Table\Delete');
+        }
 
         $this->prepareVars();
 
@@ -103,11 +108,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $hosts = $this->arrayToDatasource($this->hosts,'host');
         $groups = $this->arrayToDatasource($this->hostGroups,'host-group');
         $view['HostDatasource'] = array(array($hosts,$h),array($groups,$hg));
-        $view->setTemplate('NethServer\Template\Proxy\BypassModify');
     }
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('firewall-adjust');
+        $this->getPlatform()->signalEvent('firewall-adjust &');
     }
 }

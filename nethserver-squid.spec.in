@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Dec 09 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.1-1.ns6
+- DNS: remove role property from dns db key - Enhancement #2915 [NethServer]
+
 * Wed Aug 20 2014 Davide Principi <davide.principi@nethesis.it> - 1.2.0-1.ns6
 - Proxy: block ports 80 (http) and 443 (https) - Feature #2777 [NethServer]
 - Web proxy: refactor squid.conf template - Enhancement #2704 [NethServer]

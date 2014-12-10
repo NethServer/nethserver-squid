@@ -1,0 +1,6 @@
+#
+# 90options
+#
+shutdown_lifetime 1 seconds
+buffered_logs on
+max_filedesc 16384

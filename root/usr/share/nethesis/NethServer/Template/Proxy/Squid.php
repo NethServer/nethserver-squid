@@ -20,6 +20,12 @@ echo $view->fieldsetSwitch('status', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
         ->insert($blue_modes)
         ->insert($view->checkbox('PortBlock', 'enabled')->setAttribute('uncheckedValue', 'disabled'));
 
+echo "<ul style='margin-bottom: 10px; margin-left: 5px; padding: 3px'><li>".$view->translate('ca_download')."</li><li><ul>";
+foreach ($view['ips'] as $ip) {
+    echo "<li><a href='http://$ip/proxy.crt'>http://$ip/proxy.crt</a></li>";
+}
+echo "</ul></li></ul>";
+
 echo $view->fieldset('', $view::FIELDSET_EXPANDABLE)->setAttribute('template', $T('ProxyAdvanced_label'))
     ->insert($view->textInput('ParentProxy')->setAttribute('placeholder','192.168.0.1:8080'));
 

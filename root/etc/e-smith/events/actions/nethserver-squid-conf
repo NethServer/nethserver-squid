@@ -36,4 +36,7 @@ fi
 # Delete unused ACL, can be removed in the future. Refs #2973
 rm -f /etc/squid/no-cache
 
+# Publish certificate for clients
+ln -s /etc/pki/tls/certs/NSRV.crt /var/www/html/proxy.crt
+
 exit 0

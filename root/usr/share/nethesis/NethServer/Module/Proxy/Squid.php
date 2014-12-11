@@ -46,6 +46,18 @@ class Squid extends \Nethgui\Controller\AbstractController
         $this->declareParameter('PortBlock', Validate::SERVICESTATUS, array('configuration', 'squid', 'PortBlock'));
     }
 
+    public function prepareView(\Nethgui\View\ViewInterface $view)
+    {
+        parent::prepareView($view);
+        $ips = array();
+        foreach ($this->getPlatform()->getDatabase('networks')->getAll() as $key => $values) {
+            if (isset($values['role']) && $values['role'] == 'green') {
+                $ips[] = $values['ipaddr'];
+            }
+        }
+        $view['ips'] = $ips;
+    }
+
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-squid-save@post-process');

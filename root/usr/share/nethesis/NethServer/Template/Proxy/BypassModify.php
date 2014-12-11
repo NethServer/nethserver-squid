@@ -1,6 +1,6 @@
 <?php
 
-echo $view->textInput('name');
+echo $view->textInput('name', ($view->getModule()->getIdentifier() == 'update' ? $view::STATE_READONLY : 0));
 echo $view->checkbox('status', 'enabled')
         ->setAttribute('template', $T('status'))
         ->setAttribute('uncheckedValue', 'disabled');

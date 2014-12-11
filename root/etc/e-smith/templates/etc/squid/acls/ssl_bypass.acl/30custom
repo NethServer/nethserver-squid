@@ -1,0 +1,8 @@
+{
+    my $sslbypass = $squid{'SSLBypass'} || "";
+    return "" unless ($sslbypass ne "");
+    my @list = split(',',$sslbypass);
+    foreach my $site (@list) {
+        $OUT.="$site\n";
+    }
+}

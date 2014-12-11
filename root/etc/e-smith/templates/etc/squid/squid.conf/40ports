@@ -15,15 +15,17 @@
    } elsif ($green_mode eq 'transparent_ssl' || (defined($ndb->blue()) && $blue_mode eq 'transparent_ssl')) {
        $OUT.="# Enable transparent proxy\n";
        $OUT.="http_port ".$ports[1]." transparent\n";
-$OUT.="
+       $OUT.="
 # Enable ssl man-in-the-middle with default self-signed certs
-https_port ".$ports[2]." transparent ssl-bump generate-host-certificates=on cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tl
+https_port ".$ports[2]." transparent ssl-bump generate-host-certificates=on cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tls/private/NSRV.key
 acl https_proto proto https
 always_direct allow https_proto
 ssl_bump none localhost
+acl bypass_ssl dstdomain '/etc/squid/acls/ssl_bypass.acl'
+ssl_bump none bypass_ssl
 ssl_bump server-first all
 sslproxy_cert_error allow all
-sslproxy_flags DONT_VERIFY_PEER
+sslproxy_flags DONT_VERIFY_PEER";
    }
 }
 

@@ -37,6 +37,6 @@ fi
 rm -f /etc/squid/no-cache
 
 # Publish certificate for clients
-ln -s /etc/pki/tls/certs/NSRV.crt /var/www/html/proxy.crt
+ln -sf /etc/pki/tls/certs/NSRV.crt /var/www/html/proxy.crt
 
 exit 0

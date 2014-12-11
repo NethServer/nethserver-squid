@@ -35,7 +35,7 @@ event_actions($event, qw(
 ));
 
 templates2events("/etc/squid/squid.conf",  $event);
-templates2events("/etc/squid/no-cache",  $event);
+templates2events("/etc/squid/acls/no_cache.acl",  $event);
 templates2events("/etc/squid/acls/ssl_bypass.acl",  $event);
 templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);
@@ -56,7 +56,7 @@ event_actions($event, qw(
 ));
 
 templates2events("/etc/squid/squid.conf",  $event);
-templates2events("/etc/squid/no-cache",  $event);
+templates2events("/etc/squid/acls/no_cache.acl",  $event);
 templates2events("/etc/squid/acls/ssl_bypass.acl",  $event);
 templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);

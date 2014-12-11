@@ -33,4 +33,7 @@ if [ ! -d /var/lib/ssl_db ]; then
     /bin/chown -R squid:squid /var/lib/ssl_db
 fi 
 
+# Delete unused ACL, can be removed in the future. Refs #2973
+rm -f /etc/squid/no-cache
+
 exit 0

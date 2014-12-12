@@ -35,7 +35,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private function prepareVars()
     {
         if (!$this->hosts) {
-            $this->hosts = $this->getPlatform()->getDatabase('hosts')->getAll('host');
+            foreach ($this->getPlatform()->getDatabase('hosts')->getAll() as $key => $values) {
+                if ($values['type'] == 'local' || $values['type'] == 'host') {
+                    $this->hosts[$key] = $values;
+                }
+            }
         }
         if (!$this->hostGroups) {
             $this->hostGroups = $this->getPlatform()->getDatabase('hosts')->getAll('host-group');

@@ -84,7 +84,7 @@
             $OUT.="REDIRECT\tblue$bypass_src_str\t3129\ttcp\t80\t-\t$bypass_dst_str\n";
             if ($blue_mode =~ /ssl/) {
                 $OUT .="?COMMENT transparent proxy on blue for port 443\n";
-                $OUT.="REDIRECT\tloc$bypass_src_str\t3130\ttcp\t443\t-\t$bypass_dst_str\n";
+                $OUT.="REDIRECT\tblue$bypass_src_str\t3130\ttcp\t443\t-\t$bypass_dst_str\n";
             }
         }
     }

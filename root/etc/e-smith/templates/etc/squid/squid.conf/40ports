@@ -21,7 +21,6 @@ https_port ".$ports[2]." transparent ssl-bump generate-host-certificates=on cert
 acl https_proto proto https
 always_direct allow https_proto
 ssl_bump none localhost
-acl bypass_ssl dstdomain '/etc/squid/acls/ssl_bypass.acl'
 ssl_bump none bypass_ssl
 ssl_bump server-first all
 sslproxy_cert_error allow all

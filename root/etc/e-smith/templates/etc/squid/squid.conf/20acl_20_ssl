@@ -1,0 +1,5 @@
+#
+# SSL bump bypass
+#
+acl bypass_ssl dstdomain '/etc/squid/acls/ssl_bypass.acl'
+

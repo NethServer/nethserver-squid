@@ -2,14 +2,15 @@
 Proxy web
 =========
 
-Configura il proxy web (Squid) e il filtro contenuti.
+Configura il proxy web (Squid) e le regole di bypass.
 
 Proxy
 =====
 
 Il proxy web lavora per ridurre l'utilizzo della banda facendo cache
-delle pagine visitate. E' trasparente ai web browser che utilizzano
-questo server come loro gateway.
+delle pagine visitate. Può anche forzare il filtraggio dei contenuti.
+
+Il proxy web può essere abilitato solo sulle zone green (reti locali) e blue (reti ospiti).
 
 Abilitato
     Abilita/disabilita il proxy.
@@ -41,53 +42,39 @@ Proxy di secondo livello
     Indirizzo_IP:porta.
     *NON inserire* l'indirizzo IP di questo server.
 
-Filtro
-======
+Host senza proxy
+================
 
-Il filtro contenuti serve per controllare la navigazione web ed
-impostare dei blocchi in base ad alcuni elementi quali parole chiave, ip
-interni, utenti interni, valutazione del contenuto della pagina web,
-estensioni dei file. Grazie a questo strumento è possibile ad esempio abilitare
-l'accesso solo su alcuni siti desiderati (ad esempio quelli di interesse
-aziendale) bloccando tutti gli altri.
+Configura alcuni IP per bypassare il proxy trasparente ed accedere ad
+internet senza essere filtrati.
 
-Modalità
-    Abilitando il Filtro Web è possibile configurarlo nella modalità
-    "Blocca tutto" e poi permettere le categorie selezionate, oppure
-    "Permetti tutto" e poi bloccare le categorie selezionate.
+Nome
+    Nome univoco per la regola di bypass.
 
-Blocca accesso con IP ai siti web
-    Se abilitato, non è possibile accedere ai siti web usando un IP ma solo il nome host.
+Abilitato
+    Abilita o disabilita la regola di bypass.
 
-Abilita filtro con espressioni su URL
-    Se abilitato, gli URL sono scansionati alla ricerca di parole che ricadono nelle categorie selezionate. 
-    Ad esempio potrebbero essere bloccati gli url che contengono la parola *sesso*.
+Sorgente
+    Seleziona un host tra le macchine locale o gli oggetti del firewall.
 
-Lista di estensioni file bloccate
-    Inserire le estensioni che si vogliono bloccare, separate da virgola.
+Descrizione
+    Descrizione personalizzata (opzionale).
 
-Siti e IP bloccati
-    Contiene la lista di siti sempre bloccati e la lista degli host della LAN che non possono navigare.
+Siti senza proxy
+================
 
-Siti e IP permessi
-    Contiene la lista dei siti sempre permessi e degli host della LAN che possono bypassare il filtro contenuti.
+Configura siti remoti che devono essere acceduti direttamente.
+Utile nel caso di siti mal scritti che non funzionano correttamente con il proxy.
 
-Bypass proxy trasparente
-========================
+Nome
+    Nome univoco per la regola di bypass.
 
-Configurare alcuni IP per bypassare il proxy trasparente ed accedere ad
-internet senza essere proxati
+Abilitato
+    Abilita o disabilita la regola di bypass.
 
-Crea
-----
+Destinazione
+    Seleziona un host tra le macchine remote o gli oggetti del firewall.
 
-Crea una nuova regola di bypass.
-
-Indirizzo IP
-    Indirizzo IP dell'host che non sarà filtrato dal proxy.
-
-Antivirus
-=========
-
-Abilita / disabilita la scansione antivirus delle pagine web.
+Descrizione
+    Descrizione personalizzata (opzionale).
 

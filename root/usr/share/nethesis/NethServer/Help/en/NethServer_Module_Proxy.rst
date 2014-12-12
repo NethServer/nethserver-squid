@@ -2,17 +2,15 @@
 Web proxy 
 =========
 
-Configure the web proxy (Squid) with content filtering.
+Configure the web proxy (Squid) and bypass rules.
 
 Proxy
 =====
 
 The web proxy works to reduce bandwidth usage by caching
-the pages you visit. It's transparent to web browsers using
-this server as their gateway.
+the pages you visit. It can also enforce content filtering.
 
-Enabled
-    Enable/disable proxy.
+Web proxy can be enabled only on green (local networks) and blue (guest networks) zones.
 
 Manual
     Squid will listen on port 3128. All client must be explicitly configured to use the proxy.
@@ -38,52 +36,39 @@ Parent proxy
     IP_Address:port.
     *DO NOT* enter the IP address of this server.
 
-Filter
-======
+Hosts without proxy
+===================
 
-The content filter is used to control web browsing and
-site blocking using some variables such as keywords, IP
-address, internal users, or evaluating the content of the web page,
-or file extensions. With this tool it is possible for example to enable
-access only on some desired sites (such as those of interest
-company) while blocking all others.
+Set up some hosts allowed to bypass the transparent proxy and access
+Internet without being filtered.
 
-Mode
-    Enabling the Web Filter you can configure mode
-    "Block All" and then allow the selected categories, or
-    "Allow all" and then block the selected categories.
+Name
+    A unique name for the bypass rule.
 
-Block access to websites with IP
-    If enabled, you can not access websites using one IP but only the host name.
+Enabled
+    Enable or disable the bypass rule.
 
-Enable URL filtering with expressions of
-    If enabled, the URLs are scanned for words that fall into the categories selected. 
-    For example may be blocked urls that contain the word *sex*.
+Host
+    Select a host between local machines and firewall objects.
 
-List of blocked file extensions
-    Enter the extensions that you want to block, separated by commas
+Description
+    Custom description (optional).
 
-Banned sites and IP addresses
-    The list of banned sites and the list of hosts on the LAN that can not browse the Internet.
+Sites without proxy
+===================
 
-Sites and IP permissions
-    The list of sites and hosts on the LAN allowed to bypass the content filter.
+Setup some remote hosts that need to be accessed directly.
+It's useful for bad-written sites which doesn't correctly work with proxy.
 
-Bypass transparent proxy
-========================
+Name
+    A unique name for the bypass rule.
 
-Set up some IP to bypass the transparent proxy and access
-Internet without being proxied.
+Enabled
+    Enable or disable the bypass rule.
 
-Create
-------
+Host
+    Select a host between remote hosts and firewall objects.
 
-Create a new bypass rule.
+Description
+    Custom description (optional).
 
-IP Address
-    IP address of the host that will not be filtered by the proxy.
-
-Antivirus
-=========
-
-Enable / disable virus scanning of web pages.

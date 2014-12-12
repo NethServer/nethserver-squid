@@ -60,6 +60,6 @@ class Squid extends \Nethgui\Controller\AbstractController
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('nethserver-squid-save@post-process');
+        $this->getPlatform()->signalEvent('nethserver-squid-save');
     }
 }

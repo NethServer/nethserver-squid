@@ -37,6 +37,15 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Jan 20 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.0-1.ns6
+- Transparent proxy: switch iplementation from TPROXY to REDIRECT - Enhancement #2967 [NethServer]
+- Proxy: intercept SSL connections (SSL transparent) - Enhancement #2977 [NethServer]
+- Adjust squid.conf for better performances - Enhancement #2973 [NethServer]
+- Web proxy: support blue zones - Enhancement #2964 [NethServer]
+- Add port 980 to safe/ssl ports on squid configuration - Enhancement #2905 [NethServer]
+- Web proxy: bypass rules based on destination and source - Feature #2503 [NethServer]
+- Enhance upstream proxy validator - Enhancement #2736 [NethServer]
+
 * Wed Aug 20 2014 Davide Principi <davide.principi@nethesis.it> - 1.2.0-1.ns6
 - Proxy: block ports 80 (http) and 443 (https) - Feature #2777 [NethServer]
 - Web proxy: refactor squid.conf template - Enhancement #2704 [NethServer]

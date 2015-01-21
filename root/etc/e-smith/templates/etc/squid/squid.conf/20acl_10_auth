@@ -7,32 +7,40 @@
    if ($green_mode eq 'authenticated' || (defined($ndb->blue()) && $blue_mode eq 'authenticated')) {
        $OUT .= "# Authentication required\n\n";
 
-       if(defined $slapd && $slapd{'status'} eq 'enabled') {
-	   # Use BASIC/LDAP auth if we have slapd
-	   $OUT .= "# BASIC (LDAP)
-auth_param basic program /usr/lib64/squid/basic_ldap_auth -b ou=People,dc=directory,dc=nh localhost
-auth_param basic children 5
-auth_param basic realm $fqdn
-auth_param basic credentialsttl 1 hours
-auth_param basic casesensitive on\n";
+       # Samba 
+       if(defined $smb && $smb{'status'} eq 'enabled' && $smb{'ServerRole'} eq 'ADS') {
+       $OUT .= "\n# GSSAPI auth in ADS mode\n";
+           $OUT .= "auth_param negotiate program /usr/lib64/squid/negotiate_kerberos_auth\n";
+           $OUT .= "auth_param negotiate children 10\n";
+           $OUT .= "auth_param negotiate keep_alive on\n";
+
+           $OUT .= "\n# Additional NTLM auth for Windows XP clients in ADS mode\n";
+           $OUT .= "auth_param ntlm program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-ntlmssp\n";
+           $OUT .= "auth_param ntlm children 30\n";
+       }
+       if(defined $smb && $smb{'status'} eq 'enabled' && $smb{'ServerRole'} eq 'PDC') {
+           $OUT .= "\n# NTLM auth in PDC mode\n";
+           $OUT .= "auth_param ntlm program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-ntlmssp\n";
+           $OUT .= "auth_param ntlm children 30\n";
+
+           $OUT .= "\n# BASIC (LDAP) in PDC mode\n";
+           $OUT .= "auth_param basic program /usr/lib64/squid/basic_ldap_auth -b ou=People,dc=directory,dc=nh localhost\n";
+           $OUT .= "auth_param basic children 5\n";
+           $OUT .= "auth_param basic realm $fqdn\n";
+           $OUT .= "auth_param basic credentialsttl 1 hours\n";
+           $OUT .= "auth_param basic casesensitive on\n";
        } 
 
-       if(defined $smb && $smb{'status'} eq 'enabled') {
-	   if($smb{'ServerRole'} eq 'ADS') {
-	       # Additional GSSAPI auth if we are ADS..
-	       $OUT .= "# Negotiate (SPNEGO/GSSAPI)
-auth_param negotiate program /usr/lib64/squid/negotiate_kerberos_auth
-auth_param negotiate children 10
-auth_param negotiate keep_alive on\n";
-	   } elsif($smb{'ServerRole'} eq 'PDC') {
-	       # ..Or additional NTLMSSP if we are PDC
-	       $OUT .= "# NTLMSSP
-auth_param ntlm program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-ntlmssp
-auth_param ntlm children 30\n";
-	   }
+       # Use BASIC/LDAP auth if we have slapd and Samba is disabled
+       if ((!defined $smb || $smb{'status'} eq 'disabled') && defined $slapd && $slapd{'status'} eq 'enabled') {
+           $OUT .= "\n# BASIC (LDAP)\n";
+           $OUT .= "auth_param basic program /usr/lib64/squid/basic_ldap_auth -b ou=People,dc=directory,dc=nh localhost\n";
+           $OUT .= "auth_param basic children 5\n";
+           $OUT .= "auth_param basic realm $fqdn\n";
+           $OUT .= "auth_param basic credentialsttl 1 hours\n";
+           $OUT .= "auth_param basic casesensitive on\n";
        } 
 
        $OUT.="acl authenticated proxy_auth REQUIRED\n";
    }
 }
-

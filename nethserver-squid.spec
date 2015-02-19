@@ -1,7 +1,7 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
 Version: 1.3.0
-Release: 1
+Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
 Source0: %{name}-%{version}.tar.gz

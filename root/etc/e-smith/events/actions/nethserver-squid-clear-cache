@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#
+# Copyright (C) 2013 Nethesis S.r.l.
+# http://www.nethesis.it - support@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
+#
+SQUID_STATUS=`/sbin/e-smith/config getprop squid status`
+
+service squid status >/dev/null && service squid stop
+mkdir /var/spool/squid.old 2>/dev/null
+mv /var/spool/squid/* /var/spool/squid.old/
+if [ "$SQUID_STATUS" = "enabled" ]; then
+  squid -z -F -N
+  service squid start
+fi
+rm -rf /var/spool/squid.old/ &
+
+exit 0

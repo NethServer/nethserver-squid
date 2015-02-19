@@ -78,3 +78,15 @@ Destinazione
 Descrizione
     Descrizione personalizzata (opzionale).
 
+Cache
+=====
+Configura la cache di Squid (abilitata o disabilitata) specificando i parametri per:
+
+Dimensione cache disco
+    Specficare in MB la dimensione su disco da destinare alla cache
+
+Dimensione minima oggetto
+    Specificare in kB la dimensione minima di un oggetto di cache.
+
+Dimensione massima oggetto
+    Specificare in kB la dimensione massima di un oggetto di cache.

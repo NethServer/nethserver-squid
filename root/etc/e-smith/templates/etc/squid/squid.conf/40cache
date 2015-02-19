@@ -1,5 +1,17 @@
-# Uncomment and adjust the following to add a disk cache directory.
-#cache_dir ufs /var/spool/squid 100 16 256
+{
+    my $mem = $squid{'MemCacheSize'} || '256';
+    $OUT.="cache_mem $mem MB\n";
+    my $status = $squid{'DiskCache'} || 'enabled';
+    my $min = $squid{'MinObjSize'} || '0';
+    my $max = $squid{'MaxObjSize'} || '4096';
+    my $size = $squid{'DiskCacheSize'} || '100';
+    if ($status eq 'enabled') {
+        $OUT.="\n# Enable disk cache\n";
+        $OUT.="cache_dir aufs /var/spool/squid $size 16 256\n";
+        $OUT.="minimum_object_size $min KB\n";
+        $OUT.="maximum_object_size $max KB\n";
+    }
+}
 
 # Leave coredumps in the first cache dir
 coredump_dir /var/spool/squid
@@ -11,4 +23,4 @@ refresh_pattern ^ftp:		1440	20%	10080
 refresh_pattern ^gopher:	1440	0%	1440
 refresh_pattern -i (/cgi-bin/|\?) 0	0%	0
 refresh_pattern .		0	20%	4320
-
+refresh_pattern ([^.]+.|)(download|(windows|)update|).(microsoft.|)com/.*\.(cab|exe|msi|msp) 4320 100% 43200 reload-into-ims

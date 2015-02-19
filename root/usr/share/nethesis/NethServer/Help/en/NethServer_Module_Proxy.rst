@@ -1,5 +1,5 @@
 =========
-Web proxy 
+Web proxy
 =========
 
 Configure the web proxy (Squid) and bypass rules.
@@ -72,3 +72,15 @@ Host
 Description
     Custom description (optional).
 
+Cache
+=====
+Cache configuration of squid (enabled o disabled) by setting these parameters:
+
+Disk cache size
+    Set (in MB) the size of cache
+
+Min object size
+    Set (in kB) the minimum size of cache object.
+
+Max object size
+    Set (in kB) the maximum size of cache object.

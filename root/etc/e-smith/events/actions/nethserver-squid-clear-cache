@@ -28,6 +28,6 @@ if [ "$SQUID_STATUS" = "enabled" ]; then
   squid -z -F -N
   service squid start
 fi
-rm -rf /var/spool/squid.old/ &
+rm -rf /var/spool/squid.old/
 
 exit 0

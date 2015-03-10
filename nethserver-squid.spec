@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.0
+Version: 1.3.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Mar 10 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.1-1
+- Web proxy: Active Directory authentication not working  - Bug #2984 [NethServer]
+- squid cache management - Feature #2981 [NethServer]
+
 * Tue Jan 20 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.0-1.ns6
 - Transparent proxy: switch iplementation from TPROXY to REDIRECT - Enhancement #2967 [NethServer]
 - Proxy: intercept SSL connections (SSL transparent) - Enhancement #2977 [NethServer]

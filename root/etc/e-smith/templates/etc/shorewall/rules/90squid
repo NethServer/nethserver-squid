@@ -89,7 +89,7 @@
         }
     }
 
-    if ($block eq 'enabled') {
+    if ($status eq 'enabled' && $block eq 'enabled') {
         # generate rules for all zones
         foreach my $z (keys %zones) {
             $OUT .= "#\n# Block HTTP/HTTPS from $z to net\n#\n";

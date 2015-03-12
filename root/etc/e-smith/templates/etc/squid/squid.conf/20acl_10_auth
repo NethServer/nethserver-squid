@@ -32,7 +32,7 @@
        } 
 
        # Use BASIC/LDAP auth if we have slapd and Samba is disabled
-       if ((!defined $smb || $smb{'status'} eq 'disabled') && defined $slapd && $slapd{'status'} eq 'enabled') {
+       if ((!defined $smb || $smb{'status'} eq 'disabled' || $smb{'ServerRole'} eq 'WS') && defined $slapd && $slapd{'status'} eq 'enabled') {
            $OUT .= "\n# BASIC (LDAP)\n";
            $OUT .= "auth_param basic program /usr/lib64/squid/basic_ldap_auth -b ou=People,dc=directory,dc=nh localhost\n";
            $OUT .= "auth_param basic children 5\n";

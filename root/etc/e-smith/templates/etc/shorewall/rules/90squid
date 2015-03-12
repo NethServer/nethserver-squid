@@ -97,5 +97,11 @@
             $OUT .= "REJECT $z\t\tnet\ttcp\t80,443\n";
         }
    }
+
+   if ($status eq 'enabled' && defined($ndb->blue())) {
+       $OUT .= "\n#\n# Allow Squid access from blue\n#\n";
+       $OUT .="?COMMENT Allow Squid access from blue\n";
+       $OUT .= "ACCEPT\tblue\t\$FW\ttcp\t3128\n";
+   }
     
 }

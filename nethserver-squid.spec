@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.1
+Version: 1.3.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,11 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Thu Mar 12 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.2-1
+- Can't access Squid from blue network when proxy is configured in manual or authenticated mode - Bug #3086 [NethServer]
+- HTTP and HTTPS port blocked even if proxy is disabled - Bug #3050 [NethServer]
+- Allow authentication if samba is configured in WS mode  - Bug #2984 [NethServer]
+
 * Tue Mar 10 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.1-1
 - Web proxy: Active Directory authentication not working  - Bug #2984 [NethServer]
 - squid cache management - Feature #2981 [NethServer]

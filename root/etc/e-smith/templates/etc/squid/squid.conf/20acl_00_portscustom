@@ -1,0 +1,9 @@
+#
+# 20acl_00_portscustom
+#
+{
+   $safeports = $squid{'SafePorts'} || '';
+   foreach (split(/,/,$safeports)) {
+       $OUT.="acl Safe_ports port $_\n";
+   }
+}

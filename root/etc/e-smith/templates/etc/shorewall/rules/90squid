@@ -14,8 +14,20 @@
     my $block = $squid{'PortBlock'} || 'disabled';
     
     my %zones;
+    my @ips;
+    my @interfaces;
     foreach my $i ($ndb->interfaces) {
         my $role = $i->prop('role') || '';
+        my $ip = $i->prop('ipaddr') || '';
+        my $bp = $i->prop('bootproto') || '';
+        if ($ip ne '') {
+            push(@ips,$ip);
+        } else {
+            if ($role eq 'red' && $bp eq 'dhcp') {
+                push(@interfaces, "&".$i->key);
+            }
+        }
+
         next if ($role eq '' || $role eq 'red' || $role eq 'slave' || $role eq 'bridged' || $role eq 'alias');
         my $zone = substr($role, 0, 5); #truncate zone name to 5 chars
         if ($role eq 'green') { # rename green to loc
@@ -30,6 +42,8 @@
         my $bypass_src_str = '';
         my @bypass_dst = ();
         my $bypass_dst_str = '';
+        push(@bypass_dst, @interfaces);
+        push(@bypass_dst, @ips);
 
         if ( $green_mode =~ /transparent/ || (defined($ndb->blue()) && $blue_mode =~ /transparent/) ) {
 

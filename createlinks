@@ -32,6 +32,7 @@ my $event = "nethserver-squid-update";
 event_actions($event, qw(
    initialize-default-databases 00
    nethserver-squid-conf 20
+   nethserver-squid-check-cache 30
 ));
 
 templates2events("/etc/squid/squid.conf",  $event);

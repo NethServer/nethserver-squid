@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.2
+Version: 1.3.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,12 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Thu Apr 09 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.3-1
+- Web proxy: add prop for squid SSL_ports - Enhancement #3106 [NethServer]
+- squid stop after restore if cache enabled - Bug #3105 [NethServer]
+- Web proxy: add property for Squid safe ports - Enhancement #3101 [NethServer]
+- Web proxy: exclude local sites when mode is transparent - Enhancement #3099 [NethServer]
+
 * Thu Mar 12 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.2-1
 - Can't access Squid from blue network when proxy is configured in manual or authenticated mode - Bug #3086 [NethServer]
 - HTTP and HTTPS port blocked even if proxy is disabled - Bug #3050 [NethServer]

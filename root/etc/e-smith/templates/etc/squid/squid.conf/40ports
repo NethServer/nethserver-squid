@@ -7,7 +7,7 @@
    $OUT.="\n# Always enable manual proxy\n";
    $OUT.="http_port 3128\n";
 
-   if ($green_mode eq 'transparent' || (defined($ndb->blue()) && $blue_mode eq 'transparent')) {
+   if ($green_mode =~ /transparent/ || (defined($ndb->blue()) && $blue_mode =~ /transparent/)) {
        $OUT.="\n# Enable transparent proxy\n";
        $OUT.="http_port 3129 transparent\n";
    } 

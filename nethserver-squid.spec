@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.3
+Version: 1.3.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Apr 21 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.4-1
+- Proxy http doesn't allow http traffic when set in SSL transparent mode - Bug #3128 [NethServer]
+
 * Thu Apr 09 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.3-1
 - Web proxy: add prop for squid SSL_ports - Enhancement #3106 [NethServer]
 - squid stop after restore if cache enabled - Bug #3105 [NethServer]

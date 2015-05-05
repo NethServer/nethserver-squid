@@ -7,9 +7,9 @@
     my $size = $squid{'DiskCacheSize'} || '100';
     if ($status eq 'enabled') {
         $OUT.="\n# Enable disk cache\n";
-        $OUT.="cache_dir aufs /var/spool/squid $size 16 256\n";
         $OUT.="minimum_object_size $min KB\n";
         $OUT.="maximum_object_size $max KB\n";
+        $OUT.="cache_dir aufs /var/spool/squid $size 16 256\n";
     }
 }
 

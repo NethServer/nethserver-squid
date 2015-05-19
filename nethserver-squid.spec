@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.4
+Version: 1.3.5
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue May 19 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.5-1
+- web proxy does not cache objects bigger than 4Mb - Bug #3144 [NethServer]
+
 * Tue Apr 21 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.4-1
 - Proxy http doesn't allow http traffic when set in SSL transparent mode - Bug #3128 [NethServer]
 

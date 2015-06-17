@@ -21,10 +21,10 @@
 #
 
 
-# exec() smbads initkeytab, if we are joined to Active Directory
+# Re-initialize the kerberos keytab, if we are joined to Active Directory:
 smbads=/usr/libexec/nethserver/smbads
 if [ -x ${smbads} ] && ${smbads} test; then
-    exec /usr/libexec/nethserver/smbads initkeytab
+    /usr/libexec/nethserver/smbads initkeytab
 fi
 
 # Initialize SSL db

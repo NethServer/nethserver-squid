@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.5
+Version: 1.3.6
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Mon Jun 22 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.6-1
+- SquidGuard profiles not working when proxy authenticated with AD  - Enhancement #3178 [NethServer]
+- Fixed nethserver-squid-conf on keytab re-initialization. Was Bug #2407 [NethServer]
+
 * Tue May 19 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.5-1
 - web proxy does not cache objects bigger than 4Mb - Bug #3144 [NethServer]
 

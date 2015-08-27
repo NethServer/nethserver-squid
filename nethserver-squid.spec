@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.6
+Version: 1.3.7
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Thu Aug 27 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.7-1
+- Web proxy: rules error if port blocking enabled with pppoe - Bug #3240 [NethServer]
+
 * Mon Jun 22 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.6-1
 - SquidGuard profiles not working when proxy authenticated with AD  - Enhancement #3178 [NethServer]
 - Fixed nethserver-squid-conf on keytab re-initialization. Was Bug #2407 [NethServer]

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.7
+Version: 1.3.8
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Sep 29 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.8-1
+- Make Italian language pack optional - Enhancement #3265 [NethServer]
+
 * Thu Aug 27 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.7-1
 - Web proxy: rules error if port blocking enabled with pppoe - Bug #3240 [NethServer]
 

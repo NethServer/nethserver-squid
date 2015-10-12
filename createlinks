@@ -77,6 +77,14 @@ event_actions($event, qw(
     nethserver-squid-clear-cache 20
 ));
 
+#--------------------------------------------------
+# actions for interface-update
+#--------------------------------------------------
+my $event = "interface-update";
+
+templates2events("/etc/squid/squid.conf",  $event);
+event_services($event, 'squid' => 'restart');
+
 #
 # nethserver-samba-{save,update,adsjoin) events
 #

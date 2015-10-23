@@ -5,3 +5,4 @@ forward_max_tries 25
 shutdown_lifetime 1 seconds
 buffered_logs on
 max_filedesc 16384
+logfile_rotate 0

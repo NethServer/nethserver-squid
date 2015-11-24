@@ -51,13 +51,15 @@
                 my $status = $_->prop('status') || 'disabled';
                 next if ($status eq 'disabled');
                 my $host = $_->prop('Host') || next;
-                push(@bypass_src,$fw->getAddress($host))
+                my $address = $fw->getAddress($host) || next;
+                push(@bypass_src,$address);
             }
             foreach ($pdb->get_all_by_prop(type => 'bypass-dst')) {
                 my $status = $_->prop('status') || 'disabled';
                 next if ($status eq 'disabled');
                 my $host = $_->prop('Host') || next;
-                push(@bypass_dst,$fw->getAddress($host))
+                my $address = $fw->getAddress($host) || next;
+                push(@bypass_dst,$address);
             }
 
         }

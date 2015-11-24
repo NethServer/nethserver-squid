@@ -75,7 +75,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         private function keyExists($key)
     {
         $tmp = explode(';', $key);
-        if ($tmp[0] == 'host' || $tmp[0] == 'host-group') {
+        if ($tmp[0] == 'host' || $tmp[0] == 'host-group' || $tmp[0] == 'iprange' || $tmp[0] == 'cidr') {
             $db = 'hosts';
         } else {
             $db = 'proxy';

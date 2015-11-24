@@ -38,7 +38,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
     {
         if (!$this->hosts) {
             foreach ($this->getPlatform()->getDatabase('hosts')->getAll() as $key => $values) {
-                if ($values['type'] == 'local' || $values['type'] == 'host') {
+                if ($values['type'] == 'local' || $values['type'] == 'remote' || $values['type'] == 'host') {
                     $this->hosts[$key] = $values;
                 }
             }

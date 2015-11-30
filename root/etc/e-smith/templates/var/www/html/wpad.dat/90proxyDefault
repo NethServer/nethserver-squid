@@ -1,11 +1,26 @@
-{    
-    my $enabled = $squid{status} || 'disabled';
-    my $portlist = $squid{'TCPPorts'} || "3128,3129,3130";
-    my @ports = split(',',$portlist);
+{   
+    use esmith::NetworksDB;
+    use esmith::util;
+    my $status = $squid{status} || 'disabled';
 
-    my $target = ($enabled eq 'enabled') ?
-	"PROXY proxy.$DomainName:".$ports[0] :
-	"DIRECT";
+    $ndb = esmith::NetworksDB->open_ro or warn("Could not open NetworksDB");
+    my $LocalIP = $ndb->green()->prop('ipaddr') || return '';
+    my $phost = "PROXY proxy.$DomainName:3128";
+    my $adJoin = 0;
+    if ( ($smb{'status'} || 'disabled') eq 'enabled' and ($smb{'ServerRole'} || '') eq 'ADS' ) {
+        $adJoin = 1;
+    }
 
-    $OUT = '	return "' . $target . '";';
+    if ($status eq 'enabled') {
+        my $target = "PROXY $LocalIP:3128";
+        if ($adJoin) {
+            $target = $phost;
+        }
+        $OUT.= "\n    // DEFAULT\n";
+        $OUT.= '    return "' . $target . '";';
+    } else {
+
+        $OUT.= "    return DIRECT;\n";
+    }
+
 }

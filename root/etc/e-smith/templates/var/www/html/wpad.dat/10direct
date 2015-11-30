@@ -1,0 +1,17 @@
+{
+    my $status = $squid{'status'} || 'disabled';
+    if ($status eq 'disabled') {
+        return '';
+    }
+
+    $OUT .=<<EOM 
+    // Direct access to localhost
+    if (isInNet(host, "127.0.0.1", "255.255.255.255"))
+        return "DIRECT";
+
+    // Direct access to local hosts
+    if (isPlainHostName(host))
+        return "DIRECT";
+EOM
+
+}

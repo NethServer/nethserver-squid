@@ -1,2 +1,0 @@
-    if (isPlainHostName(host))
-        return "DIRECT";

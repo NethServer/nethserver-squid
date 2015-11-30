@@ -1,2 +1,0 @@
-    if (isInNet(host, "127.0.0.1", "255.255.255.255"))
-        return "DIRECT";

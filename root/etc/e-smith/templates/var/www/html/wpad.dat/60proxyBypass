@@ -1,0 +1,73 @@
+{   
+    use esmith::ConfigDB;
+    use esmith::util;
+    use NethServer::Firewall;
+    use NetAddr::IP;
+    use Socket 'inet_aton';
+    my $status = $squid{status} || 'disabled';
+
+    $db = esmith::ConfigDB->open_ro('fwrules') or warn("Could not open fwrules db");
+    $fw = new NethServer::Firewall();
+    my $phost = "PROXY proxy.$DomainName:3128";
+
+    if ($status eq 'disabled') {
+        return '';
+    }
+
+    foreach ($db->get_all_by_prop('type' => 'bypass-dst')) {
+        next if ($_->prop('status') eq 'disabled');
+        my $h = $_->prop('Host') || next;
+        my $address = $fw->getAddress($h);
+        $OUT .= "    // Bypass destination: ".$_->key.": $h\n";
+        if ($h =~ /cidr/) {
+            $c = NetAddr::IP->new($address);
+            $OUT .= '    if (isInNet(host, "'.$c->addr().'","'.$c->mask().'"))';
+            $OUT .= "\n        return \"DIRECT\";\n";
+        } elsif ($h =~ /host-group/) {
+            foreach my $h (split(/,/,$address)) {
+            $OUT .= '    if (host == "'.$h.'")';
+            $OUT .= "\n        return \"DIRECT\";\n";
+            }
+        } elsif ($h =~ /host/) {
+            $OUT .= '    if (host == "'.$address.'")';
+            $OUT .= "\n        return \"DIRECT\";\n";
+        } else {
+            next;
+        }
+        $OUT .= "\n";
+    }
+
+
+    foreach ($db->get_all_by_prop('type' => 'bypass-src')) {
+        next if ($_->prop('status') eq 'disabled');
+        my $h = $_->prop('Host') || next;
+        my $address = $fw->getAddress($h);
+        $OUT .= "    // Bypass source: ".$_->key.": $h\n";
+        if ($h =~ /cidr/) {
+            $c = NetAddr::IP->new($address);
+            $OUT .= '    if (isInNet(myIpAddress(), "'.$c->addr().'","'.$c->mask().'"))';
+            $OUT .= "\n        return \"DIRECT\";\n";
+        } elsif ($h =~ /host-group/) {
+            foreach my $h (split(/,/,$address)) {
+                $OUT .= '    if (myIpAddress() == "'.$h.'")';
+                $OUT .= "\n        return \"DIRECT\";\n";
+            }
+        } elsif ($h =~ /host/) {
+            $OUT .= '    if (myIpAddress() == "'.$address.'")';
+            $OUT .= "\n        return \"DIRECT\";\n";
+        } elsif ($h =~ /iprange/) {
+            my ($start,$end) = split(/-/,$address);
+            my @addresses = map { sprintf "%vi", pack "N", $_ } unpack("N",inet_aton($start)) .. unpack("N",inet_aton($end));
+            foreach my $h (@addresses) {
+                $OUT .= '    if (myIpAddress() == "'.$h.'")';
+                $OUT .= "\n        return \"DIRECT\";\n";
+            }
+
+        } else {
+            next;
+        }
+        $OUT .= "\n";
+
+    }
+
+}

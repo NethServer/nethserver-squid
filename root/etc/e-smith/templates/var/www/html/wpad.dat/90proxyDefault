@@ -20,7 +20,7 @@
         $OUT.= '    return "' . $target . '";';
     } else {
 
-        $OUT.= "    return DIRECT;\n";
+        $OUT.= "    return \"DIRECT\";\n";
     }
 
 }

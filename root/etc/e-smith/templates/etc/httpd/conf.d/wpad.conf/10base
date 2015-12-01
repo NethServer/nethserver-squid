@@ -5,9 +5,10 @@ AddType application/x-ns-proxy-autoconfig .dat
 Alias /wpad.dat  /var/www/html/wpad.dat
 Alias /proxy.pac  /var/www/html/wpad.dat
 
-<Files /var/www/html/wpad.dat>
-Order allow,deny
-Deny from all
+<Directory /var/www/html >
+    <Files wpad.dat>
+        Order deny,allow
+        Deny from all
 {
     use esmith::NetworksDB;
     use esmith::util;
@@ -16,6 +17,7 @@ Deny from all
     foreach ($ndb->blue) {
         $localaccess .= ' '.esmith::util::computeLocalNetworkShortSpec($_->prop('ipaddr'), $_->prop('netmask'));
     }
-    $OUT .= "Allow from $localaccess";
+    $OUT .= "        Allow from $localaccess";
 }
-</Files>
+    </Files>
+</Directory>

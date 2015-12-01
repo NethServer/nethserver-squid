@@ -114,3 +114,16 @@ foreach (qw(
        squid reload
 ));
 }
+
+#
+# Update wpad on firewall objects change
+#
+foreach (qw(
+    nethserver-firewall-base-save
+    firewall-objects-modify
+)) {
+    event_templates($_, qw(
+        /var/www/html/wpad.dat
+    ));
+}
+

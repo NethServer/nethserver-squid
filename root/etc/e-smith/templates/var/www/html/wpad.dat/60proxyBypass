@@ -25,11 +25,11 @@
             $OUT .= "\n        return \"DIRECT\";\n";
         } elsif ($h =~ /host-group/) {
             foreach my $h (split(/,/,$address)) {
-            $OUT .= '    if (host == "'.$h.'")';
+            $OUT .= '    if (isInNet(host,"'.$h.'", "255.255.255.255"))';
             $OUT .= "\n        return \"DIRECT\";\n";
             }
         } elsif ($h =~ /host/) {
-            $OUT .= '    if (host == "'.$address.'")';
+            $OUT .= '    if (isInNet(host,"'.$address.'", "255.255.255.255"))';
             $OUT .= "\n        return \"DIRECT\";\n";
         } else {
             next;

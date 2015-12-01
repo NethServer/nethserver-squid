@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.10
+Version: 1.3.11
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,11 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Dec 01 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.11-1
+- Add CIDR subnets and ip ranges as hosts without proxy in Proxy - Enhancement #3323 [NethServer]
+- WPAD improvements - Enhancement #3266 [NethServer]
+- Entire Subnet and Ip Ranges Exclusion in Proxy - Enhancement #3226 [NethServer]
+
 * Tue Nov 10 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.10-1
 - Configure forward_max_tries for Squid - Bug #3288 [NethServer]
 - squid log file rotation - Enhancement #3290 [NethServer]

@@ -42,6 +42,7 @@ templates2events("/etc/dnsmasq.conf",  $event);
 templates2events("/etc/hosts",  $event);
 templates2events("/var/www/html/wpad.dat",  $event);
 templates2events("/etc/sysconfig/squid",  $event);
+templates2events("/etc/httpd/conf.d/wpad.conf",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
 event_services($event, 'dnsmasq' => 'reload');
@@ -83,7 +84,9 @@ event_actions($event, qw(
 my $event = "interface-update";
 
 templates2events("/etc/squid/squid.conf",  $event);
+templates2events("/etc/httpd/conf.d/wpad.conf",  $event);
 event_services($event, 'squid' => 'restart');
+event_actions($event, "nethserver-squid-httpd-reload", 20);
 
 #
 # nethserver-samba-{save,update,adsjoin) events

@@ -44,7 +44,7 @@ templates2events("/var/www/html/wpad.dat",  $event);
 templates2events("/etc/sysconfig/squid",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
-event_services($event, 'dnsmasq' => 'reload');
+event_services($event, 'dnsmasq' => 'restart');
 
 #--------------------------------------------------
 # actions for nethserver-squid-save event
@@ -66,7 +66,7 @@ templates2events("/var/www/html/wpad.dat",  $event);
 templates2events("/etc/sysconfig/squid",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
-event_services($event, 'dnsmasq' => 'reload');
+event_services($event, 'dnsmasq' => 'restart');
 
 #--------------------------------------------------
 # actions for nethserver-squid-clear-cache

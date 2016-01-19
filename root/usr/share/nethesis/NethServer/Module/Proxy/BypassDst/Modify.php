@@ -31,6 +31,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
 {
     private $hosts = array();
     private $hostGroups = array();
+    private $cidrs = array();
 
     private function prepareVars()
     {
@@ -44,6 +45,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if (!$this->hostGroups) {
             $this->hostGroups = $this->getPlatform()->getDatabase('hosts')->getAll('host-group');
         }
+        if (!$this->cidrs) {
+            $this->cidrs = $this->getPlatform()->getDatabase('hosts')->getAll('cidr');
+        }
+
     }
 
     // Declare all parameters
@@ -67,7 +72,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private function keyExists($key)
     {
         $tmp = explode(';', $key);
-        if ($tmp[0] == 'host' || $tmp[0] == 'host-group') {
+        if ($tmp[0] == 'host' || $tmp[0] == 'host-group' || $tmp[0] == 'cidr') {
             $db = 'hosts';
         } else {
             $db = 'proxy';
@@ -110,9 +115,12 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
         $h = $view->translate('Hosts_label');
         $hg = $view->translate('HostGroups_label');
+        $ir = $view->translate('IpRanges_label');
+        $c = $view->translate('CIDRs_label');
         $hosts = $this->arrayToDatasource($this->hosts,'host');
         $groups = $this->arrayToDatasource($this->hostGroups,'host-group');
-        $view['HostDatasource'] = array(array($hosts,$h),array($groups,$hg));
+        $cidrs = $this->arrayToDatasource($this->cidrs,'cidr');
+        $view['HostDatasource'] = array(array($hosts,$h),array($groups,$hg),array($cidrs,$c));
     }
 
     protected function onParametersSaved($changes)

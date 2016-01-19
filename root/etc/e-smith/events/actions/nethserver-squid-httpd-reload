@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/sbin/service httpd reload

@@ -1,0 +1,23 @@
+# wpad support
+
+AddType application/x-ns-proxy-autoconfig .dat
+
+Alias /wpad.dat  /var/www/html/wpad.dat
+Alias /proxy.pac  /var/www/html/wpad.dat
+
+<Directory /var/www/html >
+    <Files wpad.dat>
+        Order deny,allow
+        Deny from all
+{
+    use esmith::NetworksDB;
+    use esmith::util;
+    my $ndb = esmith::NetworksDB->open_ro() || return '';
+    my $localaccess = $ndb->local_access_spec();
+    foreach ($ndb->blue) {
+        $localaccess .= ' '.esmith::util::computeLocalNetworkShortSpec($_->prop('ipaddr'), $_->prop('netmask'));
+    }
+    $OUT .= "        Allow from $localaccess";
+}
+    </Files>
+</Directory>

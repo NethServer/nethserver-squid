@@ -130,3 +130,9 @@ foreach (qw(
     ));
 }
 
+#----------------------------------------------------------------------
+# Expand squid and restart when a global http/https proxy is configured
+#----------------------------------------------------------------------
+
+templates2events("/etc/squid/squid.conf","proxy-update");
+event_services("proxy-update", 'squid' => 'restart');

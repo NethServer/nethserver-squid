@@ -9,6 +9,7 @@ BuildArch: noarch
 
 Requires: nethserver-firewall-base, nethserver-httpd
 Requires: squid >= 3.3.10
+Requires: samba-winbind-clients, nethserver-sssd, samba-winbind
 
 BuildRequires: perl
 BuildRequires: nethserver-devtools 
@@ -26,7 +27,7 @@ perl createlinks
 %install
 rm -rf %{buildroot}
 (cd root; find . -depth -print | cpio -dump %{buildroot})
-%{genfilelist} %{buildroot} --file /usr/libexec/nethserver/squid_pam_helper "%attr(4755,root,root)" > %{name}-%{version}-filelist
+%{genfilelist} %{buildroot} > %{name}-%{version}-filelist
 echo "%doc COPYING" >> %{name}-%{version}-filelist
 
 %post

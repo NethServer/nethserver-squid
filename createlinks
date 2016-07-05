@@ -134,8 +134,8 @@ foreach (qw(
 # Expand squid and restart when a global http/https proxy is configured
 #----------------------------------------------------------------------
 
-templates2events("/etc/squid/squid.conf","proxy-update");
-event_services("proxy-update", 'squid' => 'restart');
+templates2events("/etc/squid/squid.conf","proxy-modify");
+event_services("proxy-modify", 'squid' => 'restart');
 
 
 safe_symlink('../winbind.service', 'root/usr/lib/systemd/system/squid.service.wants/winbind.service');

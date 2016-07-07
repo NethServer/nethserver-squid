@@ -1,31 +1,31 @@
 [main]
 host = https://www.transifex.com
 
-[nethserver.Proxy]
+[nethserver-v6.Proxy]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.Proxy_BypassDst]
+[nethserver-v6.Proxy_BypassDst]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy_BypassDst.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.Proxy_Squid]
+[nethserver-v6.Proxy_Squid]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy_Squid.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.Proxy_BypassSrc]
+[nethserver-v6.Proxy_BypassSrc]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy_BypassSrc.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.Proxy_Config]
+[nethserver-v6.Proxy_Config]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy_Config.php
 source_lang = en
 type = PHP_ALT_ARRAY

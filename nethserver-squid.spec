@@ -8,7 +8,7 @@ Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
 Requires: nethserver-firewall-base, nethserver-httpd
-Requires: squid >= 3.3.10
+Requires: squid >= 3.5.20
 Requires: samba-winbind-clients, nethserver-sssd, samba-winbind
 
 BuildRequires: perl

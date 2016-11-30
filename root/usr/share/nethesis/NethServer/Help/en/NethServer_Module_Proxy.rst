@@ -20,16 +20,16 @@ Authenticated
     Squid will listen on port 3128. All client must be explicitly configured to use the proxy.
 
 Transparent
-    All HTTP traffic will be redirect through the proxy.
+    All HTTP traffic on port 80 will be redirect through the proxy.
     No client configuration is needed.
 
 Transparent with SSL
-    All HTTP and HTTPS traffic will be redirect through the proxy.
-    The server certificate (CA) must be installed on each client to allow HTTPS traffic.
+    All HTTP and HTTPS traffic on port 80 and 443 will be redirect through the proxy.
+    No client configuration is needed.
 
 Block HTTP and HTTPS ports
     If enabled, clients will not be able to bypass the proxy.
-    Ports 80 and 443 will be reachable only using the proxy.
+    External sites on ports 80 and 443 will be reachable only using the proxy.
 
 Parent proxy
     Enter the IP address and port of the parent proxy. The correct syntax is
@@ -39,7 +39,7 @@ Parent proxy
 Hosts without proxy
 ===================
 
-Set up some hosts allowed to bypass the transparent proxy and access
+List of internal hosts allowed to bypass the transparent proxy and access
 Internet without being filtered.
 
 Name
@@ -57,8 +57,8 @@ Description
 Sites without proxy
 ===================
 
-Setup some remote hosts that need to be accessed directly.
-It's useful for bad-written sites which doesn't correctly work with proxy.
+List of remote hosts that need to be accessed directly.
+It's useful for badly written sites which don't work through a proxy.
 
 Name
     A unique name for the bypass rule.

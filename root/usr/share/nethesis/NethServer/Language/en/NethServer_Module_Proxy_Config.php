@@ -8,4 +8,4 @@ $L['DiskCacheSize_label'] = 'Disk cache size (in MB)';
 $L['MinObjSize_label'] = 'Min object size (in kB)';
 $L['MaxObjSize_label'] = 'Max object size (in kB)';
 $L['ClearCache_label'] = 'Empty cache';
-$L['ClearSSLDB_label'] = 'Clear SSL Database';
+$L['RebuildSSLDB_label'] = 'Clear SSL Database';

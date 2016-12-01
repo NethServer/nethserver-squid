@@ -30,6 +30,7 @@ systemctl status squid >/dev/null && systemctl stop squid
 # Check to see if the ssl_db file exists
 if [ -f /var/lib/ssl_db ] then
   rm -f /var/lib/ssl_db
+  chown -R squid:squid /var/lib/ssl_db
 fi
 
 # Generate /var/lib/ssl_db

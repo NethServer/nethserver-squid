@@ -28,10 +28,7 @@ if [ -x ${smbads} ] && ${smbads} test; then
 fi
 
 # Initialize SSL db
-if [ ! -d /var/lib/ssl_db ]; then
-    /usr/lib64/squid/ssl_crtd -c -s /var/lib/ssl_db
-    /bin/chown -R squid:squid /var/lib/ssl_db
-fi 
+/etc/e-smith/events/actions/nethserver-squid-init-ssldb
 
 # Delete unused ACL, can be removed in the future. Refs #2973
 rm -f /etc/squid/no-cache

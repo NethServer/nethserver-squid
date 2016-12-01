@@ -28,8 +28,8 @@ systemctl status squid >/dev/null && systemctl stop squid
 # Initialize the Squid ssl_crtd database, used to cache certificates generated and served to clients
 
 # Check to see if the ssl_db file exists
-if [ -f /var/lib/ssl_db ] then
-  rm -f /var/lib/ssl_db
+if [ -d /var/lib/ssl_db ] then
+  rm -Rf /var/lib/ssl_db
   chown -R squid:squid /var/lib/ssl_db
 fi
 

@@ -13,4 +13,5 @@ echo $view->panel()
 
 echo '<br>';
 echo $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_HELP)
-     ->insert($view->button('Clear_cache', $view::BUTTON_SUBMIT)->setAttribute('label', $T('ClearCache_label')));
+     ->insert($view->button('Clear_cache', $view::BUTTON_SUBMIT)->setAttribute('label', $T('ClearCache_label')))
+     ->insert($view->button('Rebuild_SSL_DB', $view::BUTTON_SUBMIT)->setAttribute('label', $T('RebuildSSLDB_label')));

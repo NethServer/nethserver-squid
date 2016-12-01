@@ -2,38 +2,44 @@
 
 #
 # Copyright (C) 2013 Nethesis S.r.l.
-# http://www.nethesis.it - support@nethesis.it
-# 
+# http://www.nethesis.it - support@nethesis.it, Jacob Oliver:Jacob@ostechnology.co.uk
+#
 # This script is part of NethServer.
-# 
+#
 # NethServer is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License,
 # or any later version.
-# 
+#
 # NethServer is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 
-# Re-initialize the kerberos keytab, if we are joined to Active Directory:
-smbads=/usr/libexec/nethserver/smbads
-if [ -x ${smbads} ] && ${smbads} test; then
-    /usr/libexec/nethserver/smbads initkeytab
+SQUID_STATUS=`/sbin/e-smith/config getprop squid status`
+
+systemctl status squid >/dev/null && systemctl stop squid
+
+# Initialize the Squid ssl_crtd database, used to cache certificates generated and served to clients
+
+# Check to see if the ssl_db file exists
+if [ -d /var/lib/ssl_db ]; then
+  rm -Rf /var/lib/ssl_db
 fi
 
-# Initialize SSL db
-/etc/e-smith/events/actions/nethserver-squid-init-ssldb
+# Generate /var/lib/ssl_db
+/usr/lib64/squid/ssl_crtd -c -s /var/lib/ssl_db
 
-# Delete unused ACL, can be removed in the future. Refs #2973
-rm -f /etc/squid/no-cache
+# Grant squid user and group full permissions to the SSL database
+chown -R squid:squid /var/lib/ssl_db
 
-# Publish certificate for clients
-ln -sf /etc/pki/tls/certs/NSRV.crt /var/www/html/proxy.crt
+if [ "$SQUID_STATUS" = "enabled" ]; then
+  systemctl start squid
+fi
 
 exit 0

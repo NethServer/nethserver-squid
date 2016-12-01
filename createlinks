@@ -79,6 +79,15 @@ event_actions($event, qw(
 ));
 
 #--------------------------------------------------
+# actions for nethserver-squid-init-ssldb
+#--------------------------------------------------
+my $event = "nethserver-squid-init-ssldb";
+
+event_actions($event, qw(
+    nethserver-squid-init-ssldb 20
+));
+
+#--------------------------------------------------
 # actions for interface-update
 #--------------------------------------------------
 my $event = "interface-update";

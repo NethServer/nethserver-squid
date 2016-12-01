@@ -55,6 +55,9 @@ class Config extends \Nethgui\Controller\AbstractController
         if ($this->getRequest()->hasParameter('Clear_cache')) {
             // Signal nethserver-squid-clear-cache
             $this->getPlatform()->signalEvent('nethserver-squid-clear-cache &');
+        } else if ($this->getPlatform()->hasParameter('Rebuild_SSL_DB')) {
+            // Signal nethserver-squid-init-ssldb
+            $this->getPlatfrom()->signalEvent('nethserver-squid-init-ssldb &');
         }
     }
 

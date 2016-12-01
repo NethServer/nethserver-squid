@@ -23,7 +23,7 @@ CACHE_STATUS=`/sbin/e-smith/config getprop squid DiskCache`
 
 if [ "$CACHE_STATUS" = "enabled" ]; then
   if [ ! -f "/var/spool/squid/swap.state" ]; then
-      service squid status >/dev/null && service squid stop
+      systemctl status squid >/dev/null && systemctl stop squid
       squid -z -F -N
   fi
 fi

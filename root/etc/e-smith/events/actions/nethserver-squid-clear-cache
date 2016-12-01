@@ -21,12 +21,12 @@
 #
 SQUID_STATUS=`/sbin/e-smith/config getprop squid status`
 
-service squid status >/dev/null && service squid stop
+systenctl status squid >/dev/null && systemctl stop squid
 mkdir /var/spool/squid.old 2>/dev/null
 mv /var/spool/squid/* /var/spool/squid.old/
 if [ "$SQUID_STATUS" = "enabled" ]; then
   squid -z -F -N
-  service squid start
+  systemctl start squid
 fi
 rm -rf /var/spool/squid.old/
 

@@ -13,14 +13,23 @@
    } 
    if ($green_mode eq 'transparent_ssl' || (defined($ndb->blue()) && $blue_mode eq 'transparent_ssl')) {
        $OUT.="\n# Enable SSL transparent proxy
-https_port 3130 transparent ssl-bump generate-host-certificates=on cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tls/private/NSRV.key
+https_port 3130 intercept ssl-bump generate-host-certificates=on cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tls/private/NSRV.key sslflags=VERIFY_CRL_ALL options=NO_SSLv2,NO_SSLv3,No_Compression
 acl https_proto proto https
 always_direct allow https_proto
 ssl_bump none localhost
 ssl_bump none bypass_ssl
-ssl_bump server-first all
-sslproxy_cert_error allow all
-sslproxy_flags DONT_VERIFY_PEER";
+sslproxy_options NO_SSLv2,NO_SSLv3,No_Compression
+sslproxy_cipher ALL:!SSLv2:!ADH:!DSS:!MD5:!EXP:!DES:!PSK:!SRP:!RC4:!IDEA:!SEED:!aNULL:!eNULL
+# TLS/SSL bumping definitions
+acl tls_s1_connect at_step SslBump1
+acl tls_s2_client_hello at_step SslBump2
+acl tls_s3_server_hello at_step SslBump3
+# TLS/SSL bumping steps
+ssl_bump peek tls_s1_connect all
+ssl_bump splice all
+# peek at TLS/SSL connect data
+# splice: no active bumping
+";
    }
 }
 

@@ -17,7 +17,6 @@ https_port 3130 intercept ssl-bump generate-host-certificates=on cert=/etc/pki/t
 acl https_proto proto https
 always_direct allow https_proto
 ssl_bump none localhost
-ssl_bump none bypass_ssl
 sslproxy_options NO_SSLv2,NO_SSLv3,No_Compression
 sslproxy_cipher ALL:!SSLv2:!ADH:!DSS:!MD5:!EXP:!DES:!PSK:!SRP:!RC4:!IDEA:!SEED:!aNULL:!eNULL
 # TLS/SSL bumping definitions

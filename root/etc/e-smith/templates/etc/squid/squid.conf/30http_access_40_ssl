@@ -1,5 +1,0 @@
-#
-# Skip URL rewriter for SSL bump bypass sites
-#
-url_rewrite_access deny bypass_ssl self_port
-

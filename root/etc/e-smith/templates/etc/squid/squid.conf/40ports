@@ -13,7 +13,7 @@
    } 
    if ($green_mode eq 'transparent_ssl' || (defined($ndb->blue()) && $blue_mode eq 'transparent_ssl')) {
        $OUT.="\n# Enable SSL transparent proxy
-https_port 3130 intercept ssl-bump generate-host-certificates=on cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tls/private/NSRV.key sslflags=VERIFY_CRL_ALL options=NO_SSLv2,NO_SSLv3,No_Compression
+https_port 3130 intercept ssl-bump generate-host-certificates=on cert=/etc/pki/tls/certs/NSRV.crt key=/etc/pki/tls/private/NSRV.key sslflags=NO_DEFAULT_CA options=NO_SSLv2,NO_SSLv3,No_Compression dynamic_cert_mem_cache_size=128KB
 acl https_proto proto https
 always_direct allow https_proto
 ssl_bump none localhost

@@ -76,7 +76,7 @@ In this case, when accessing github, the avatars won't be displayed by the brows
 This kind of errors can't be fixes. See official documentation:
 
 * http://wiki.squid-cache.org/KnowledgeBase/HostHeaderForgery2
-* http://lists.squid-cache.org/pipermail/squid-users/2016-September/012344.html1
+* http://lists.squid-cache.org/pipermail/squid-users/2016-September/012344.html
 
 Authenticated mode
 ==================

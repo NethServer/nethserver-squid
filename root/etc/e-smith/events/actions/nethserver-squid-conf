@@ -27,10 +27,4 @@ if [ -x ${smbads} ] && ${smbads} test; then
     /usr/libexec/nethserver/smbads initkeytab
 fi
 
-# Initialize SSL db
-if [ ! -d /var/lib/ssl_db ]; then
-    /usr/lib64/squid/ssl_crtd -c -s /var/lib/ssl_db
-    /bin/chown -R squid:squid /var/lib/ssl_db
-fi
-
 exit 0

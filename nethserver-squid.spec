@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.11
+Version: 1.3.12
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Mon Jan 09 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.12-1
+- web filter: ssl bypassed sites can't be blocked - Enhancement #3432
+
 * Tue Dec 01 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.11-1
 - Add CIDR subnets and ip ranges as hosts without proxy in Proxy - Enhancement #3323 [NethServer]
 - WPAD improvements - Enhancement #3266 [NethServer]

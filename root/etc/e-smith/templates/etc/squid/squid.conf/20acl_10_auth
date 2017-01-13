@@ -13,11 +13,6 @@
            $OUT .= "auth_param negotiate program /usr/lib64/squid/negotiate_kerberos_auth -i\n";
            $OUT .= "auth_param negotiate children 10\n";
            $OUT .= "auth_param negotiate keep_alive on\n";
-
-           $OUT .= "\n# Additional NTLM auth for Windows XP clients in ADS mode\n";
-           $OUT .= "auth_param ntlm program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-ntlmssp\n";
-           $OUT .= "auth_param ntlm children 10\n";
-           $OUT .= "auth_param ntlm keep_alive off\n";
        }
 
        $OUT .= "\n# BASIC PAM auth (fallback) \n";

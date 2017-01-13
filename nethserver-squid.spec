@@ -9,7 +9,7 @@ BuildArch: noarch
 
 Requires: nethserver-firewall-base, nethserver-httpd
 Requires: squid >= 3.5.20
-Requires: samba-winbind-clients, nethserver-sssd, samba-winbind
+Requires: nethserver-sssd
 
 BuildRequires: perl
 BuildRequires: nethserver-devtools 

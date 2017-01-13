@@ -135,5 +135,3 @@ foreach (qw(
 templates2events("/etc/squid/squid.conf","proxy-modify");
 event_services("proxy-modify", 'squid' => 'restart');
 
-
-safe_symlink('../winbind.service', 'root/usr/lib/systemd/system/squid.service.wants/winbind.service');

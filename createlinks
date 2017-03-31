@@ -54,6 +54,7 @@ my $event = "nethserver-squid-save";
 
 event_actions($event, qw(
    nethserver-squid-check-cache 20
+   nethserver-sssd-initkeytabs  20
    firewall-adjust 30
 ));
 

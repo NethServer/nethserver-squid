@@ -137,3 +137,16 @@ event_services("proxy-modify", 'squid' => 'restart');
 
 
 safe_symlink('../winbind.service', 'root/usr/lib/systemd/system/squid.service.wants/winbind.service');
+
+#--------------------------------------------------
+# actions for trusted-networks-modify event
+#--------------------------------------------------
+
+$event = "trusted-networks-modify";
+event_templates($event, qw(
+    /etc/squid/squid.conf
+));
+event_services($event, qw(
+    squid restart
+));
+

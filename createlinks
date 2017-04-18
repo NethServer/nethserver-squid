@@ -136,3 +136,14 @@ foreach (qw(
 templates2events("/etc/squid/squid.conf","proxy-modify");
 event_services("proxy-modify", 'squid' => 'restart');
 
+#--------------------------------------------------
+# actions for trusted-networks-modify event
+#--------------------------------------------------
+
+$event = "trusted-networks-modify";
+event_templates($event, qw(
+    /etc/squid/squid.conf
+));
+event_services($event, qw(
+    squid restart
+));

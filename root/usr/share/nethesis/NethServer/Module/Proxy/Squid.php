@@ -42,8 +42,29 @@ class Squid extends \Nethgui\Controller\AbstractController
         $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'squid', 'status'));
         $this->declareParameter('GreenMode', $this->createValidator()->memberOf($this->modes), array('configuration', 'squid', 'GreenMode'));
         $this->declareParameter('BlueMode', $this->createValidator()->memberOf($this->modes), array('configuration', 'squid', 'BlueMode'));
-        $this->declareParameter('ParentProxy', Validate::IPv4_OR_EMPTY, array('configuration', 'squid', 'ParentProxy'));
+        $this->declareParameter('ParentProxy', Validate::ANYTHING, array('configuration', 'squid', 'ParentProxy'));
         $this->declareParameter('PortBlock', Validate::SERVICESTATUS, array('configuration', 'squid', 'PortBlock'));
+    }
+
+    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
+    {
+        if ($this->getRequest()->isMutation()) {
+            if ($this->parameters['ParentProxy']) {
+                $parts = explode(':', $this->parameters['ParentProxy']);
+                $vh = $this->createValidator(Validate::HOSTADDRESS);
+                if ( ! $vh->evaluate($parts[0]) ) {
+                    $report->addValidationError($this, 'ParentProxy', $vh);
+                }
+                if (isset($parts[1])) {
+                    $vp = $this->createValidator(Validate::PORTNUMBER);
+                    if ( ! $vp->evaluate($parts[1]) ) {
+                        $report->addValidationError($this, 'ParentProxy', $vp);
+                    }
+                }
+            }
+        }
+
+        parent::validate($report);
     }
 
     public function prepareView(\Nethgui\View\ViewInterface $view)

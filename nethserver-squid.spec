@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.5.0
+Version: 1.5.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -9,7 +9,7 @@ BuildArch: noarch
 
 Requires: nethserver-firewall-base, nethserver-httpd
 Requires: squid >= 3.5.20
-Requires: samba-winbind-clients, nethserver-sssd, samba-winbind
+Requires: nethserver-sssd
 
 BuildRequires: perl
 BuildRequires: nethserver-devtools 
@@ -39,6 +39,15 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Feb 15 2017 Davide Principi <davide.principi@nethesis.it> - 1.5.3-1
+- Squid parent proxy can no be set to ADDRESS:PORT in UI - Bug NethServer/dev#5217
+
+* Mon Jan 16 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.5.2-1
+- Web-proxy is interfering with the samba fileserver - Bug NethServer/dev#5194
+
+* Tue Jan 03 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.5.1-1
+- Disable squid ssl certificate generation - NethServer/dev#5176
+
 * Thu Dec 15 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.5.0-1
 - Transparent HTTPS proxy - NethServer/dev#5169
 

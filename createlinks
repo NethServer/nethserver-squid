@@ -31,7 +31,7 @@ my $event = "nethserver-squid-update";
 
 event_actions($event, qw(
    initialize-default-databases 00
-   nethserver-squid-conf 20
+   nethserver-sssd-initkeytabs  20
    nethserver-squid-check-cache 30
 ));
 
@@ -54,6 +54,7 @@ my $event = "nethserver-squid-save";
 
 event_actions($event, qw(
    nethserver-squid-check-cache 20
+   nethserver-sssd-initkeytabs  20
    firewall-adjust 30
 ));
 
@@ -135,9 +136,6 @@ foreach (qw(
 templates2events("/etc/squid/squid.conf","proxy-modify");
 event_services("proxy-modify", 'squid' => 'restart');
 
-
-safe_symlink('../winbind.service', 'root/usr/lib/systemd/system/squid.service.wants/winbind.service');
-
 #--------------------------------------------------
 # actions for trusted-networks-modify event
 #--------------------------------------------------
@@ -149,4 +147,3 @@ event_templates($event, qw(
 event_services($event, qw(
     squid restart
 ));
-

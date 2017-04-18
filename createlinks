@@ -128,3 +128,14 @@ foreach (qw(
     ));
 }
 
+#--------------------------------------------------
+# actions for trusted-networks-modify event
+#--------------------------------------------------
+
+$event = "trusted-networks-modify";
+event_templates($event, qw(
+    /etc/squid/squid.conf
+));
+event_services($event, qw(
+    squid restart
+));

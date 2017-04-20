@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.3.12
+Version: 1.3.13
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -37,6 +37,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Thu Apr 20 2017 Davide Principi <davide.principi@nethesis.it> - 1.3.13-1
+- squid: trusted networks not enabled - Bug NethServer/dev#5261
+
 * Mon Jan 09 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.12-1
 - web filter: ssl bypassed sites can't be blocked - Enhancement #3432
 

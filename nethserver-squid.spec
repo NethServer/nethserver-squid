@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.5.3
+Version: 1.5.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -39,6 +39,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Thu Apr 20 2017 Davide Principi <davide.principi@nethesis.it> - 1.5.4-1
+- Squid: integrated authentication doesn't work - Bug NethServer/dev#5259
+- squid: trusted networks not enabled - Bug NethServer/dev#5261
+
 * Wed Feb 15 2017 Davide Principi <davide.principi@nethesis.it> - 1.5.3-1
 - Squid parent proxy can no be set to ADDRESS:PORT in UI - Bug NethServer/dev#5217
 

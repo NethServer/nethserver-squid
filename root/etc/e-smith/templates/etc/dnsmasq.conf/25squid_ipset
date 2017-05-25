@@ -1,0 +1,11 @@
+{
+    my $status = $squid{'status'} || 'disabled';
+    my $list = $squid{'BypassDomains'} || '';
+    if ($status eq 'enabled' && $list ne '') {
+        $list =~ s/,/\//g;
+        $OUT.="#\n";
+        $OUT.="# 25squid_ipset - Squid domain bypass using ipset\n";
+        $OUT.="#\n";
+        $OUT.="ipset=/$list/squid-bypass\n\n\n";
+    }
+}

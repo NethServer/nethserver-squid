@@ -24,6 +24,10 @@ source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_P
 source_lang = en
 type = PHP_ALT_ARRAY
 
+[nethserver.Proxy_BypassDomains]
+source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy_BypassDomains.php
+source_lang = en
+type = PHP_ALT_ARRAY
 
 [nethserver.Proxy_Config]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_Proxy_Config.php

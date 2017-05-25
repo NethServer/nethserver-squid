@@ -12,6 +12,7 @@
     my $green_mode = $squid{'GreenMode'} || 'manual';
     my $blue_mode = $squid{'BlueMode'} || 'manual';
     my $block = $squid{'PortBlock'} || 'disabled';
+    my $bypass_domain_list = $squid{'BypassDomains'} ? '+squid-bypass' : '';
     
     my %zones;
     my @ips;
@@ -44,6 +45,9 @@
         my $bypass_dst_str = '';
         push(@bypass_dst, @interfaces);
         push(@bypass_dst, @ips);
+        if ($bypass_domain_list ne '') {
+            push(@bypass_dst, $bypass_domain_list);
+        }
 
         if ( $green_mode =~ /transparent/ || (defined($ndb->blue()) && $blue_mode =~ /transparent/) ) {
 

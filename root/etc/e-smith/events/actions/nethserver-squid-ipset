@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#
+# Copyright (C) 2017 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+# Manage ipset for squid bypass
+
+NAME=squid-bypass
+TIMEOUT=300
+
+ipset list $NAME 2>/dev/null
+
+# Create the ipset if not exists
+if [ $? -gt 0 ]; then
+    ipset create $NAME iphash timeout $TIMEOUT
+else
+# otherwise flush it
+    ipset flush $NAME
+fi
+

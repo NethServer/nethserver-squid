@@ -23,7 +23,7 @@
 # Manage ipset for squid bypass
 
 NAME=squid-bypass
-TIMEOUT=300
+TIMEOUT=43200 # 12 hours
 
 ipset list $NAME 2>/dev/null
 

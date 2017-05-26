@@ -36,6 +36,14 @@ Parent proxy
     IP_Address:port.
     *DO NOT* enter the IP address of this server.
 
+Domains without proxy
+=====================
+
+List of domains bypassed when transparent proxy is enabled.
+
+Domains
+    List of domains, one per line.
+
 Hosts without proxy
 ===================
 

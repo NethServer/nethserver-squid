@@ -33,6 +33,7 @@ event_actions($event, qw(
    initialize-default-databases 00
    nethserver-sssd-initkeytabs  20
    nethserver-squid-check-cache 30
+   nethserver-squid-ipset       50
 ));
 
 templates2events("/etc/squid/squid.conf",  $event);
@@ -55,6 +56,7 @@ my $event = "nethserver-squid-save";
 event_actions($event, qw(
    nethserver-squid-check-cache 20
    nethserver-sssd-initkeytabs  20
+   nethserver-squid-ipset       50
    firewall-adjust 30
 ));
 

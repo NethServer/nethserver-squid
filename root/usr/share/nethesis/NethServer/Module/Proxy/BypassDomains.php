@@ -61,7 +61,7 @@ class BypassDomains extends \Nethgui\Controller\AbstractController
         $domains = array_filter(preg_split('/[,\s]+/', $this->parameters['BypassDomains']));
         foreach ($domains as $domain){
             if( ! $hostnameValidator->evaluate($domain)) {
-                $report->addValidationErrorMessage($this, 'BypassDomains', "'$domain' is not a valid domain");
+                $report->addValidationErrorMessage($this, 'BypassDomains', 'valid_bypass', array($domain));
             }
         }
     }

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.5.4
+Version: 1.6.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -39,6 +39,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Thu Jun 01 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.6.0-1
+- Web proxy: support bypass by domains - NethServer/dev#5299
+
 * Thu Apr 20 2017 Davide Principi <davide.principi@nethesis.it> - 1.5.4-1
 - Squid: integrated authentication doesn't work - Bug NethServer/dev#5259
 - squid: trusted networks not enabled - Bug NethServer/dev#5261

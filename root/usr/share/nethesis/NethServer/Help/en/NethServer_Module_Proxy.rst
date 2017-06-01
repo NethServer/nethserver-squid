@@ -41,8 +41,11 @@ Domains without proxy
 
 List of domains bypassed when transparent proxy is enabled.
 
+Requirement: all clients must use this machine as DNS server.
+
 Domains
     List of domains, one per line.
+    Each entry matches the domain itself and all sub-domains.
 
 Hosts without proxy
 ===================

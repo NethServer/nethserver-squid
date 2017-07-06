@@ -16,7 +16,7 @@ Manual
     Squid will listen on port 3128. All client must be explicitly configured to use the proxy.
 
 Authenticated
-    Each user will be forced to enter username and password.
+    Each user will be forced to enter user name and password.
     Squid will listen on port 3128. All client must be explicitly configured to use the proxy.
 
 Transparent
@@ -79,6 +79,44 @@ Enabled
 
 Host
     Select a host between remote hosts and firewall objects.
+
+Description
+    Custom description (optional).
+
+Rules
+=====
+
+Change the priority or the output WAN for traffic which goes through the proxy.
+
+Rule #
+    Auto-generated identification number
+
+Enable rule
+    If checked, the rule is enabled.
+
+Source
+    Select a host, IP range or CIDR between firewall objects.
+
+Action
+    There 3 actions available:
+
+    - *Force to <provide>*: force the traffic from :guilabel:`Source` to the selected
+      provider. If the provider is down, the remote hosts will not be reachable
+      from the selected source
+
+    - *Route to <provider>*: divert the traffic from :guilabel:`Source` to the selected provider.
+      If the provider is down, the traffic will be routed accordingly to the
+      configured multi wan policy.
+
+    - *Low priority*: lower the priority of the traffic from :guilabel:`Source`
+
+    - *High priority*: raise the priority of the traffic from :guilabel:`Source`
+     
+
+Destination domains
+    Accept a list of domain names.
+    If left blank, the rule applies to any contacted remote host,
+    otherwise the rule applies only if involved domain is listed.
 
 Description
     Custom description (optional).

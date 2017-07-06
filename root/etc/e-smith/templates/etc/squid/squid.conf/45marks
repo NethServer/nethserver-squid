@@ -1,0 +1,70 @@
+
+#
+# 45marks
+#
+{
+    use esmith::ConfigDB;
+    use esmith::NetworksDB;
+    use NethServer::Firewall;
+
+    my $fw = new NethServer::Firewall();
+    my $db = esmith::ConfigDB->open_ro('squid');
+    my $ndb = esmith::NetworksDB->open_ro();
+    our @providers = $fw->getProviders();
+
+    sub getProvider
+    {
+        my $needle = shift;
+
+        foreach my $p (@providers) {
+            if ($p->{'name'} eq $needle) {
+                return $p;
+            }
+        }
+        return undef;
+    }
+
+
+    foreach my $rule ($db->get_all_by_prop('type' => 'rule')) {
+        my $src = $rule->prop('Src') || next;
+        my $action = $rule->prop('Action') || next;
+        my $status = $rule->prop('status') || 'disabled';
+        next if ($status eq 'disabled');
+        my $dst = $rule->prop('Dst') || '';
+        my $acl_dst_name = '';
+        if ($dst) {
+            $dst =~ s/,/ \./g;
+            $acl_dst_name = "dst_mark_".$rule->key;
+        }
+        my $acl_src_name = "src_mark_".$rule->key;
+        my $src_addr = $fw->getAddress($src);
+
+        # Supported objects: host, cidr, zone, iprange
+        if ($src !~ /^(host|cidr|zone|iprange)/ || !$src_addr) {
+            next;
+        }
+        $OUT .= "\n# Rule ".$rule->key.": src: $src action: $action dst: $dst\n";
+        $OUT .= "acl $acl_src_name src $src_addr\n";
+        if ($acl_dst_name) {
+            $OUT .= "acl $acl_dst_name dstdomain .$dst\n";
+        }
+        if ($action =~ /^priority;(.*)/) {
+            # map low to 3 (low), map high to 2 (medium)
+            # 1 (high) is reserved for system use
+            $mask = (lc($1) eq 'low') ? "0x3": "0x2";
+            $OUT .= "tcp_outgoing_mark $mask $acl_src_name $acl_dst_name\n";
+        } elsif ($action =~ /^provider;(.*)/) {
+            my $p = getProvider($1);
+            my $mask = $p->{'mask'} || next;
+            $OUT .= "tcp_outgoing_mark $mask $acl_src_name $acl_dst_name\n";
+        } elsif ($action =~ /^force;(.*)/) {
+            my $p = getProvider($1);
+            my $interface = $ndb->get($p->{'interface'}) || next;
+            my $ipaddr = $interface->prop('ipaddr') || next;
+            $OUT .= "tcp_outgoing_address $ipaddr $acl_src_name $acl_dst_name\n";
+        } else {
+            next;
+        }
+       
+    }
+}

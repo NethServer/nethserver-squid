@@ -5,6 +5,7 @@
 {
     use esmith::ConfigDB;
     use esmith::NetworksDB;
+    use esmith::util;
     use NethServer::Firewall;
 
     my $fw = new NethServer::Firewall();
@@ -32,15 +33,24 @@
         next if ($status eq 'disabled');
         my $dst = $rule->prop('Dst') || '';
         my $acl_dst_name = '';
+        my $src_addr = '';
         if ($dst) {
             $dst =~ s/,/ \./g;
             $acl_dst_name = "dst_mark_".$rule->key;
         }
         my $acl_src_name = "src_mark_".$rule->key;
-        my $src_addr = $fw->getAddress($src);
+        if ($src =~ /^role;(.*)/) {
+            foreach my $interface ($ndb->get_all_by_prop('role' => $1)) {
+                my $ipaddr = $interface->prop('ipaddr') || next;
+                my $mask = $interface->prop('netmask') || next;
+                $src_addr .= " ".esmith::util::computeLocalNetworkShortSpec($ipaddr, $mask);
+            }
+        } else {
+            $src_addr = $fw->getAddress($src,1);
+        }
 
         # Supported objects: host, cidr, zone, iprange
-        if ($src !~ /^(host|cidr|zone|iprange)/ || !$src_addr) {
+        if ($src !~ /^(host|cidr|zone|iprange|role)/ || !$src_addr) {
             next;
         }
         $OUT .= "\n# Rule ".$rule->key.": src: $src action: $action dst: $dst\n";

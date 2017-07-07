@@ -32,6 +32,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private $hosts = array();
     private $ipRanges = array();
     private $cidrs = array();
+    private $zones = array();
+    private $roles = array();
     private $actions = array();
     private $objs = array();
 
@@ -50,6 +52,19 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if (!$this->cidrs) {
             $this->cidrs = $this->getPlatform()->getDatabase('hosts')->getAll('cidr');
         }
+        if (!$this->zones) {
+            $this->zones = $this->getPlatform()->getDatabase('networks')->getAll('zone');
+        }
+        if (!$this->roles) {
+            $tmp = array();
+            foreach($this->getPlatform()->getDatabase('networks')->getAll() as $key => $props) {
+                if (isset($props['role']) && in_array($props['role'],array('green','orange','blue','hotspot'))) {
+                    $tmp[$props['role']] = '';
+                }
+            }
+            $this->roles = array_keys($tmp);
+        }
+
         if (!$this->actions) {
             foreach ($this->getPlatform()->getDatabase('networks')->getAll('provider') as $key => $props) {
                 $i = $this->getPlatform()->getDatabase('networks')->getKey($props['interface']);
@@ -70,6 +85,12 @@ class Modify extends \Nethgui\Controller\Table\Modify
             }
             foreach ($this->arrayToDatasource($this->cidrs,'cidr') as $pair) {
                 $this->objs[] = $pair[0];
+            }
+            foreach ($this->arrayToDatasource($this->zones,'zone') as $pair) {
+                $this->objs[] = $pair[0];
+            }
+            foreach ($this->roles as $role) {
+                $this->objs[] = "role;".$role;
             }
         }
     }
@@ -151,10 +172,15 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $h = $view->translate('Hosts_label');
         $ir = $view->translate('IpRanges_label');
         $c = $view->translate('CIDRs_label');
+        $z = $view->translate('Zones_label');
         $hosts = $this->arrayToDatasource($this->hosts,'host');
         $ranges = $this->arrayToDatasource($this->ipRanges,'iprange');
         $cidrs = $this->arrayToDatasource($this->cidrs,'cidr');
-        $view['SrcDatasource'] = array(array($hosts,$h),array($ranges,$ir),array($cidrs,$c));
+        $zones = $this->arrayToDatasource($this->zones,'zone');
+        foreach($this->roles as $role) {
+           $zones[] = array('role;'.$role, $role);
+        }
+        $view['SrcDatasource'] = array(array($hosts,$h),array($ranges,$ir),array($cidrs,$c),array($zones,$z));
         $view['ActionDatasource'] = array_map(function($fmt) use ($view) {
             $tmp = explode(";",$fmt);
             if ($tmp[0] == 'priority') {

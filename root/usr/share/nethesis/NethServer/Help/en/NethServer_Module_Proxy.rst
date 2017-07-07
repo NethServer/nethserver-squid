@@ -95,7 +95,7 @@ Enable rule
     If checked, the rule is enabled.
 
 Source
-    Select a host, IP range or CIDR between firewall objects.
+    Select a host, zone, IP range or CIDR between firewall objects.
 
 Action
     There 3 actions available:

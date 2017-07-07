@@ -156,7 +156,7 @@ Each rule has following properties:
 
 * ``Description``: optional description
 * ``Dst``: comma-separeted list of domains, this is converted to a ``dstdomain`` ACL
-* ``Src``: firewall object, supported objects are: host, ip range and cidr . This is converted to ``src`` ACL
+* ``Src``: firewall object, supported objects are: role, host, zone, ip range and cidr . This is converted to ``src`` ACL
 * ``status``: can be ``enabled`` or ``disabled``
 
 Example: ::

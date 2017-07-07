@@ -58,7 +58,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if (!$this->roles) {
             $tmp = array();
             foreach($this->getPlatform()->getDatabase('networks')->getAll() as $key => $props) {
-                if (isset($props['role']) && in_array($props['role'],array('green','orange','blue','hotspot'))) {
+                if (isset($props['role']) && in_array($props['role'],array('green','orange','blue'))) {
                     $tmp[$props['role']] = '';
                 }
             }

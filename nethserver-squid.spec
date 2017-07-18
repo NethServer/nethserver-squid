@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.6.0
+Version: 1.7.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -39,6 +39,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Jul 18 2017 Davide Principi <davide.principi@nethesis.it> - 1.7.0-1
+- Web proxy: support divert and priority rules - NethServer/dev#5327
+
 * Thu Jun 01 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.6.0-1
 - Web proxy: support bypass by domains - NethServer/dev#5299
 

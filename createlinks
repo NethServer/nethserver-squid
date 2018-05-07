@@ -43,6 +43,7 @@ templates2events("/etc/hosts",  $event);
 templates2events("/var/www/html/wpad.dat",  $event);
 templates2events("/etc/sysconfig/squid",  $event);
 templates2events("/etc/httpd/conf.d/wpad.conf",  $event);
+templates2events("/etc/backup-config.d/nethserver-sssd.include",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
 event_services($event, 'dnsmasq' => 'restart');

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.7.0
+Version: 1.7.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -39,6 +39,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Mon Jul 02 2018 Davide Principi <davide.principi@nethesis.it> - 1.7.1-1
+- Fix of keytab backup configuration expansion - NethServer/dev#5536
+
 * Tue Jul 18 2017 Davide Principi <davide.principi@nethesis.it> - 1.7.0-1
 - Web proxy: support divert and priority rules - NethServer/dev#5327
 

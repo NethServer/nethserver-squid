@@ -35,7 +35,7 @@
 
     if ($squid{'GreenMode'} eq 'authenticated' || $squid{'GreenMode'} eq 'manual') {
         foreach my $n ($ndb->green()) {
-            my $target = "PROXY ".$n->prop('ipaddr').":3128";
+            my $target = "PROXY $SystemName.$DomainName:3128";
             if ($adJoin) {
                $target = $phost; 
             }
@@ -48,7 +48,7 @@
 
     if ($squid{'BlueMode'} eq 'authenticated' || $squid{'BlueMode'} eq 'manual') {
         foreach my $n ($ndb->blue()) {
-            my $target = "PROXY ".$n->prop('ipaddr').":3128";
+            my $target = "PROXY $SystemName.$DomainName:3128";
             if ($adJoin) {
                $target = $phost;
             }

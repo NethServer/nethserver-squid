@@ -4,11 +4,6 @@
     my $status = $squid{status} || 'disabled';
 
     $ndb = esmith::NetworksDB->open_ro or warn("Could not open NetworksDB");
-    my $phost = "PROXY proxy.$DomainName:3128";
-    my $adJoin = 0;
-    if ( ($smb{'status'} || 'disabled') eq 'enabled' and ($smb{'ServerRole'} || '') eq 'ADS' ) {
-        $adJoin = 1;
-    }
 
 
     if ($status eq 'disabled') {
@@ -35,10 +30,7 @@
 
     if ($squid{'GreenMode'} eq 'authenticated' || $squid{'GreenMode'} eq 'manual') {
         foreach my $n ($ndb->green()) {
-            my $target = "PROXY ".$n->prop('ipaddr').":3128";
-            if ($adJoin) {
-               $target = $phost; 
-            }
+            my $target = "PROXY $SystemName.$DomainName:3128; PROXY ".$n->prop('ipaddr').":3128";
             my ($net, $bcast) = esmith::util::computeNetworkAndBroadcast($n->prop('ipaddr'), $n->prop('netmask'));
             $OUT.= "\n    // ".$n->key.":$net green ".$squid{'GreenMode'}."\n";
             $OUT.= '    if (isInNet(myIpAddress(), "'.$net.'", "'.$n->prop('netmask').'"))'."\n";
@@ -48,10 +40,7 @@
 
     if ($squid{'BlueMode'} eq 'authenticated' || $squid{'BlueMode'} eq 'manual') {
         foreach my $n ($ndb->blue()) {
-            my $target = "PROXY ".$n->prop('ipaddr').":3128";
-            if ($adJoin) {
-               $target = $phost;
-            }
+            my $target = "PROXY $SystemName.$DomainName:3128; PROXY ".$n->prop('ipaddr').":3128";
             my ($net, $bcast) = esmith::util::computeNetworkAndBroadcast($n->prop('ipaddr'), $n->prop('netmask'));
             $OUT.= "\n    // ".$n->key.":$net blue ".$squid{'BlueMode'}."\n";
             $OUT.= '    if (isInNet(myIpAddress(), "'.$net.'", "'.$n->prop('netmask').'"))'."\n";

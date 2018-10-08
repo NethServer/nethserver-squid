@@ -151,3 +151,15 @@ event_templates($event, qw(
 event_services($event, qw(
     squid restart
 ));
+
+#--------------------------------------------------
+# actions for nethserver-sssd-save event
+#--------------------------------------------------
+
+$event = "nethserver-sssd-save";
+event_templates($event, qw(
+    /etc/squid/squid.conf
+));
+event_services($event, qw(
+    squid restart
+));

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.7.1
+Version: 1.7.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -39,6 +39,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Oct 12 2018 Stephane de Labrusse <stephdl@de-labrusse.fr> - 1.7.2-1
+- Package nethserver-X must subscribe nethserver-sssd-save - NethServer/dev#5600
+
 * Mon Jul 02 2018 Davide Principi <davide.principi@nethesis.it> - 1.7.1-1
 - Fix of keytab backup configuration expansion - NethServer/dev#5536
 

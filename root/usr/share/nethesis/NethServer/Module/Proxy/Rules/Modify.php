@@ -73,8 +73,9 @@ class Modify extends \Nethgui\Controller\Table\Modify
                 }
                 $this->actions[] = 'provider;'.$key;
             }
-            $this->actions[] = 'priority;low';
-            $this->actions[] = 'priority;high';
+            foreach ($this->getPlatform()->getDatabase('tc')->getAll('class') as $key => $props) {
+                $this->actions[] = "class;$key";
+            }
         }
         if (!$this->objs) {
             foreach ($this->arrayToDatasource($this->hosts,'host') as $pair) {
@@ -183,8 +184,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $view['SrcDatasource'] = array(array($hosts,$h),array($ranges,$ir),array($cidrs,$c),array($zones,$z));
         $view['ActionDatasource'] = array_map(function($fmt) use ($view) {
             $tmp = explode(";",$fmt);
-            if ($tmp[0] == 'priority') {
-                return array($fmt, $view->translate($tmp[1] . '_label'). " " . $view->translate($tmp[0] . '_label'));
+            if ($tmp[0] == 'class') {
+                return array($fmt, $view->translate('class_label')." ".$view->translate($tmp[1]));
             } else {
                 return array($fmt, $view->translate($tmp[0] . '_label'). " " . $view->translate($tmp[1]));
             }

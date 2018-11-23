@@ -11,6 +11,7 @@
     my $fw = new NethServer::Firewall();
     my $db = esmith::ConfigDB->open_ro('squid');
     my $ndb = esmith::NetworksDB->open_ro();
+    my $tdb = esmith::ConfigDB->open_ro('tc');
     our @providers = $fw->getProviders();
 
     sub getProvider
@@ -58,10 +59,10 @@
         if ($acl_dst_name) {
             $OUT .= "acl $acl_dst_name dstdomain .$dst\n";
         }
-        if ($action =~ /^priority;(.*)/) {
-            # map low to 3 (low), map high to 2 (medium)
-            # 1 (high) is reserved for system use
-            $mask = (lc($1) eq 'low') ? "0x3": "0x2";
+        if ($action =~ /^class;(.*)/) {
+            my $class = $tdb->get($1);
+            my $mark = $class->prop('Mark') || next;
+            $mask = "0x$mark";
             $OUT .= "tcp_outgoing_mark $mask $acl_src_name $acl_dst_name\n";
         } elsif ($action =~ /^provider;(.*)/) {
             my $p = getProvider($1);

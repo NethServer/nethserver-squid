@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.7.2
+Version: 1.7.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -39,6 +39,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Nov 27 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.3-1
+- Web proxy rules don't show shaping priorities - Bug NethServer/dev#5656
+
 * Fri Oct 12 2018 Stephane de Labrusse <stephdl@de-labrusse.fr> - 1.7.2-1
 - Package nethserver-X must subscribe nethserver-sssd-save - NethServer/dev#5600
 

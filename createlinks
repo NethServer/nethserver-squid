@@ -44,6 +44,7 @@ templates2events("/var/www/html/wpad.dat",  $event);
 templates2events("/etc/sysconfig/squid",  $event);
 templates2events("/etc/httpd/conf.d/wpad.conf",  $event);
 templates2events("/etc/backup-config.d/nethserver-sssd.include",  $event);
+templates2events("/etc/logrotate.d/squid",  $event);
 event_services($event, 'squid' => 'restart');
 event_services($event, 'httpd' => 'reload');
 event_services($event, 'dnsmasq' => 'restart');
@@ -162,4 +163,13 @@ event_templates($event, qw(
 ));
 event_services($event, qw(
     squid restart
+));
+
+#--------------------------------------------------
+# actions for nethserver-base-update event
+#--------------------------------------------------
+
+$event = "nethserver-base-update";
+event_templates($event, qw(
+    /etc/logrotate.d/squid
 ));

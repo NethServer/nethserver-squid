@@ -1,0 +1,24 @@
+/var/log/squid/*.log \{
+    {$logrotate{'Rotate'} || 'weekly'}
+    rotate {$logrotate{'Times'} || '5'}
+    { 
+    my $compress = $logrotate{'Compression'} || 'disabled';
+    if ($compress eq 'enabled') {
+        $OUT.="compress";
+    } 
+    else {
+        $OUT.="#compress";
+    } 
+    }
+    notifempty
+    missingok
+    nocreate
+    sharedscripts
+    postrotate
+      # Asks squid to reopen its logs. (logfile_rotate 0 is set in squid.conf)
+      # errors redirected to make it silent if squid is not running
+      /usr/sbin/squid -k rotate 2>/dev/null
+      # Wait a little to allow Squid to catch up before the logs is compressed
+      sleep 1
+    endscript
+\}

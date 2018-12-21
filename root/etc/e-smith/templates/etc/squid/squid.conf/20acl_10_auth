@@ -1,6 +1,10 @@
 {
    use esmith::NetworksDB;
    use NethServer::SSSD;
+   
+   # check and set libdir 32/64bit (for armhfp)
+   my $_libdir = ( -e '/usr/lib64/' ) ? "/usr/lib64" : "/usr/lib";
+
    my $ndb = esmith::NetworksDB->open_ro();
    my $green_mode = $squid{'GreenMode'} || "manual";
    my $blue_mode = $squid{'BlueMode'} || "manual";
@@ -10,13 +14,13 @@
 
        if ($sssd->isAD()) {
            $OUT .= "\n# GSSAPI auth in ADS mode\n";
-           $OUT .= "auth_param negotiate program /usr/lib64/squid/negotiate_kerberos_auth -i\n";
+           $OUT .= "auth_param negotiate program ${_libdir}/squid/negotiate_kerberos_auth -i\n";
            $OUT .= "auth_param negotiate children 10\n";
            $OUT .= "auth_param negotiate keep_alive on\n";
        }
 
        $OUT .= "\n# BASIC PAM auth (fallback) \n";
-       $OUT .= "auth_param basic program  /usr/lib64/squid/basic_pam_auth\n";
+       $OUT .= "auth_param basic program  ${_libdir}/squid/basic_pam_auth\n";
        $OUT .= "auth_param basic children 5\n";
        $OUT .= "auth_param basic realm $DomainName\n";
        $OUT .= "auth_param basic credentialsttl 1 hours\n";

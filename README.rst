@@ -106,6 +106,7 @@ A bypass can be of two types:
 * bypass-dst: listed target host are bypassed
 
 Properties:
+
 * *Host*: a host object, like a remote or local host
 * *status*: can be ``enabled`` or ``disabled``
 * *Description*: optional description

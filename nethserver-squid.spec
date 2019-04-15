@@ -3,7 +3,7 @@ Name: nethserver-squid
 Version: 1.7.4
 Release: 1%{?dist}
 License: GPL
-URL: %{url_prefix}/%{name} 
+URL: %{url_prefix}/%{name}
 Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
@@ -12,7 +12,7 @@ Requires: squid >= 3.5.20
 Requires: nethserver-sssd
 
 BuildRequires: perl
-BuildRequires: nethserver-devtools 
+BuildRequires: nethserver-devtools
 
 %description
 NethServer squid configuration

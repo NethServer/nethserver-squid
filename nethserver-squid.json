@@ -1,0 +1,23 @@
+{
+  "id": "nethserver-squid",
+  "name": "Web Proxy & Filter",
+  "summary": "NethServer configuration for a caching web proxy",
+  "description": "NethServer squid configuration",
+  "url": "",
+  "homepage": "https://github.com/NethServer/nethserver-squid",
+  "provides": ["nethserver-squid"],
+  "release": {
+    "version": "1.0.0"
+  },
+  "tags": ["squid", "proxy", "filter"],
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/NethServer/dev/issues"
+  },
+  "author": {
+    "name": "Edoardo Spadoni, Giacomo Sanchietti",
+    "url": "https://github.com/NethServer/nethserver-squid",
+    "email": "edoardo.spadoni@nethesis.it, giacomo.sanchietti@nethesis.it"
+  },
+  "icon": "logo.png"
+}

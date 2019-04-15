@@ -12,4 +12,4 @@ npm install
 npm run build
 popd
 
-tar -C ui/dist -c -z -f nethserver-squid-ui.tar.gz .
+tar -C ui/dist -c -z -f nethserver-squid.tar.gz .

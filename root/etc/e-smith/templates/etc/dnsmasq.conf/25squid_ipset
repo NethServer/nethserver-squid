@@ -1,11 +1,18 @@
 {
+    use esmith::ConfigDB;
+    my $db = esmith::ConfigDB->open_ro('fwrules');
+    my @list;
+    foreach ($db->get_all_by_prop('type' => 'bypass-dst')) {
+        my $status = $_->prop('status') || next;
+        next if ($status eq 'disabled');
+        my $domains = $_->prop('Domains') || next;
+        push(@list, split(/,/,$domains));
+    }
     my $status = $squid{'status'} || 'disabled';
-    my $list = $squid{'BypassDomains'} || '';
-    if ($status eq 'enabled' && $list ne '') {
-        $list =~ s/,/\//g;
+    if ($status eq 'enabled' && (scalar @list > 0)) {
         $OUT.="#\n";
         $OUT.="# 25squid_ipset - Squid domain bypass using ipset\n";
         $OUT.="#\n";
-        $OUT.="ipset=/$list/squid-bypass\n\n\n";
+        $OUT.="ipset=/".join("/",@list)."/squid-bypass\n\n\n";
     }
 }

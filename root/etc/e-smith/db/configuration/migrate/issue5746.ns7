@@ -1,0 +1,16 @@
+{
+    #
+    # Issue 5746
+    # Migrate BypassDomains squid property
+    #
+
+    my $bypass = $DB->get_prop_and_delete('squid','BypassDomains') || '';
+    if ($bypass ne '') {
+        # create a destination bypass inside fwrules db
+        use esmith::ConfigDB;
+        my $db = esmith::ConfigDB->open('fwrules');
+        $db->new_record("migrated-BypassDomains", {type => 'bypass-dst', status => 'enabled', Domains => $bypass, Description => 'Migrated from squid BypassDomains'});
+    }
+
+    '';
+}

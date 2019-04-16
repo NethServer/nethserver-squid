@@ -12,7 +12,14 @@
     my $green_mode = $squid{'GreenMode'} || 'manual';
     my $blue_mode = $squid{'BlueMode'} || 'manual';
     my $block = $squid{'PortBlock'} || 'disabled';
-    my $bypass_domain_list = $squid{'BypassDomains'} ? '+squid-bypass' : '';
+    my $bypass_domain_list = '';
+    foreach ($pdb->get_all_by_prop('type' => 'bypass-dst')) {
+        my $status = $_->prop('status') || 'disabled';
+        next if ($status eq 'disabled');
+        my $domains = $_->prop('Domains') || next;
+        $bypass_domain_list = '+squid-bypass';
+        last;
+    }
     
     my %zones;
     my @ips;

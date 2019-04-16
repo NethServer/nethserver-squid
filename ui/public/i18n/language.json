@@ -1,0 +1,87 @@
+{
+  "actions": "Actions",
+  "action": "Action",
+  "list": "List",
+  "search": "Search",
+  "enable": "Enable",
+  "disable": "Disable",
+  "create": "Create",
+  "edit": "Edit",
+  "delete": "Delete",
+  "save": "Save",
+  "next": "Next",
+  "back": "Back",
+  "close": "Close",
+  "prev": "Previous",
+  "of": "of",
+  "or": "or",
+  "with": "with",
+  "rows_per_page": "Rows per page",
+  "all": "All",
+  "yes": "Yes",
+  "no": "No",
+  "configure": "Configure",
+  "charts": "Charts",
+  "charts_not_updated": "Charts cannot be updated. Maybe Netdata is not running",
+  "show_charts": "Show charts",
+  "hide_charts": "Hide charts",
+  "status": "Status",
+  "advanced_mode": "Advanced options",
+  "cancel": "Cancel",
+  "are_you_sure": "Are you sure",
+  "days": "Days",
+  "ever": "Ever",
+  "other": "Other",
+  "info": "Info",
+  "warning": "Warning",
+  "package_required": "Missing packages",
+  "package_required_desc": "To access this page you have to install the required packages showed below",
+  "install_package": "Install package",
+  "install_packages": "Install packages",
+  "packages_installed_ok": "Packages installed successfully!",
+  "packages_installed_error": "Packages not installed.",
+  "about": {
+    "title": "About",
+    "website": "Web site",
+    "bug_tracker": "Bug tracker"
+  },
+  "dashboard": {
+    "menu_title": "Web Proxy & Filter",
+    "title": "Web Proxy & Filter dashboard"
+  },
+  "proxy": {
+    "menu_title": "Proxy",
+    "title": "Proxy"
+  },
+  "proxy_rules": {
+    "menu_title": "Proxy rules",
+    "title": "Proxy rules"
+  },
+  "filter": {
+    "menu_title": "Filter",
+    "title": "Filter"
+  },
+  "categories": {
+    "menu_title": "Categories",
+    "title": "Categories"
+  },
+  "profiles": {
+    "menu_title": "Profiles",
+    "title": "Profiles"
+  },
+  "settings": {
+    "menu_title": "Settings",
+    "title": "Settings"
+  },
+  "logs": {
+    "title": "Logs",
+    "start_follow_button": "Follow",
+    "stop_follow_button": "Stop following"
+  },
+  "docs": {
+    "more_info_about": "More info about"
+  },
+  "validation": {
+    "validation_failed": "Validation failed"
+  }
+}

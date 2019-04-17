@@ -1,0 +1,10 @@
+#
+# 80squid_port
+#
+{
+    my $port = $squid{'PortRedirect'} || '';
+    if ($port ne '' && $squid{'status'} eq 'enabled') {
+        $OUT .= "?COMMENT redirect squid port for green\n";
+        $OUT .= "REDIRECT\tloc\t3128\ttcp\t$port\n";;
+    }
+}

@@ -4,8 +4,8 @@
     <doc-info
       :placement="'top'"
       :title="$t('docs.proxy_rules')"
-      :chapter="'mail'"
-      :section="'mailbox-configuration'"
+      :chapter="'web_proxy'"
+      :section="'priority-and-divert-rules'"
       :inline="false"
     ></doc-info>
   </div>

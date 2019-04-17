@@ -4,8 +4,8 @@
     <doc-info
       :placement="'top'"
       :title="$t('docs.filter')"
-      :chapter="'mail'"
-      :section="'mailbox-configuration'"
+      :chapter="'content_filter'"
+      :section="''"
       :inline="false"
     ></doc-info>
 

@@ -45,4 +45,4 @@ if ($input->{'Host'}) {
 
 $db->new_record($name, $obj);
 
-system("/sbin/e-smith/signal-event -j firewall-adjust");
+system("/sbin/e-smith/signal-event -j nethserver-squid-save");

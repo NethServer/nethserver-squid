@@ -36,7 +36,6 @@ if ($cmd eq 'configuration') {
     }
     $db->set_prop('squid', 'SafePorts', join(',',@{$input->{'SafePorts'}}));
 
-    system("/sbin/e-smith/signal-event -j nethserver-squid-save");
 } elsif ($cmd eq 'update-bypass') {
     my $db = esmith::ConfigDB->open('fwrules');
     $db->set_prop($input->{'name'}, 'Description', $input->{'Description'});
@@ -48,13 +47,13 @@ if ($cmd eq 'configuration') {
         $db->set_prop($input->{'name'}, 'Host', $input->{'Host'}{'type'}.";".$input->{'Host'}{'name'});
     }
 
-    system("/sbin/e-smith/signal-event -j firewall-adjust");
 } elsif ($cmd eq 'enable-bypass' || $cmd eq 'disable-bypass') {
     my $db = esmith::ConfigDB->open('fwrules');
     my $status =( $cmd eq 'enable-bypass') ? 'enabled' : 'disabled';
     $db->set_prop($input->{'name'}, 'status', $status);
 
-    system("/sbin/e-smith/signal-event -j firewall-adjust");
 } else {
     error();
 }
+
+system("/sbin/e-smith/signal-event -j nethserver-squid-save");

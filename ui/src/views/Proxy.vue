@@ -215,8 +215,10 @@
                 :class="['mg-left-5', props.row.props.status == 'enabled' ? '' : 'gray']"
                 @click="props.row.props.status == 'enabled' ? openEditDestination(props.row) : undefined"
               >
-                <strong>{{ props.row.props.Host.name}}</strong>
-                <span class="gray mg-left-5">({{ props.row.props.Host.type}})</span>
+                <strong>{{ (props.row.props.Host && props.row.props.Host.name) || props.row.props.Domains.join(',')}}</strong>
+                <span
+                  class="gray mg-left-5"
+                >({{ props.row.props.Host && props.row.props.Host.type || 'domains'}})</span>
               </a>
             </td>
             <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">
@@ -615,7 +617,7 @@
           <div class="modal-header">
             <h4
               class="modal-title"
-            >{{$t('proxy.delete_destination')}} {{toDeleteDestination.props.Host.name}}</h4>
+            >{{$t('proxy.delete_destination')}} {{(toDeleteDestination.props.Host && toDeleteDestination.props.Host.name) || toDeleteDestination.props.Domains.join(',')}}</h4>
           </div>
           <form
             class="form-horizontal"
@@ -725,14 +727,16 @@ export default {
         props: {
           Host: {
             name: ""
-          }
+          },
+          Domains: []
         }
       },
       toDeleteDestination: {
         props: {
           Host: {
             name: ""
-          }
+          },
+          Domains: []
         }
       },
       objects: []
@@ -914,8 +918,7 @@ export default {
       nethserver.exec(
         ["nethserver-squid/proxy/read"],
         {
-          action: "configuration",
-          expand: true
+          action: "configuration"
         },
         null,
         function(success) {
@@ -949,8 +952,7 @@ export default {
       nethserver.exec(
         ["nethserver-squid/proxy/read"],
         {
-          action: "bypass-list",
-          expand: true
+          action: "bypass-list"
         },
         null,
         function(success) {
@@ -975,8 +977,7 @@ export default {
       nethserver.exec(
         ["nethserver-squid/proxy/read"],
         {
-          action: "object-list",
-          expand: true
+          action: "object-list"
         },
         null,
         function(success) {
@@ -1081,9 +1082,18 @@ export default {
     },
     openEditDestination(dest) {
       this.currentDestination = JSON.parse(JSON.stringify(dest));
-      this.currentDestination.Destination = this.currentDestination.props.Host.name;
-      this.currentDestination.Type = this.currentDestination.props.Host.type;
-      this.currentDestination.DstType = this.currentDestination.props.Host.type;
+      this.currentDestination.Destination =
+        (this.currentDestination.props.Host &&
+          this.currentDestination.props.Host.name) ||
+        this.currentDestination.props.Domains.join(",");
+      this.currentDestination.Type =
+        (this.currentDestination.props.Host &&
+          this.currentDestination.props.Host.type) ||
+        "domains";
+      this.currentDestination.DstType =
+        (this.currentDestination.props.Host &&
+          this.currentDestination.props.Host.type) ||
+        "domains";
       this.currentDestination.Description = this.currentDestination.props.Description;
       this.currentDestination.errors = this.initDestinationErrors();
       this.currentDestination.isEdit = true;
@@ -1193,14 +1203,19 @@ export default {
 
       var destinationObj = {
         action: destination.isEdit ? "update-bypass" : "create-bypass",
-        Host: {
-          type: destination.Type,
-          name: destination.Destination
-        },
         Description: destination.Description,
         name: destination.isEdit ? destination.name : null,
         type: "bypass-dst"
       };
+
+      if (destination.Type) {
+        destinationObj["Host"] = {
+          type: destination.Type,
+          name: destination.Destination
+        };
+      } else {
+        destinationObj["Domains"] = destination.Destination.split(",");
+      }
 
       context.currentDestination.isLoading = true;
       context.$forceUpdate();

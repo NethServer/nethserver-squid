@@ -53,6 +53,7 @@ export default {
           }
 
           vm.view.menu = success;
+          vm.getSettings();
         },
         function(error) {
           console.error(error);
@@ -65,6 +66,7 @@ export default {
     $(".modal").modal("hide");
     next();
   },
+  mounted() {},
   data() {
     return {
       view: {
@@ -100,6 +102,9 @@ export default {
           console.error(error);
         }
       );
+    },
+    getSettings() {
+      this.view.isLoaded = true;
     }
   }
 };

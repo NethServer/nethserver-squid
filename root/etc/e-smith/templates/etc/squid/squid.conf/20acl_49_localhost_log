@@ -1,0 +1,3 @@
+# exclude localhost from logging
+# these lines have to go before any logging acl
+access_log none to_localhost

@@ -43,8 +43,12 @@ class BypassDst extends \Nethgui\Controller\TableController
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
 
+        $filterCbk = function($key, $row) {
+            return isset($row['Host']);
+        };
+
         $this
-            ->setTableAdapter($this->getPlatform()->getTableAdapter('fwrules', 'bypass-dst'))
+            ->setTableAdapter($this->getPlatform()->getTableAdapter('fwrules', 'bypass-dst', $filterCbk))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\Proxy\BypassDst\Modify('update')) 
             ->addRowAction(new \NethServer\Module\Proxy\BypassDst\Modify('delete'))

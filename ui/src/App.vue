@@ -74,15 +74,6 @@
             <span class="list-group-item-value">{{$t('categories.menu_title')}}</span>
           </a>
         </li>
-        <li
-          id="profiles-item"
-          v-bind:class="[getCurrentPath('profiles') ? 'active' : '', 'list-group-item']"
-        >
-          <a href="#/profiles">
-            <span class="fa fa-users"></span>
-            <span class="list-group-item-value">{{$t('profiles.menu_title')}}</span>
-          </a>
-        </li>
         <li class="li-empty"></li>
         <li
           v-bind:class="[getCurrentPath('settings') ? 'active' : '', 'list-group-item']"
@@ -141,6 +132,10 @@ export default {
 }
 .divider {
   border-bottom: 1px solid #d1d1d1;
+}
+
+.mg-left-5 {
+  margin-left: 5px !important;
 }
 
 .stats-container {
@@ -266,6 +261,10 @@ export default {
 
 .gray {
   color: #72767b !important;
+}
+
+.blue {
+  color: #0088ce !important;
 }
 
 .v-suggestions .items {

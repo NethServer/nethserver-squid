@@ -38,7 +38,6 @@ import ProxyRules from "./views/ProxyRules.vue";
 
 import Filter from "./views/Filter.vue";
 import Categories from "./views/Categories.vue";
-import Profiles from "./views/Profiles.vue";
 
 import Settings from "./views/Settings.vue";
 import Logs from "./views/Logs.vue";
@@ -93,10 +92,6 @@ const router = new Router({
     {
       path: "/categories",
       component: Categories
-    },
-    {
-      path: "/profiles",
-      component: Profiles
     },
     {
       path: "/settings",

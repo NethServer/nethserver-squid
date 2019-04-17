@@ -51,7 +51,50 @@
   },
   "proxy": {
     "menu_title": "Proxy",
-    "title": "Proxy"
+    "title": "Proxy",
+    "configuration": "Configuration",
+    "source": "Source",
+    "destination": "Destination",
+    "description": "Description",
+    "bypass": "Bypass",
+    "enabled": "Enabled",
+    "green_trusted": "GREEN & Trusted",
+    "blue_zones": "BLUE",
+    "configure_proxy": "Configure proxy",
+    "mode_green_zones": "Mode GREEN zones",
+    "mode_blue_zones": "Mode BLUE zones",
+    "block_http": "Block HTTP/HTTPS port",
+    "parent_proxy": "Parent proxy",
+    "redirect_port": "Redirect port",
+    "safe_ports": "Safe ports",
+    "manual": "Manual",
+    "authenticated": "Authenticated",
+    "transparent": "Transparent",
+    "transparent_ssl": "Transparent SSL",
+    "we_suggest_no_block": "We suggest you to not use this option if proxy mode is 'Trasparent' or 'Transparent SSL'",
+    "configuration_updated_ok": "Configuration updated successfully!",
+    "configuration_updated_error": "Configuration not updated.",
+    "edit_configuration": "Edit configuration",
+    "bypass_warning": "Bypass not available",
+    "bypass_warning_desc": "Source or Destination bypasses are available only with 'Transparent' or 'Transparent SSL' proxy mode",
+    "add_source": "Add source",
+    "edit_source": "Edit source",
+    "delete_source": "Delete source",
+    "add_destination": "Add destination",
+    "edit_destination": "Edit destination",
+    "delete_destination": "Delete destination",
+    "source_created_ok": "Source created successfully!",
+    "source_created_error": "Source not created.",
+    "source_updated_ok": "Source updated successfully!",
+    "source_updated_error": "Source not updated.",
+    "source_deleted_ok": "Source deleted successfully!",
+    "source_deleted_error": "Source not deleted.",
+    "destination_created_ok": "Destination created successfully!",
+    "destination_created_error": "Destination not created.",
+    "destination_updated_ok": "Destination updated successfully!",
+    "destination_updated_error": "Destination not updated.",
+    "destination_deleted_ok": "Destination deleted successfully!",
+    "destination_deleted_error": "Destination not deleted."
   },
   "proxy_rules": {
     "menu_title": "Proxy rules",
@@ -65,10 +108,6 @@
     "menu_title": "Categories",
     "title": "Categories"
   },
-  "profiles": {
-    "menu_title": "Profiles",
-    "title": "Profiles"
-  },
   "settings": {
     "menu_title": "Settings",
     "title": "Settings"
@@ -79,7 +118,15 @@
     "stop_follow_button": "Stop following"
   },
   "docs": {
-    "more_info_about": "More info about"
+    "more_info_about": "More info about",
+    "proxy": "Proxy",
+    "proxy_rules": "Proxy rules",
+    "filter": "Filter",
+    "categories": "Categories",
+    "profiles": "Profiles",
+    "parent_proxy": "Upstream proxy, port is optional (default 3128)",
+    "safe_ports": "Safe ports are a list of ports accessible using the proxy. It accepts a comma-separated list of ports",
+    "redirect_port": "Override the default Squid listening port"
   },
   "validation": {
     "validation_failed": "Validation failed"

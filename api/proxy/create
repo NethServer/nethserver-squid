@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+
+require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
+
+my $input = readInput();
+# the only valid cmd is 'create-bypass'
+my $cmd = $input->{'action'};
+
+my $db = esmith::ConfigDB->open('fwrules');
+my @records = $db->get_all_by_prop('type' => $input->{'type'});
+
+my $name = sprintf("%s%d", $input->{'type'}, (scalar @records)+1);
+
+my $obj = {Description => $input->{'Description'}, type => $input->{'type'}, 'status' => 'enabled'};
+if ($input->{'Domains'}) {
+    $obj->{'Domains'} = join(",", @{$input->{'Domains'}});
+}
+if ($input->{'Host'}) {
+    $obj->{'Host'} = $input->{'Host'}{'type'}.";".$input->{'Host'}{'name'};
+}
+
+$db->new_record($name, $obj);
+
+system("/sbin/e-smith/signal-event -j firewall-adjust");

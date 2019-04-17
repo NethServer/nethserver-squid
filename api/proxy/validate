@@ -56,15 +56,15 @@ if ($data['action'] == 'configuration') {
     $fdb = new EsmithDatabase('fwrules');
 
     $v->declareParameter('status', Validate::SERVICESTATUS);
-    if ($data['Host']) {
+    if (isset($data['Host']) && $data['Host']) {
         if (!$hdb->getKey($data['Host']['name'])) {
             $v->addValidationError('Host', 'object_not_found');
         }
     } 
-    if ($data['Domains']) {
+    if (isset($data['Domains']) && $data['Domains']) {
         $vh = $v->createValidator(Validate::HOSTNAME_FQDN);
         foreach ($data['Domains'] as $domain) {
-            if (!$vh->evaluate($parts[0])) {
+            if (!$vh->evaluate($domain)) {
                 $v->addValidationError('Domains', 'valid_fqdn_domain');
             }
         }

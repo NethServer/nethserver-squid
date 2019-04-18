@@ -888,18 +888,51 @@ export default {
         ")";
     },
     toggleStatus(isEdit) {
+      var context = this;
       if (!isEdit) {
-        this.configuration.status = !this.configuration.status;
+        context.configuration.status = !context.configuration.status;
       }
-      this.configuration.isEdit = isEdit;
+      context.configuration.isEdit = isEdit;
 
-      if (this.configuration.status == true) {
+      if (context.configuration.status == true) {
         $("#configureProxyModal").modal("show");
-        this.newConfiguration = JSON.parse(JSON.stringify(this.configuration));
-        this.newConfiguration.errors = this.initConfigurationErrors();
-        console.log(this.newConfiguration);
+        context.newConfiguration = JSON.parse(
+          JSON.stringify(context.configuration)
+        );
+        context.newConfiguration.errors = context.initConfigurationErrors();
       } else {
         // save state
+        // notification
+        nethserver.notifications.success = context.$i18n.t(
+          "proxy.configuration_updated_ok"
+        );
+        nethserver.notifications.error = context.$i18n.t(
+          "proxy.configuration_updated_error"
+        );
+
+        // update values
+        nethserver.exec(
+          ["nethserver-squid/proxy/update"],
+          {
+            SafePorts: context.configuration.SafePorts,
+            status: "disabled",
+            PortBlock: context.configuration.PortBlock,
+            ParentProxy: context.configuration.ParentProxy,
+            GreenMode: context.configuration.GreenMode,
+            BlueMode: context.configuration.BlueMode,
+            action: "configuration"
+          },
+          function(stream) {
+            console.info("update-config", stream);
+          },
+          function(success) {
+            // get all
+            context.getConfiguration();
+          },
+          function(error, data) {
+            console.error(error, data);
+          }
+        );
       }
     },
     toggleAdvancedMode() {

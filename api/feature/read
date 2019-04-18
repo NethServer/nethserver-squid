@@ -27,7 +27,7 @@ require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
 
 my $input = readInput();
 my $features = {
-    filter => { installed => (-f '/etc/e-smith/db/configuration/defaults/ufdb/type'), packages => ['nethserver-squidguard', 'nethserver-squidclamav'] },
+    filter => { installed => (-f '/etc/e-smith/db/configuration/defaults/ufdb/type') ? JSON::true : JSON::false, packages => ['nethserver-squidguard', 'nethserver-squidclamav'] },
     categories => { installed => (-f '/etc/e-smith/db/configuration/defaults/ufdb/type') ? JSON::true : JSON::false, packages => ['nethserver-squidguard', 'nethserver-squidclamav'] }
 };
 

@@ -135,7 +135,9 @@
           <div class="stats-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <span class="card-pf-utilization-card-details-count stats-count">
               {{proxy["client_bytes_out"] || 0 | byteFormat}}
-              <span class="semi-bold">{{$t('download')}}</span>
+              <span
+                class="semi-bold"
+              >{{$t('download')}}</span>
             </span>
             <span class="card-pf-utilization-card-details-count stats-count mg-left-20">
               {{proxy["client_bytes_in"] || 0 | byteFormat}}
@@ -191,26 +193,10 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container">
-        <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
-        <span class="card-pf-utilization-card-details-description stats-description">
-          <span
-            class="card-pf-utilization-card-details-line-2 stats-text"
-          >{{$t('dashboard.total_users')}}</span>
-        </span>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container">
-        <span
-          class="card-pf-utilization-card-details-count stats-count"
-        >{{proxyStats.traffic || 0 | byteFormat}}</span>
-        <span class="card-pf-utilization-card-details-description stats-description">
-          <span
-            class="card-pf-utilization-card-details-line-2 stats-text"
-          >{{$t('dashboard.total_traffic')}}</span>
-        </span>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-        <h3>{{$t('dashboard.top_10_users')}}</h3>
+      <h3>{{ $t('dashboard.today_proxy_traffic') }}</h3>
+      <div v-if="!view.isProxyLoaded" class="spinner spinner-lg view-spinner"></div>
+      <div v-if="view.isProxyLoaded" class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <h3>{{$t('dashboard.top_5_users')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in proxyStats.top_users" v-bind:key="k" class="list-group-item">
             <strong>{{k+1}}.</strong>
@@ -218,6 +204,22 @@
             <span class="gray">({{i.bytes | byteFormat}} | {{i.percentage}}%)</span>
           </li>
         </ul>
+      </div>
+      <div v-if="view.isProxyLoaded" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container mg-left-20">
+        <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
+        <span class="card-pf-utilization-card-details-description stats-description">
+          <span
+            class="card-pf-utilization-card-details-line-2 stats-text"
+          >{{$t('dashboard.total_users')}}</span>
+        </span>
+        <span
+          class="card-pf-utilization-card-details-count stats-count mg-left-20"
+        >{{proxyStats.traffic || 0 | byteFormat}}</span>
+        <span class="card-pf-utilization-card-details-description stats-description">
+          <span
+            class="card-pf-utilization-card-details-line-2 stats-text"
+          >{{$t('dashboard.total_traffic')}}</span>
+        </span>
       </div>
     </div>
 
@@ -332,6 +334,7 @@ export default {
   },
   mounted() {
     this.getStats();
+    this.getProxyStats();
     this.initProxyCharts();
     this.initFilterCharts();
   },
@@ -341,6 +344,7 @@ export default {
         isLoaded: false,
         isChartLoaded: false,
         isFilterChartLoaded: false,
+        isProxyLoaded: false,
         invalidChartsData: false
       },
       proxy: {
@@ -400,7 +404,7 @@ export default {
     getProxyStats() {
       var context = this;
 
-      context.view.isLoaded = false;
+      context.view.isProxyLoaded = false;
       nethserver.exec(
         ["nethserver-squid/dashboard/read"],
         {
@@ -414,9 +418,12 @@ export default {
             console.error(e);
           }
           context.proxyStats = success;
+
+          context.view.isProxyLoaded = true;
         },
         function(error) {
           console.error(error);
+          context.view.isProxyLoaded = true;
         }
       );
     },
@@ -427,8 +434,7 @@ export default {
       nethserver.exec(
         ["nethserver-squid/dashboard/read"],
         {
-          action: "filter-stats",
-          time: 900
+          action: "filter-stats"
         },
         null,
         function(success) {

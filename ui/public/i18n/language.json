@@ -85,9 +85,10 @@
     "top_10_sites": "Top 10 blocked sites",
     "top_10_categories": "Top 10 blocked categories",
     "top_10_profiles": "Top matching profiles",
-    "top_10_users": "Top 10 traffic users",
+    "top_5_users": "Top 5 traffic users",
     "total_users": "Total users",
-    "total_traffic": "Total traffic"
+    "total_traffic": "Total traffic",
+    "today_proxy_traffic": "Today proxy traffic"
   },
   "proxy": {
     "menu_title": "Proxy",

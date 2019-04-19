@@ -240,7 +240,7 @@
             <p v-if="view.isLoaded && filter.status == 'enabled'">
               <strong class="col-xs-7 col-sm-7 col-md-7 col-lg-7">{{$t('dashboard.antivirus')}}:</strong>
               <span
-                :class="['mg-left-10', filter.antivirus == 'enabled' ? 'pficon pficon-ok' : 'pficon pficon-error-circle-o']"
+                :class="[filter.antivirus == 'enabled' ? 'pficon pficon-ok' : 'pficon pficon-error-circle-o']"
               ></span>
             </p>
             <p v-if="view.isLoaded && filter.status == 'enabled'">

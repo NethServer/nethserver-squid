@@ -225,8 +225,9 @@ export default {
   position: absolute;
   right: 0;
   font-size: 0.8em;
-  top: -10px;
+  top: -30px;
   text-align: left;
+  z-index: 5;
 }
 .dygraph-label.dygraph-ylabel {
   transform: rotate(-90deg) !important;
@@ -236,6 +237,9 @@ export default {
 
 .no-mg-top {
   margin-top: 0px !important;
+}
+.no-mg-bottom {
+  margin-bottom: 0px !important;
 }
 
 .mg-top-10 {

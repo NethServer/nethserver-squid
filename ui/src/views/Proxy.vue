@@ -14,7 +14,6 @@
     <h3 v-if="view.isLoaded">{{ $t('proxy.configuration') }}</h3>
     <div v-if="view.isLoaded" class="panel panel-default">
       <div class="panel-heading">
-        <!-- <button @click="openConfigure()" class="btn btn-primary right">{{$t('configure')}}</button> -->
         <button
           v-if="configuration.status"
           @click="toggleStatus(true)"

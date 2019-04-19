@@ -79,10 +79,10 @@
     "empty_piechart_label": "Statistics are not available",
     "filter_requests": "Requests",
     "filter_blocked": "Blocked",
-    "top_10_hosts": "Top 10 hosts",
-    "top_10_sites": "Top 10 sites",
-    "top_10_categories": "Top 10 categories",
-    "top_10_profiles": "Top 10 profiles"
+    "top_10_hosts": "Top 10 blocked hosts",
+    "top_10_sites": "Top 10 blocked sites",
+    "top_10_categories": "Top 10 blocked categories",
+    "top_10_profiles": "Top matching profiles"
   },
   "proxy": {
     "menu_title": "Proxy",

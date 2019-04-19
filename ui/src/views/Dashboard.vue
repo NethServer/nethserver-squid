@@ -84,7 +84,7 @@
       <h3>{{ $t('dashboard.proxy_counter') }}</h3>
       <div class="row row-stat">
         <div class="row-inline-block">
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
               class="card-pf-utilization-card-details-count stats-count"
             >{{proxy["source-bypass"]}}</span>
@@ -94,7 +94,7 @@
               >{{$t('dashboard.source_bypass')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
               class="card-pf-utilization-card-details-count stats-count"
             >{{proxy["destination-bypass"]}}</span>
@@ -104,7 +104,7 @@
               >{{$t('dashboard.destination_bypass')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span class="card-pf-utilization-card-details-count stats-count">{{proxy["rules"]}}</span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
@@ -112,7 +112,7 @@
               >{{$t('dashboard.rules')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span class="card-pf-utilization-card-details-count stats-count">
               <span
                 :class="[proxy.PortBlock == 'enabled' ? 'pficon pficon-ok' : 'pficon pficon-error-circle-o']"
@@ -134,20 +134,20 @@
         <div class="row-inline-block">
           <div class="stats-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <span class="card-pf-utilization-card-details-count stats-count">
-              {{proxy["client_bytes_in"] || 0 | byteFormat}}
-              <span class="semi-bold">in</span>
-            </span>
-            <span class="card-pf-utilization-card-details-count stats-count mg-left-10">
               {{proxy["client_bytes_out"] || 0 | byteFormat}}
-              <span class="semi-bold">out</span>
+              <span class="semi-bold">{{$t('download')}}</span>
             </span>
-            <span class="card-pf-utilization-card-details-description stats-description">
+            <span class="card-pf-utilization-card-details-count stats-count mg-left-20">
+              {{proxy["client_bytes_in"] || 0 | byteFormat}}
+              <span class="semi-bold">{{$t('upload')}}</span>
+            </span>
+            <span class="card-pf-utilization-card-details-description stats-description mg-left-10">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
               >{{$t('dashboard.client_kbytes_sec')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
               class="card-pf-utilization-card-details-count stats-count"
             >{{proxy["client_requests"] || 0}}</span>
@@ -157,7 +157,7 @@
               >{{$t('dashboard.client_requests')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
               class="card-pf-utilization-card-details-count stats-count"
             >{{proxy["client_hits"] || 0}}</span>
@@ -167,7 +167,7 @@
               >{{$t('dashboard.client_hits')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
               class="card-pf-utilization-card-details-count stats-count"
             >{{proxy["client_errors"] || 0}}</span>
@@ -177,7 +177,7 @@
               >{{$t('dashboard.client_errors')}}</span>
             </span>
           </div>
-          <div class="stats-container col-xs-12 col-sm-4 col-md-3 col-lg-2">
+          <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
               class="card-pf-utilization-card-details-count stats-count"
             >{{proxy["cpu_usage"] || 0}}%</span>
@@ -188,6 +188,36 @@
             </span>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container">
+        <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
+        <span class="card-pf-utilization-card-details-description stats-description">
+          <span
+            class="card-pf-utilization-card-details-line-2 stats-text"
+          >{{$t('dashboard.total_users')}}</span>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container">
+        <span
+          class="card-pf-utilization-card-details-count stats-count"
+        >{{proxyStats.traffic || 0 | byteFormat}}</span>
+        <span class="card-pf-utilization-card-details-description stats-description">
+          <span
+            class="card-pf-utilization-card-details-line-2 stats-text"
+          >{{$t('dashboard.total_traffic')}}</span>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+        <h3>{{$t('dashboard.top_10_users')}}</h3>
+        <ul class="list-group">
+          <li v-for="(i,k) in proxyStats.top_users" v-bind:key="k" class="list-group-item">
+            <strong>{{k+1}}.</strong>
+            {{i.name}}
+            <span class="gray">({{i.bytes | byteFormat}} | {{i.percentage}}%)</span>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -245,7 +275,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
         <h3>{{$t('dashboard.top_10_hosts')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.ip" v-bind:key="k" class="list-group-item">
@@ -255,7 +285,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-sm-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
         <h3>{{$t('dashboard.top_10_sites')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.host" v-bind:key="k" class="list-group-item">
@@ -265,7 +295,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-sm-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
         <h3>{{$t('dashboard.top_10_categories')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.category" v-bind:key="k" class="list-group-item">
@@ -275,7 +305,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-sm-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
         <h3>{{$t('dashboard.top_10_profiles')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.profile" v-bind:key="k" class="list-group-item">
@@ -328,6 +358,11 @@ export default {
         host: [],
         category: []
       },
+      proxyStats: {
+        traffic: 0,
+        top_users: [],
+        users: 0
+      },
       charts: {
         request: null,
         net: null
@@ -356,6 +391,29 @@ export default {
           context.filter = success["filter"];
 
           context.view.isLoaded = true;
+        },
+        function(error) {
+          console.error(error);
+        }
+      );
+    },
+    getProxyStats() {
+      var context = this;
+
+      context.view.isLoaded = false;
+      nethserver.exec(
+        ["nethserver-squid/dashboard/read"],
+        {
+          action: "proxy-stats"
+        },
+        null,
+        function(success) {
+          try {
+            success = JSON.parse(success);
+          } catch (e) {
+            console.error(e);
+          }
+          context.proxyStats = success;
         },
         function(error) {
           console.error(error);
@@ -419,7 +477,7 @@ export default {
       nethserver.exec(
         ["nethserver-squid/dashboard/read"],
         {
-          action: "proxy-stats",
+          action: "proxy-charts",
           time: 900
         },
         null,
@@ -526,7 +584,7 @@ export default {
       nethserver.exec(
         ["nethserver-squid/dashboard/read"],
         {
-          action: "proxy-stats",
+          action: "proxy-charts",
           time: time
         },
         null,

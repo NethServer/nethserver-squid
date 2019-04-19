@@ -46,15 +46,29 @@
       </div>
     </div>
 
-    <h3 v-if="view.isLoaded">{{ $t('proxy.bypass') }}</h3>
+    <h3 v-if="view.isLoaded">
+      {{ $t('proxy.bypass') }}
+      <span
+        v-if="(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') && !(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
+      >
+        ({{ $t('proxy.valid_for')}}
+        <span class="green">{{$t('proxy.green_trusted')}}</span>)
+      </span>
+      <span
+        v-if="(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl') && !(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl')"
+      >
+        ({{ $t('proxy.valid_for')}}
+        <span class="blue">{{$t('proxy.blue_zones')}}</span>)
+      </span>
+    </h3>
 
     <div
-      v-if="view.isLoaded && ((configuration.GreenMode != 'transparent' && configuration.GreenMode != 'transparent_ssl') || (configuration.BlueMode != 'transparent' && configuration.BlueMode != 'transparent_ssl'))"
+      v-if="view.isLoaded && ((configuration.GreenMode != 'transparent' && configuration.GreenMode != 'transparent_ssl') && (configuration.BlueMode != 'transparent' && configuration.BlueMode != 'transparent_ssl'))"
       class="blank-slate-pf"
       id
     >
       <div class="blank-slate-pf-icon">
-        <span class="pficon pficon-warning-triangle-o"></span>
+        <span class="pficon pficon-info"></span>
       </div>
       <h1>{{$t('proxy.bypass_warning')}}</h1>
       <p>{{$t('proxy.bypass_warning_desc')}}.</p>
@@ -67,7 +81,7 @@
     </div>
 
     <ul
-      v-if="view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') && (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
+      v-if="view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
       class="nav nav-tabs nav-tabs-pf"
     >
       <li>
@@ -89,7 +103,7 @@
     </ul>
 
     <div
-      v-if=" view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') && (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
+      v-if=" view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
       class="tab-content"
     >
       <div class="tab-pane fade active" id="source-tab" role="tabpanel" aria-labelledby="hosts-tab">

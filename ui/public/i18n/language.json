@@ -40,6 +40,8 @@
   "install_packages": "Install packages",
   "packages_installed_ok": "Packages installed successfully!",
   "packages_installed_error": "Packages not installed.",
+  "download": "Download",
+  "upload": "Upload",
   "about": {
     "title": "About",
     "website": "Web site",
@@ -82,7 +84,10 @@
     "top_10_hosts": "Top 10 blocked hosts",
     "top_10_sites": "Top 10 blocked sites",
     "top_10_categories": "Top 10 blocked categories",
-    "top_10_profiles": "Top matching profiles"
+    "top_10_profiles": "Top matching profiles",
+    "top_10_users": "Top 10 traffic users",
+    "total_users": "Total users",
+    "total_traffic": "Total traffic"
   },
   "proxy": {
     "menu_title": "Proxy",
@@ -95,6 +100,7 @@
     "enabled": "Enabled",
     "green_trusted": "GREEN & Trusted",
     "blue_zones": "BLUE",
+    "valid_for": "Valid for",
     "configure_proxy": "Configure proxy",
     "mode_green_zones": "Mode GREEN zones",
     "mode_blue_zones": "Mode BLUE zones",

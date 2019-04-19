@@ -1076,6 +1076,9 @@ export default {
 .mg-left-10 {
   margin-left: 10px !important;
 }
+.mg-left-20 {
+  margin-left: 20px !important;
+}
 
 .mg-top-20 {
   margin-top: 20px !important;

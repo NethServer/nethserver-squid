@@ -38,8 +38,12 @@ if ($data['action'] == 'update') {
 $v_domain = $v->createValidator()->hostname(1);
 if(isset($data['Dst']) && $data['Dst']) {
     foreach ($data['Dst'] as $d){
+        # skip empty objects
+        if (!$d) {
+            continue;
+        }
         if( ! $v_domain->evaluate($d)) {
-            $report->addValidationError('Dst', $v_domain);
+            $v->addValidationError('Dst', $v_domain);
         }
     }
 }

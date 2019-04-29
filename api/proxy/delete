@@ -28,7 +28,6 @@ require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
 my $db = esmith::ConfigDB->open('fwrules');
 
 my $input = readInput();
-my $key = $input->{'name'};
 
 my $record = $db->get($input->{'name'});
 $record->delete();

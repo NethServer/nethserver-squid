@@ -1,0 +1,109 @@
+#!/usr/bin/php
+<?php
+
+/*
+ * Copyright (C) 2019 Nethesis S.r.l.
+ *
+ * This script is part of NethServer.
+ *
+ * NethServer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NethServer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once("/usr/libexec/nethserver/api/lib/Helpers.php");
+
+
+function parseIndex() 
+{
+    $cdb = new EsmithDatabase('contentfilter');
+    $index = array();
+    $c = "/var/squidGuard/blacklists/global_usage";
+    $last = "";
+    if (is_readable($c)) {
+        $handle = @fopen("$c", "r");
+        if ($handle) {
+            while (($buffer = fgets($handle, 4096)) !== false) {
+                $buffer = trim($buffer);
+                if (!$buffer || $buffer[0] == "#") {
+                    continue;
+                }
+                $fields = explode(":",$buffer);
+                if ($fields) {
+                    if ($fields[0] == "NAME") {
+                        $last = trim($fields[1]);
+                        # Add to the list only existing categories
+                        if (file_exists("/var/squidGuard/blacklists/$last")) {
+                            $index[$last] = array("type" => "downloaded", "name" => $last, "domains" => array(), 'profiles' => listParentProfiles($cdb, $last));
+                        }
+                    } else {
+                        # remove whitespaces and lowercase
+                        $field_name = strtolower(trim($fields[0]));
+                        $field_name = str_replace(" ", "_", $field_name);
+
+                        # remap fields
+                        if ($field_name == 'desc_en') {
+                            $field_name = 'description';
+                        } else if ($field_name == 'name_en') {
+                            $field_name = 'info';
+                        } else {
+                            continue;
+                        }
+
+                        if (trim($fields[1])) {
+                            $index[$last][$field_name] = trim($fields[1]);
+                        } else {
+                            $index[$last][$field_name] = $last;
+                        }
+                    }
+                }
+            }
+            fclose($handle);
+        }
+    }
+    return $index;
+}
+
+function listParentProfiles($db, $category)
+{
+    $ret = array();
+    foreach ($db->getAll('filter') as $key => $props) {
+        if (in_array($category, explode(',', $props['Categories']))) {
+            foreach ($db->getAll('profile') as $pkey => $pprops) {
+                if ($pprops['Filter'] == "filter;$key" || @$pprops['FilterElse'] == "filter;$key") {
+                    $ret[] = $pkey;
+                }
+            }
+        }
+    }
+    return $ret;
+}
+
+function readCategories($filter = "")
+{
+
+    $categories = parseIndex();
+    $cdb = new EsmithDatabase('contentfilter');
+    $custom_categories = $cdb->getAll('category');
+    foreach ( $custom_categories as $k => $c ) {
+        $categories[$k] = array("name" => $k, "info" => "", "description" => $c['Description'], "type" => "custom", "domains" => explode(",",$c['Domains']), "profiles" => listParentProfiles($cdb, $k));
+    }
+    if ($filter) {
+        return array_filter($categories, function($k) use($filter) { return $k['type'] == $filter; });
+    } else {
+        return $categories;
+    }
+}
+
+$filter = isset($argv[1]) ? $argv[1] : "";
+
+print json_encode(array("categories" => array_values(readCategories($filter))));

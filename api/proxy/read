@@ -71,7 +71,6 @@ if ($cmd eq 'bypass-list') {
     my $hdb = esmith::HostsDB->open_ro();
     # Objects
     foreach ($hdb->get_all()) {
-        my $type = $_->prop('type');
         my %props = $_->props;
         $props{'name'} = $_->key;
         push(@objects, \%props);

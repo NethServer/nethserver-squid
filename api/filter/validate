@@ -38,12 +38,12 @@ function validate_filter($v, $data)
     $dv = $v->createValidator(Validate::SERVICESTATUS);
     foreach (array('BlockAll', 'BlockIpAccess', 'BlockFileTypes', 'WhiteList', 'BlackList') as $value) {
         if(!$dv->evaluate($data[$value])) {
-            $v->addValidationError('Filter', 'it_can_be_enabled_or_disabled', $data[$value]);
+            $v->addValidationError($value, 'it_can_be_enabled_or_disabled', $data[$value]);
         }
     }
     foreach ($data['Categories'] as $cat) {
         if(!isset($categories[$cat])) {
-            $v->addValidationError('Filter', 'category_not_found', $cat);
+            $v->addValidationError('DefaultFilter', 'category_not_found', $cat);
         }
     }
 }

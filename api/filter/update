@@ -31,6 +31,7 @@ my $cmd = $input->{'action'};
 
 if ($cmd eq 'configuration') {
     my $db = esmith::ConfigDB->open();
+    my $cdb = esmith::ConfigDB->open('contentfilter');
     $db->set_prop('ufdb', 'status', $input->{'Filter'});
     $db->set_prop('clamd@squidclamav', 'status', $input->{'AntiVirus'});
     $db->set_prop('squidguard','Expressions', $input->{'Expressions'});
@@ -38,6 +39,11 @@ if ($cmd eq 'configuration') {
     foreach (qw(DomainWhitelist DomainBlacklist UrlBlacklist BlockedFileTypes UrlWhitelist)) {
         $db->set_prop('squidguard', $_, join(',',@{$input->{$_}}));
     }
+
+    foreach (qw(BlockIpAccess BlockFileTypes BlackList BlockAll WhiteList)) {
+        $cdb->set_prop('default', $_, $input->{'DefaultFilter'}{$_});
+    }
+    $cdb->set_prop('default', 'Categories', join(",",@{$input->{'DefaultFilter'}{'Categories'}}));
 
 } elsif ($cmd eq 'update-profile') {
 

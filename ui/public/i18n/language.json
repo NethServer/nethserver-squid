@@ -241,7 +241,8 @@
     "allow_all": "Allow all, block selected categories",
     "select_categories": "Select one or more categories",
     "category_not_found": "Cateogry not found",
-    "categories": "Categories"
+    "categories": "Categories",
+    "profile_broken": "This profile uses invalid categories"
   },
   "categories": {
     "menu_title": "Categories",

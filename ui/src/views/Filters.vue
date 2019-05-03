@@ -124,13 +124,17 @@
         class="list-group list-view-pf list-view-pf-view no-mg-top mg-top-10"
       >
         <li
-          class="list-group-item"
+          :class="['list-group-item', p.broken == 1 ? 'gray' : '']"
           v-for="(p,pk) in profiles"
           v-bind:key="pk"
           v-show="p.Removable == 'yes'"
         >
           <div class="list-view-pf-actions">
-            <button @click="openEditProfile(p)" :class="['btn btn-default']">
+            <button
+              :disabled="p.broken == 1"
+              @click="openEditProfile(p)"
+              :class="['btn btn-default']"
+            >
               <span :class="['fa', 'fa-pencil', 'span-right-margin']"></span>
               {{$t('edit')}}
             </button>
@@ -158,12 +162,20 @@
 
           <div class="list-view-pf-main-info small-list">
             <div class="list-view-pf-left">
-              <span class="list-view-pf-icon-sm pficon pficon-user"></span>
+              <span
+                :class="['list-view-pf-icon-sm pficon pficon-user', p.broken == 1 ? 'border-broken' : '']"
+              ></span>
             </div>
             <div class="list-view-pf-body">
               <div class="list-view-pf-description rules-src-dst">
                 <div class="list-group-item-heading">
-                  <span class="handle-overflow">
+                  <span
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    data-html="true"
+                    :title="mapTitleName(p)"
+                    class="handle-overflow"
+                  >
                     <span class="mg-left-5">{{p.name}}</span>
                   </span>
                 </div>
@@ -206,7 +218,7 @@
                   >{{t.name}}</span>
                   <span v-if="p.Time.length == 0">{{$t('always')}}</span>
                 </span>
-                <span class="list-view-pf-additional-info-item col-sm-12">{{p.Description}}</span>
+                <!-- <span class="list-view-pf-additional-info-item col-sm-12">{{p.Description}}</span> -->
               </div>
             </div>
           </div>
@@ -648,6 +660,18 @@ export default {
           return "fa fa-globe";
           break;
       }
+    },
+    mapTitleName(profile) {
+      var html = "<b>" + profile.name + "</b>";
+      html += "<br><br>";
+
+      if (profile.broken == 1) {
+        html += this.$i18n.t("filter.profile_broken");
+      } else {
+        html += profile.Description;
+      }
+
+      return html;
     },
     mapTitleSrc(profile) {
       var html =
@@ -1452,5 +1476,9 @@ export default {
 
 .list-group-item-text {
   width: calc(40% - 20px) !important;
+}
+
+.border-broken {
+  border: 2px solid #cc0000 !important;
 }
 </style>

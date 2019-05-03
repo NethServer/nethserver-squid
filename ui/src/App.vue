@@ -57,8 +57,8 @@
         </li>
         <li class="li-empty"></li>
         <li
-          id="filter-item"
-          v-bind:class="[getCurrentPath('filter') ? 'active' : '', 'list-group-item']"
+          id="filters-item"
+          v-bind:class="[getCurrentPath('filters') ? 'active' : '', 'list-group-item']"
         >
           <a href="#/filter">
             <span class="pficon pficon-filter"></span>
@@ -280,5 +280,30 @@ export default {
 
 .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
   width: 160px;
+}
+
+.v-select.vs--open.vs--single.vs--searchable {
+  border-color: #0088ce;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(0, 136, 206, 0.6);
+}
+
+.v-select .vs__dropdown-toggle {
+  width: 100%;
+  height: 26px;
+  background-color: #fff;
+  border: 1px solid #bbb;
+  border-radius: 1px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.v-select .vs__dropdown-menu {
+  border-top: 1px solid #bbb;
+}
+
+.vs__dropdown-option.vs__dropdown-option--highlight {
+  background: #00659c;
 }
 </style>

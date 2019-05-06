@@ -75,18 +75,21 @@ if ($data['action'] == 'configuration') {
     $tv = $v->createValidator(Validate::TIME);
     foreach($data['Days'] as $day) {
         if(!in_array($day, $days)) {
-            $v->addValidationError('Time', 'invalid_day');
+            $v->addValidationError('Days', 'invalid_day');
         }
     }
-    if(!$tv->evaluate($data['StartTime']) || !$tv->evaluate($data['EndTime'])) {
-        $v->addValidationError('Time', 'invalid_time');
+    if(!$tv->evaluate($data['StartTime'])) {
+        $v->addValidationError('StartTime', 'invalid_time');
+    }
+    if(!$tv->evaluate($data['EndTime'])) {
+        $v->addValidationError('EndTime', 'invalid_time');
     }
 
 } else if ($data['action'] == 'Src') {
     $users = list_users();
     $groups = list_groups();
 
-    if ($type == 'user') {
+    if ($data['type'] == 'user') {
         if(!in_array($data['name'], array_keys($users))) {
             $v->addValidationError('name', 'invalid_user');
         }

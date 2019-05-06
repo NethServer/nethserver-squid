@@ -81,7 +81,7 @@ sub create_profile
 
     my $obj = {type => 'profile', 'Removable' => 'yes', Description => $input->{'Description'} || ''};
 
-    my $fobj = {type => 'filter', Description => 'Auto-created for '.$input->{'name'}};
+    my $fobj = {type => 'filter', Description =>  $input->{'Filter'}{'Description'} || 'Auto-created for '.$input->{'name'}};
     foreach (qw(BlockIpAccess BlockFileTypes BlackList BlockAll WhiteList)) {
         $fobj->{$_} = $input->{'Filter'}{$_};
     }
@@ -100,7 +100,7 @@ sub create_profile
         my $k = 0;
         foreach my $t (@{$input->{'Time'}}) {
             my $name = $input->{'name'}."time$k";
-            my $tobj = {type => 'time', Description => 'Auto-created for '.$input->{'name'}};
+            my $tobj = {type => 'time', Description => $t->{'Description'} || 'Auto-created for '.$input->{'name'}};
             foreach (qw(StartTime EndTime)) {
                 $tobj->{$_} = $t->{$_};
             }

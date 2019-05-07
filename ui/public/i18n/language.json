@@ -91,7 +91,8 @@
     "top_5_users": "Top 5 traffic users",
     "total_users": "Total users",
     "total_traffic": "Total traffic",
-    "today_proxy_traffic": "Today proxy traffic"
+    "today_proxy_traffic": "Today proxy traffic",
+    "no_data_found": "No data found"
   },
   "proxy": {
     "menu_title": "Proxy",

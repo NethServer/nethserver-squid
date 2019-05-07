@@ -205,7 +205,10 @@
           </li>
         </ul>
       </div>
-      <div v-if="view.isProxyLoaded" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container mg-left-20">
+      <div
+        v-if="view.isProxyLoaded"
+        class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container mg-left-20"
+      >
         <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
         <span class="card-pf-utilization-card-details-description stats-description">
           <span
@@ -277,7 +280,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 adjust-height">
         <h3>{{$t('dashboard.top_10_hosts')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.ip" v-bind:key="k" class="list-group-item">
@@ -286,8 +289,13 @@
             <span class="gray">({{i.hits}})</span>
           </li>
         </ul>
+        <div v-if="filterStats.ip.length == 0" class="alert alert-info alert-dismissable">
+          <span class="pficon pficon-info"></span>
+          <strong>{{$t('info')}}</strong>
+          {{$t('dashboard.no_data_found')}}.
+        </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 adjust-height">
         <h3>{{$t('dashboard.top_10_sites')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.host" v-bind:key="k" class="list-group-item">
@@ -296,8 +304,13 @@
             <span class="gray">({{i.hits}})</span>
           </li>
         </ul>
+        <div v-if="filterStats.host.length == 0" class="alert alert-info alert-dismissable">
+          <span class="pficon pficon-info"></span>
+          <strong>{{$t('info')}}</strong>
+          {{$t('dashboard.no_data_found')}}.
+        </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 adjust-height">
         <h3>{{$t('dashboard.top_10_categories')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.category" v-bind:key="k" class="list-group-item">
@@ -306,8 +319,13 @@
             <span class="gray">({{i.hits}})</span>
           </li>
         </ul>
+        <div v-if="filterStats.category.length == 0" class="alert alert-info alert-dismissable">
+          <span class="pficon pficon-info"></span>
+          <strong>{{$t('info')}}</strong>
+          {{$t('dashboard.no_data_found')}}.
+        </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 adjust-height">
         <h3>{{$t('dashboard.top_10_profiles')}}</h3>
         <ul class="list-group">
           <li v-for="(i,k) in filterStats.profile" v-bind:key="k" class="list-group-item">
@@ -316,6 +334,11 @@
             <span class="gray">({{i.hits}})</span>
           </li>
         </ul>
+        <div v-if="filterStats.profile.length == 0" class="alert alert-info alert-dismissable">
+          <span class="pficon pficon-info"></span>
+          <strong>{{$t('info')}}</strong>
+          {{$t('dashboard.no_data_found')}}.
+        </div>
       </div>
     </div>
   </div>
@@ -360,7 +383,8 @@ export default {
       filterStats: {
         ip: [],
         host: [],
-        category: []
+        category: [],
+        profile: []
       },
       proxyStats: {
         traffic: 0,
@@ -655,5 +679,9 @@ export default {
 .empty-piechart .fa {
   font-size: 92px;
   color: #bbbbbb;
+}
+
+.adjust-height {
+  min-height: 132px;
 }
 </style>

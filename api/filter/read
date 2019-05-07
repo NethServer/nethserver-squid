@@ -71,6 +71,19 @@ sub is_filter_broken
     return 0;
 }
 
+sub get_parent_profile
+{
+    my $db = shift;
+    my $filter = shift;
+
+    return '' if (!$filter);
+
+    foreach ($db->get_all_by_prop(type => 'profile')) {
+        return $_->key if ($_->prop('Filter') eq $filter);
+    }
+    return '';
+}
+
 my $input = readInput();
 my $cmd = $input->{'action'};
 
@@ -96,11 +109,13 @@ if ($cmd eq 'configuration') {
 
     my $db = esmith::ConfigDB->open_ro('contentfilter');
     foreach my $p ($db->get_all_by_prop('type' => 'profile')) {
+        my $removable = $p->prop('Removable') || 'yes';
+        next if ($removable eq 'no');
         my @times;
         my $profile = { name => $p->key, type => 'profile',
             'Description' => $p->prop('Description'), 
             'Filter' => get_record($db, $p->prop('Filter')),
-            'FilterElse' => get_record($db, $p->prop('FilterElse')),
+            'FilterElse' => get_parent_profile($db, $p->prop('FilterElse')),
             'Src' => get_object($p->prop('Src')),
             'Time' => \@times,
             'Removable' => $p->prop('Removable') || 'yes'
@@ -112,7 +127,7 @@ if ($cmd eq 'configuration') {
             }
         }
 
-        $profile->{'broken'} = is_filter_broken($profile->{'Filter'}) || is_filter_broken($profile->{'FilterElse'});
+        $profile->{'broken'} = is_filter_broken($profile->{'Filter'});
         push(@profiles, $profile);
     }
     $ret->{'profiles'} = \@profiles;
@@ -121,6 +136,7 @@ if ($cmd eq 'configuration') {
     my $db = esmith::ConfigDB->open_ro();
     my $ndb = esmith::NetworksDB->open_ro();
     my $hdb = esmith::HostsDB->open_ro();
+    my $cdb = esmith::ConfigDB->open_ro('contentfilter');
     my @objects;
     if ($db->get_prop('squid', 'GreenMode') eq 'authenticated' || $db->get_prop('squid', 'BlueMode') eq 'authenticated') {
         my $users = safe_decode_json(`/usr/libexec/nethserver/list-users`); 
@@ -163,6 +179,10 @@ if ($cmd eq 'configuration') {
     foreach (values %roles) {
         $_->{'Interfaces'} = join(",", @{$_->{'Interfaces'}});
         push(@objects, $_);
+    }
+
+    foreach ($cdb->get_all_by_prop(type => "profile")) {
+        push(@objects, {type => 'profile', name => $_->key, 'Description' => $_->prop('Description') || ''});
     }
 
     $ret->{'objects'} = \@objects;

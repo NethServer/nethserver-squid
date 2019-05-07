@@ -315,6 +315,18 @@
   "validation": {
     "validation_failed": "Validation failed",
     "invalid_time": "Invalid time",
-    "profile_already_exists": "Profile already exixts"
+    "profile_already_exists": "Profile already exixts",
+    "category_not_found": "Category not found",
+    "category_already_exists": "Category already exists",
+    "it_can_be_enabled_or_disabled": "Valid values are 'enabled' or 'disabled'",
+    "profile_not_found": "Profile not found",
+    "profile_already_exists": "A profile with the same name already exists",
+    "invalid_day": "Invalid day",
+    "invalid_time": "Invalid time format, use 24h format like '12:00'",
+    "invalid_user": "Invalid user",
+    "invalid_group": "Invalid group",
+    "object_not_found": "Object not found",
+    "object_not_supported": "Object not supported",
+    "profile_not_found": "Prfile not found"
   }
 }

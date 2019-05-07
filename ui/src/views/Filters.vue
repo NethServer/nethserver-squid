@@ -411,10 +411,10 @@
                     </template>
                     <div slot="no-options">{{$t('filter.category_not_found')}}</div>
                   </v-select>
-                  <span
-                    v-if="newConfiguration.errors.DefaultFilter.hasError"
-                    class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.DefaultFilter.message)}}</span>
+                  <span v-if="newConfiguration.errors.DefaultFilter.hasError" class="help-block">
+                    {{$t('validation.validation_failed')}}. {{$t('validation.'+newConfiguration.errors.DefaultFilter.message)}}:
+                    <b>{{newConfiguration.errors.DefaultFilter.value}}</b>
+                  </span>
                 </div>
                 <div class="col-sm-2">
                   <a
@@ -752,7 +752,10 @@
                         <span
                           v-if="currentProfile.what.errors.DefaultFilter.hasError"
                           class="help-block"
-                        >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentProfile.what.errors.DefaultFilter.message)}}</span>
+                        >
+                          {{$t('validation.validation_failed')}}. {{$t('validation.'+currentProfile.what.errors.DefaultFilter.message)}}:
+                          <b>{{currentProfile.what.errors.DefaultFilter.value}}</b>
+                        </span>
                       </div>
                       <div class="col-sm-2">
                         <a
@@ -1053,7 +1056,7 @@
             <button
               type="button"
               class="btn btn-primary wizard-pf-next"
-              :disabled="currentProfile.step == 4"
+              :disabled="currentProfile.step == 4 || !currentProfile.who.Type"
               v-if="currentProfile.step <= 3"
               @click="nextStep()"
             >
@@ -1249,7 +1252,8 @@ export default {
         what: {
           DefaultFilter: {
             hasError: false,
-            message: ""
+            message: "",
+            value: ""
           }
         },
         when: {
@@ -1344,20 +1348,26 @@ export default {
           function(error, data) {
             var errorData = {};
             context.currentProfile.isLoading = false;
-            context.currentProfile.errors[
+            context.currentProfile[
               errorsObj
-            ] = context.this.initProfileErrors()[errorsObj];
+            ].errors = context.initProfileErrors()[errorsObj];
 
             try {
               errorData = JSON.parse(data);
               for (var e in errorData.attributes) {
                 var attr = errorData.attributes[e];
-                context.currentProfile.errors[errorsObj][
+                context.currentProfile[errorsObj].errors[
                   attr.parameter
                 ].hasError = true;
-                context.currentProfile.errors[errorsObj][
+                context.currentProfile[errorsObj].errors[
                   attr.parameter
                 ].message = attr.error;
+
+                if (attr.parameter == "DefaultFilter") {
+                  context.currentProfile[errorsObj].errors[
+                    attr.parameter
+                  ].value = attr.value;
+                }
                 context.$forceUpdate();
               }
             } catch (e) {
@@ -1371,6 +1381,7 @@ export default {
     },
     filterWhoAuto(query) {
       this.currentProfile.who.Type = null;
+      this.currentProfile.who.SrcType = null;
 
       if (query.trim().length === 0) {
         return null;
@@ -1828,7 +1839,8 @@ export default {
         },
         DefaultFilter: {
           hasError: false,
-          message: ""
+          message: "",
+          value: ""
         }
       };
     },
@@ -2045,6 +2057,10 @@ export default {
               context.newConfiguration.errors[attr.parameter].hasError = true;
               context.newConfiguration.errors[attr.parameter].message =
                 attr.error;
+              if (attr.parameter == "DefaultFilter") {
+                context.newConfiguration.errors[attr.parameter].value =
+                  attr.value;
+              }
             }
           } catch (e) {
             console.error(e);

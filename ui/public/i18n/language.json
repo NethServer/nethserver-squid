@@ -201,12 +201,12 @@
     "add_profile": "Add profile",
     "edit_profile": "Edit profile",
     "delete_profile": "Delete profile",
-    "profile_created_ok": "profile created successfully!",
-    "profile_created_error": "profile not created.",
-    "profile_updated_ok": "profile updated successfully!",
-    "profile_updated_error": "profile not updated.",
-    "profile_deleted_ok": "profile deleted successfully!",
-    "profile_deleted_error": "profile not deleted.",
+    "profile_created_ok": "Profile created successfully!",
+    "profile_created_error": "Profile not created.",
+    "profile_updated_ok": "Profile updated successfully!",
+    "profile_updated_error": "Profile not updated.",
+    "profile_deleted_ok": "Profile deleted successfully!",
+    "profile_deleted_error": "Profile not deleted.",
     "no_profiles_find": "No profiles found",
     "configuration_updated_ok": "Configuration updated successfully!",
     "configuration_updated_error": "Configuration not updated.",
@@ -239,10 +239,25 @@
     "mode": "Mode",
     "block_all": "Block all, allow selected categories",
     "allow_all": "Allow all, block selected categories",
+    "block_all_short": "Allow selected categories",
+    "allow_all_short": "Block selected categories",
     "select_categories": "Select one or more categories",
     "category_not_found": "Cateogry not found",
     "categories": "Categories",
-    "profile_broken": "This profile uses invalid categories"
+    "profile_broken": "This profile uses invalid categories",
+    "general": "General",
+    "blacklist": "Blacklist",
+    "whitelist": "Whitelist",
+    "range": "Range",
+    "time_start": "Time start",
+    "time_stop": "Time stop",
+    "add_time": "Add time",
+    "time_condition_set": "Time condition",
+    "time_conditions_set": "Time conditions",
+    "final": "Final",
+    "condition_not_match": "Otherwise apply the filter from this profile",
+    "main_desc_wizard": "Profile creation wizard",
+    "second_desc_wizard": "Use this wizard to configure each step of profile:<br><br><div><b>1. Who</b> (the client associated with the profile)</div><div><b>2. What</b> (which sites can be browsed by the profiled client)</div><div><b>3. When</b> (validity of the filter in certain period of times)</div>"
   },
   "categories": {
     "menu_title": "Categories",
@@ -297,6 +312,8 @@
     "redirect_port": "Override the default Squid listening port"
   },
   "validation": {
-    "validation_failed": "Validation failed"
+    "validation_failed": "Validation failed",
+    "invalid_time": "Invalid time",
+    "profile_already_exists": "Profile already exixts"
   }
 }

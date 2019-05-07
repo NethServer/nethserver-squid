@@ -58,7 +58,7 @@
         <li class="li-empty"></li>
         <li
           id="filters-item"
-          v-bind:class="[getCurrentPath('filters') ? 'active' : '', 'list-group-item']"
+          v-bind:class="[getCurrentPath('filter') ? 'active' : '', 'list-group-item']"
         >
           <a href="#/filter">
             <span class="pficon pficon-filter"></span>

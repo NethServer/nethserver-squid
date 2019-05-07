@@ -130,11 +130,7 @@
           v-show="p.Removable == 'yes'"
         >
           <div class="list-view-pf-actions">
-            <button
-              :disabled="p.broken == 1"
-              @click="openEditProfile(p)"
-              :class="['btn btn-default']"
-            >
+            <button @click="openEditProfile(p)" :class="['btn btn-default']">
               <span :class="['fa', 'fa-pencil', 'span-right-margin']"></span>
               {{$t('edit')}}
             </button>
@@ -163,7 +159,7 @@
           <div class="list-view-pf-main-info small-list">
             <div class="list-view-pf-left">
               <span
-                :class="['list-view-pf-icon-sm pficon pficon-user', p.broken == 1 ? 'border-broken' : '']"
+                :class="['list-view-pf-icon-sm pficon', p.broken == 1 ? 'border-broken pficon-warning-triangle-o' : 'pficon-user']"
               ></span>
             </div>
             <div class="list-view-pf-body">
@@ -202,7 +198,7 @@
                   class="list-view-pf-additional-info-item col-sm-5"
                 >
                   <span class="fa fa-filter"></span>
-                  {{p.Filter.name}}
+                  {{p.Filter.Description}}
                 </span>
 
                 <span class="list-view-pf-additional-info-item col-sm-5">
@@ -215,7 +211,7 @@
                     data-html="true"
                     :title="mapTitleTime(t)"
                     class="span-left-margin"
-                  >{{t.name}}</span>
+                  >{{t.Description}}</span>
                   <span v-if="p.Time.length == 0">{{$t('always')}}</span>
                 </span>
                 <!-- <span class="list-view-pf-additional-info-item col-sm-12">{{p.Description}}</span> -->
@@ -519,6 +515,576 @@
         </div>
       </div>
     </div>
+
+    <div class="modal" id="wizardProfileModal" tabindex="-1" role="dialog" data-backdrop="static">
+      <div class="modal-dialog modal-lg wizard-pf">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4
+              class="modal-title"
+            >{{currentProfile.isEdit ? $t('filter.edit_profile') + ' ' +currentProfile.name : $t('filter.add_profile')}}</h4>
+          </div>
+          <div class="modal-body wizard-pf-body clearfix">
+            <div class="wizard-pf-steps">
+              <ul class="wizard-pf-steps-indicator wizard-pf-steps-alt-indicator active">
+                <li :class="['wizard-pf-step', currentProfile.step == 1 ? 'active' : '']">
+                  <a>
+                    <span class="wizard-pf-step-number">1</span>
+                    <span class="wizard-pf-step-title">{{$t('filter.who')}}</span>
+                  </a>
+                </li>
+
+                <li :class="['wizard-pf-step', currentProfile.step == 2 ? 'active' : '']">
+                  <a>
+                    <span class="wizard-pf-step-number">2</span>
+                    <span class="wizard-pf-step-title">{{$t('filter.what')}}</span>
+                  </a>
+                </li>
+
+                <li :class="['wizard-pf-step', currentProfile.step == 3 ? 'active' : '']">
+                  <a>
+                    <span class="wizard-pf-step-number">3</span>
+                    <span class="wizard-pf-step-title">{{$t('filter.when')}}</span>
+                  </a>
+                </li>
+
+                <li :class="['wizard-pf-step', currentProfile.step == 4 ? 'active' : '']">
+                  <a>
+                    <span class="wizard-pf-step-number">4</span>
+                    <span class="wizard-pf-step-title">{{$t('filter.final')}}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="wizard-pf-row">
+              <div class="wizard-pf-sidebar">
+                <ul class="list-group">
+                  <li :class="['list-group-item', currentProfile.step == 1 ? 'active' : '']">
+                    <a>
+                      <span class="wizard-pf-substep-number">{{$t('filter.who')}}:</span>
+                      <br>
+                      <span class="wizard-pf-substep-title reduce-font-span span-color">
+                        {{currentProfile.who.Src || '-'}}
+                        <span
+                          v-if="currentProfile.who.Src.length > 0"
+                        >
+                          <br>
+                          ({{currentProfile.who.Type}})
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    v-if="currentProfile.step >= 2"
+                    :class="['list-group-item', currentProfile.step == 2 ? 'active' : '']"
+                  >
+                    <a>
+                      <span class="wizard-pf-substep-number">{{$t('filter.what')}}:</span>
+                      <br>
+                      <span class="wizard-pf-substep-title reduce-font-span span-color">
+                        {{$t('filter.categories')}}:
+                        <span
+                          class="semi-bold"
+                        >{{currentProfile.what.Categories.length == 0 ? '-' : currentProfile.what.Categories.join(', ')}}</span>
+                        <br>
+                        {{$t('filter.blacklist')}}:
+                        <span
+                          :class="['fa', currentProfile.what.BlackList ? 'fa-check green' : 'fa-times red']"
+                        ></span>
+                        <br>
+                        {{$t('filter.whitelist')}}:
+                        <span
+                          :class="['fa', currentProfile.what.WhiteList ? 'fa-check green' : 'fa-times red']"
+                        ></span>
+                        <br>
+                        {{$t('filter.mode')}}:
+                        {{currentProfile.what.BlockAll == 'enabled' ? $t('filter.block_all_short') : $t('filter.allow_all_short')}}
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    v-if="currentProfile.step >= 3"
+                    :class="['list-group-item', currentProfile.step == 3 ? 'active' : '']"
+                  >
+                    <a>
+                      <span class="wizard-pf-substep-number">{{$t('filter.when')}}:</span>
+                      <br>
+                      <span class="wizard-pf-substep-title reduce-font-span span-color">
+                        {{currentProfile.when.Times.length}}
+                        <span
+                          class="semi-bold"
+                        >{{currentProfile.when.Times.length == 1 ? $t('filter.time_condition_set') : $t('filter.time_conditions_set')}}</span>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="wizard-pf-main">
+                <!-- STEP WHO -->
+                <div :class="['wizard-pf-contents', currentProfile.step == 1 ? '' : 'hidden']">
+                  <form
+                    id="profile-step-1-form"
+                    class="form-horizontal"
+                    v-on:submit.prevent="validateStep()"
+                  >
+                    <div class="blank-slate-pf adjust-blank-pad">
+                      <div class="blank-slate-pf-icon">
+                        <span class="pficon pficon-user"></span>
+                      </div>
+                      <h1>{{$t('filter.main_desc_wizard')}}</h1>
+                      <p v-html="$t('filter.second_desc_wizard')">.</p>
+                    </div>
+
+                    <div
+                      :class="['form-group', currentProfile.who.errors.Src.hasError ? 'has-error' : '']"
+                    >
+                      <label class="col-sm-3 control-label">{{$t('filter.who')}}</label>
+                      <div class="col-sm-9">
+                        <suggestions
+                          v-model="currentProfile.who.Src"
+                          :options="autoOptions"
+                          :onInputChange="filterWhoAuto"
+                          :onItemSelected="selectWhoAuto"
+                          :required="!currentProfile.isEdit"
+                        >
+                          <div slot="item" slot-scope="props" class="single-item">
+                            <span>
+                              <span
+                                v-show="props.item.type == 'role'"
+                                :class="['square-'+ props.item.name.toUpperCase()]"
+                              ></span>
+                              {{props.item.type == 'role' ? props.item.name.toUpperCase() : props.item.name}}
+                              <span
+                                v-show="props.item.IpAddress || props.item.Address"
+                                class="gray"
+                              >({{ props.item.IpAddress || props.item.Address }})</span>
+                              <i class="mg-left-5">{{props.item.Description}}</i>
+                              <b class="mg-left-5">{{props.item.type | capitalize}}</b>
+                            </span>
+                          </div>
+                        </suggestions>
+                        <span
+                          v-if="currentProfile.who.SrcType && currentProfile.who.SrcType.length > 0"
+                          class="help-block gray"
+                        >{{currentProfile.who.SrcType}}</span>
+                        <span v-if="currentProfile.who.errors.Src.hasError" class="help-block">
+                          {{$t('validation.validation_failed')}}:
+                          {{$t('validation.'+currentProfile.who.errors.Src.message)}}
+                        </span>
+                      </div>
+                    </div>
+                    <button class="hidden" type="submit" id="profile-step-1-submit"></button>
+                  </form>
+                </div>
+                <!-- END STEP WHO -->
+
+                <!-- STEP WHAT -->
+                <div :class="['wizard-pf-contents', currentProfile.step == 2 ? '' : 'hidden']">
+                  <form
+                    id="profile-step-2-form"
+                    class="form-horizontal"
+                    v-on:submit.prevent="validateStep()"
+                  >
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.enable_global_blacklist')}}</label>
+                      <div class="col-sm-9">
+                        <toggle-button
+                          class="min-toggle"
+                          :width="40"
+                          :height="20"
+                          :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
+                          :value="currentProfile.what.BlackList"
+                          :sync="true"
+                          @change="currentProfile.what.BlackList = !currentProfile.what.BlackList"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.enable_global_whitelist')}}</label>
+                      <div class="col-sm-9">
+                        <toggle-button
+                          class="min-toggle"
+                          :width="40"
+                          :height="20"
+                          :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
+                          :value="currentProfile.what.WhiteList"
+                          :sync="true"
+                          @change="currentProfile.what.WhiteList = !currentProfile.what.WhiteList"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.mode')}}</label>
+                      <div class="col-sm-9">
+                        <select class="form-control" v-model="currentProfile.what.BlockAll">
+                          <option value="enabled">{{$t('filter.block_all')}}</option>
+                          <option value="disabled">{{$t('filter.allow_all')}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div
+                      :class="['form-group', currentProfile.what.errors.DefaultFilter.hasError ? 'has-error' : '']"
+                    >
+                      <label class="col-sm-3 control-label">{{$t('filter.categories')}}</label>
+                      <div class="col-sm-7">
+                        <v-select
+                          @input="addCategoryProfile"
+                          v-model="currentProfile.what.categoryToAdd"
+                          :options="categories"
+                          label="name"
+                          :clearable="false"
+                          :placeholder="$t('filter.select_categories')"
+                          :components="{OpenIndicator}"
+                          required
+                        >
+                          <template slot="option" slot-scope="option">
+                            {{ option.name }}
+                            <span
+                              class="gray"
+                              v-if="option.type == 'custom'"
+                            >({{$t('categories.custom')}})</span>
+                          </template>
+                          <div slot="no-options">{{$t('filter.category_not_found')}}</div>
+                        </v-select>
+                        <span
+                          v-if="currentProfile.what.errors.DefaultFilter.hasError"
+                          class="help-block"
+                        >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentProfile.what.errors.DefaultFilter.message)}}</span>
+                      </div>
+                      <div class="col-sm-2">
+                        <a
+                          class="adjust-clear"
+                          @click="currentProfile.what.Categories = []"
+                        >{{$t('clear_all')}}</a>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label" for="textInput-modal-markup"></label>
+                      <div class="col-sm-9">
+                        <ul class="list-inline compact">
+                          <li
+                            v-for="(c,i) in currentProfile.what.Categories"
+                            v-bind:key="i"
+                            class="adjust-space"
+                          >
+                            <span class="label label-info">
+                              {{c}}
+                              <a @click="removeCategoryProfile(i)" class="remove-item-inline">
+                                <span class="fa fa-times"></span>
+                              </a>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.description')}}</label>
+                      <div class="col-sm-9">
+                        <input
+                          v-model="currentProfile.what.Description"
+                          type="text"
+                          class="form-control"
+                        >
+                      </div>
+                    </div>
+
+                    <legend class="fields-section-header-pf" aria-expanded="true">
+                      <span
+                        :class="['fa fa-angle-right field-section-toggle-pf', currentProfile.what.advanced ? 'fa-angle-down' : '']"
+                      ></span>
+                      <a
+                        class="field-section-toggle-pf"
+                        @click="toggleAdvancedProfileMode()"
+                      >{{$t('advanced_mode')}}</a>
+                    </legend>
+
+                    <div v-show="currentProfile.what.advanced" class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.block_access_ip_address')}}</label>
+                      <div class="col-sm-9">
+                        <toggle-button
+                          class="min-toggle"
+                          :width="40"
+                          :height="20"
+                          :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
+                          :value="currentProfile.what.BlockIpAccess"
+                          :sync="true"
+                          @change="currentProfile.what.BlockIpAccess = !currentProfile.what.BlockIpAccess"
+                        />
+                      </div>
+                    </div>
+
+                    <div v-show="currentProfile.what.advanced" class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.block_file_extensions')}}</label>
+                      <div class="col-sm-9">
+                        <toggle-button
+                          class="min-toggle"
+                          :width="40"
+                          :height="20"
+                          :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
+                          :value="currentProfile.what.BlockFileTypes"
+                          :sync="true"
+                          @change="currentProfile.what.BlockFileTypes = !currentProfile.what.BlockFileTypes"
+                        />
+                      </div>
+                    </div>
+
+                    <button class="hidden" type="submit" id="profile-step-2-submit"></button>
+                  </form>
+                </div>
+                <!-- END STEP WHO -->
+
+                <!-- STEP WHEN -->
+                <div :class="['wizard-pf-contents', currentProfile.step == 3 ? '' : 'hidden']">
+                  <form
+                    id="profile-step-3-form"
+                    class="form-horizontal"
+                    v-on:submit.prevent="validateStep()"
+                  >
+                    <div
+                      :class="['form-group', currentProfile.when.empty.errors.StartTime.hasError || currentProfile.when.empty.errors.EndTime.hasError ? 'has-error' : '']"
+                    >
+                      <label
+                        class="col-sm-3 control-label"
+                        for="textInput-modal-markup"
+                      >{{$t('filter.range')}}</label>
+                      <div class="col-sm-4">
+                        <label>{{$t('filter.time_start')}}</label>
+                        <input
+                          class="col-sm-3 form-control"
+                          type="text"
+                          placeholder="00:15"
+                          v-model="currentProfile.when.empty.StartTime"
+                        >
+                        <span
+                          v-if="currentProfile.when.empty.errors.StartTime.hasError"
+                          class="help-block"
+                        >
+                          {{$t('validation.validation_failed')}}:
+                          {{$t('validation.'+currentProfile.when.empty.errors.StartTime.message)}}
+                        </span>
+                      </div>
+                      <div class="col-sm-4">
+                        <label>{{$t('filter.time_stop')}}</label>
+                        <input
+                          class="col-sm-3 form-control"
+                          type="text"
+                          placeholder="23:30"
+                          v-model="currentProfile.when.empty.EndTime"
+                        >
+                        <span
+                          v-if="currentProfile.when.empty.errors.EndTime.hasError"
+                          class="help-block"
+                        >
+                          {{$t('validation.validation_failed')}}:
+                          {{$t('validation.'+currentProfile.when.empty.errors.EndTime.message)}}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      :class="['form-group', currentProfile.when.empty.errors.Days.hasError ? 'has-error' : '']"
+                    >
+                      <label
+                        class="col-sm-3 control-label"
+                        for="textInput-modal-markup"
+                      >{{$t('weekdays')}}</label>
+                      <div class="col-sm-9">
+                        <select
+                          @change="addDayToWeekdays(currentProfile.when.empty.dayToAdd)"
+                          v-model="currentProfile.when.empty.dayToAdd"
+                          class="combobox form-control"
+                        >
+                          <option>-</option>
+                          <option
+                            :value="d"
+                            v-for="(d,k) in weekdays"
+                            v-bind:key="k"
+                          >{{$t('filter.'+d)}}</option>
+                        </select>
+                        <span
+                          v-if="currentProfile.when.empty.errors.Days.hasError"
+                          class="help-block"
+                        >{{currentProfile.when.empty.errors.Days.message}}</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label" for="textInput-modal-markup"></label>
+                      <div class="col-sm-9">
+                        <ul class="list-inline compact">
+                          <li
+                            v-for="(i, ki) in currentProfile.when.empty.Days"
+                            v-bind:key="i"
+                            class="mg-bottom-5"
+                          >
+                            <span class="label label-info">
+                              {{$t('filter.'+i)}}
+                              <a
+                                @click="removeDayToWeekdays(ki)"
+                                class="remove-item-inline"
+                              >
+                                <span class="fa fa-times"></span>
+                              </a>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.description')}}</label>
+                      <div class="col-sm-9">
+                        <input
+                          v-model="currentProfile.when.empty.Description"
+                          type="text"
+                          class="form-control"
+                        >
+                      </div>
+                    </div>
+                    <button
+                      class="btn btn-primary"
+                      type="submit"
+                      :disabled="currentProfile.when.empty.StartTime.length == 0 || currentProfile.when.empty.EndTime.length == 0 || currentProfile.when.empty.Days.length == 0"
+                      @click="addTime()"
+                    >{{$t('filter.add_time')}}</button>
+                    <div
+                      v-if="currentProfile.when.empty.isLoading"
+                      class="spinner spinner-sm form-spinner-loader adjust-add-time-spinner"
+                    ></div>
+                    <div class="divider adjust-divider-times"></div>
+                    <ul class="list-inline compact">
+                      <li
+                        v-for="(i, ki) in currentProfile.when.Times"
+                        v-bind:key="ki"
+                        class="mg-bottom-5 adjust-background-time"
+                      >
+                        <span class="label label-info adjust-padding-time">
+                          <a
+                            @click="removeTimeFromTimes(ki)"
+                            class="remove-item-inline adjust-remove-time"
+                          >
+                            <span class="fa fa-times"></span>
+                          </a>
+                          {{i.Description}}
+                          <br>
+                          {{i.StartTime}} - {{i.EndTime}}
+                          <br>
+                          {{$t('days')}}:
+                          <span class="semi-bold">{{printDays(i.Days)}}</span>
+                        </span>
+                      </li>
+                    </ul>
+                    <div class="form-group"></div>
+                    <div class="form-group"></div>
+
+                    <div class="form-group">
+                      <label
+                        class="col-sm-3 control-label"
+                      >{{$t('filter.condition_not_match')}} {{currentProfile.FilterElse}}</label>
+                      <div class="col-sm-9">
+                        <select class="form-control" v-model="currentProfile.FilterElse">
+                          <option
+                            v-if="s.type == 'profile'"
+                            v-for="(s,sk) in sources"
+                            v-bind:key="sk"
+                            :value="s.name"
+                          >{{s.name}} - {{s.Description}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <button class="hidden" type="submit" id="profile-step-3-submit"></button>
+                  </form>
+                </div>
+                <!-- END STEP WHEN -->
+
+                <!-- STEP FINAL -->
+                <div :class="['wizard-pf-contents', currentProfile.step == 4 ? '' : 'hidden']">
+                  <form
+                    id="profile-step-4-form"
+                    class="form-horizontal"
+                    v-on:submit.prevent="saveProfile(currentProfile)"
+                  >
+                    <div
+                      :class="['form-group', currentProfile.errors.name.hasError ? 'has-error' : '']"
+                    >
+                      <label
+                        class="col-sm-3 control-label"
+                        for="textInput-markup"
+                      >{{$t('filter.name')}}</label>
+                      <div class="col-sm-9">
+                        <input
+                          :disabled="currentProfile.isEdit"
+                          v-model="currentProfile.name"
+                          required
+                          type="text"
+                          class="form-control"
+                        >
+                        <span v-if="currentProfile.errors.name.hasError" class="help-block">
+                          {{$t('validation.validation_failed')}}:
+                          {{$t('validation.'+currentProfile.errors.name.message)}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.description')}}</label>
+                      <div class="col-sm-9">
+                        <input
+                          v-model="currentProfile.Description"
+                          type="text"
+                          class="form-control"
+                        >
+                      </div>
+                    </div>
+
+                    <button class="hidden" type="submit" id="profile-step-4-submit"></button>
+                  </form>
+                </div>
+                <!-- END STEP FINAL -->
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer wizard-pf-footer">
+            <div
+              v-if="currentProfile.isLoading"
+              class="spinner spinner-sm form-spinner-loader adjust-wizard-spinner"
+            ></div>
+            <button
+              type="button"
+              class="btn btn-primary wizard-pf-next"
+              :disabled="currentProfile.step == 4"
+              v-if="currentProfile.step <= 3"
+              @click="nextStep()"
+            >
+              <span class="wizard-pf-button-text">{{$t('next')}}</span>
+              <span class="i fa fa-angle-right"></span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-default wizard-pf-back"
+              :disabled="currentProfile.step == 1"
+              @click="prevStep()"
+            >
+              <span class="i fa fa-angle-left"></span>
+              <span class="wizard-pf-button-text">{{$t('back')}}</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-default btn-cancel wizard-pf-cancel wizard-pf-dismiss"
+              data-dismiss="modal"
+              @click="resetProfile()"
+            >{{$t('cancel')}}</button>
+            <button
+              type="button"
+              class="btn btn-primary wizard-pf-close wizard-pf-dismiss"
+              v-if="currentProfile.step == 4"
+              @click="saveProfile(currentProfile)"
+            >{{$t('save')}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- END MODALS -->
   </div>
 </template>
@@ -547,6 +1113,7 @@ export default {
           vm.getConfiguration();
           vm.getProxyConfiguration();
           vm.getProfiles();
+          vm.getSources();
         },
         function(error) {
           console.error(error);
@@ -571,6 +1138,8 @@ export default {
         }
       },
       profiles: [],
+      sources: [],
+      weekdays: ["m", "t", "w", "h", "f", "a", "s"],
       currentProfile: this.initProfile(),
       toDeleteProfile: {},
       configuration: {
@@ -600,10 +1169,239 @@ export default {
       OpenIndicator: {
         render: createElement =>
           createElement("span", { class: { toggle: true } })
+      },
+      autoOptions: {
+        inputClass: "form-control"
       }
     };
   },
   methods: {
+    initProfile(profile) {
+      return {
+        isEdit: false,
+        isLoading: false,
+        who: {
+          Src: profile ? profile.Src.name : "",
+          SrcType: "",
+          Type: profile ? profile.Src.type : "",
+          errors: this.initProfileErrors().who
+        },
+        what: {
+          BlockIpAccess: profile
+            ? profile.Filter.BlockIpAccess == "enabled"
+              ? true
+              : false
+            : false,
+          Categories: profile ? profile.Filter.Categories : [],
+          BlockFileTypes: profile
+            ? profile.Filter.BlockFileTypes == "enabled"
+              ? true
+              : false
+            : false,
+          BlackList: profile
+            ? profile.Filter.BlackList == "enabled"
+              ? true
+              : false
+            : false,
+          BlockAll: profile ? profile.Filter.BlockAll : "disabled",
+          WhiteList: profile
+            ? profile.Filter.WhiteList == "enabled"
+              ? true
+              : false
+            : false,
+          Description: profile ? profile.Filter.Description : "",
+          categoryToAdd: {},
+          advanced: false,
+          errors: this.initProfileErrors().what
+        },
+        when: {
+          empty: {
+            StartTime: "",
+            EndTime: "",
+            Days: [],
+            Description: "",
+            dayToAdd: {},
+            isLoading: false,
+            errors: this.initProfileErrors().when
+          },
+          Times: profile ? profile.Time : []
+        },
+        name: profile ? profile.name : "",
+        Description: profile ? profile.Description : "",
+        FilterElse: profile ? profile.FilterElse : "",
+        errors: {
+          name: {
+            hasError: false,
+            message: ""
+          }
+        },
+        step: 1
+      };
+    },
+    initProfileErrors() {
+      return {
+        who: {
+          Src: {
+            hasError: false,
+            message: ""
+          }
+        },
+        what: {
+          DefaultFilter: {
+            hasError: false,
+            message: ""
+          }
+        },
+        when: {
+          StartTime: {
+            hasError: false,
+            message: ""
+          },
+          EndTime: {
+            hasError: false,
+            message: ""
+          },
+          Days: {
+            hasError: false,
+            message: ""
+          }
+        },
+        name: {
+          hasError: false,
+          message: ""
+        }
+      };
+    },
+    nextStep() {
+      var context = this;
+      $("#profile-step-" + this.currentProfile.step + "-submit").trigger(
+        "click"
+      );
+      if (
+        document
+          .getElementById("profile-step-" + this.currentProfile.step + "-form")
+          .checkValidity()
+      ) {
+        context.validateStep(function() {
+          context.currentProfile.step++;
+        });
+      }
+    },
+    prevStep() {
+      this.currentProfile.step--;
+    },
+    validateStep(callback) {
+      var context = this;
+      var validateObj = {};
+      var errorsObj = "";
+
+      switch (context.currentProfile.step) {
+        case 1:
+          errorsObj = "who";
+          validateObj = {
+            name: context.currentProfile.who.Src,
+            type: context.currentProfile.who.Type,
+            action: "Src"
+          };
+          break;
+
+        case 2:
+          errorsObj = "what";
+          validateObj = {
+            BlockIpAccess: context.currentProfile.what.BlockIpAccess
+              ? "enabled"
+              : "disabled",
+            Categories: context.currentProfile.what.Categories,
+            BlockFileTypes: context.currentProfile.what.BlockFileTypes
+              ? "enabled"
+              : "disabled",
+            BlackList: context.currentProfile.what.BlackList
+              ? "enabled"
+              : "disabled",
+            BlockAll: context.currentProfile.what.BlockAll,
+            WhiteList: context.currentProfile.what.WhiteList
+              ? "enabled"
+              : "disabled",
+            action: "Filter"
+          };
+          break;
+
+        case 3:
+          errorsObj = "when";
+          break;
+      }
+
+      if (callback && context.currentProfile.step < 3) {
+        context.currentProfile.isLoading = true;
+        nethserver.exec(
+          ["nethserver-squid/filter/validate"],
+          validateObj,
+          null,
+          function(success) {
+            context.currentProfile.isLoading = false;
+            callback ? callback() : undefined;
+          },
+          function(error, data) {
+            var errorData = {};
+            context.currentProfile.isLoading = false;
+            context.currentProfile.errors[
+              errorsObj
+            ] = context.this.initProfileErrors()[errorsObj];
+
+            try {
+              errorData = JSON.parse(data);
+              for (var e in errorData.attributes) {
+                var attr = errorData.attributes[e];
+                context.currentProfile.errors[errorsObj][
+                  attr.parameter
+                ].hasError = true;
+                context.currentProfile.errors[errorsObj][
+                  attr.parameter
+                ].message = attr.error;
+                context.$forceUpdate();
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+        );
+      } else {
+        callback ? callback() : undefined;
+      }
+    },
+    filterWhoAuto(query) {
+      this.currentProfile.who.Type = null;
+
+      if (query.trim().length === 0) {
+        return null;
+      }
+
+      return this.sources.filter(function(source) {
+        return (
+          source.type.toLowerCase().includes(query.toLowerCase()) ||
+          source.name.toLowerCase().includes(query.toLowerCase()) ||
+          (source.Description &&
+            source.Description.toLowerCase().includes(query.toLowerCase())) ||
+          (source.IpAddress &&
+            source.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
+          (source.Address &&
+            source.Address.toLowerCase().includes(query.toLowerCase()))
+        );
+      });
+    },
+    selectWhoAuto(item) {
+      this.currentProfile.who.Src = item.name;
+      this.currentProfile.who.Type = item.type;
+      this.currentProfile.who.SrcType =
+        item.name +
+        " " +
+        (item.IpAddress ? item.IpAddress + " " : "") +
+        (item.Address ? item.Address + " " : "") +
+        (item.Start && item.End ? item.Start + " - " + item.End + " " : "") +
+        "(" +
+        item.type +
+        ")";
+    },
     installPackages() {
       this.view.isInstalling = true;
       // notification
@@ -629,6 +1427,10 @@ export default {
     },
     toggleAdvancedMode() {
       this.defaultProfile.advanced = !this.defaultProfile.advanced;
+      this.$forceUpdate();
+    },
+    toggleAdvancedProfileMode() {
+      this.currentProfile.what.advanced = !this.currentProfile.what.advanced;
       this.$forceUpdate();
     },
     mapObjectIcon(obj, status) {
@@ -784,12 +1586,6 @@ export default {
           : "times red") +
         '"></span></div>';
       html +=
-        '<div><span>BlockBuiltinRules</span>:<span class="span-left-margin fa fa-' +
-        (profile.Filter.BlockBuiltinRules == "enabled"
-          ? "check green"
-          : "times red") +
-        '"></span></div>';
-      html +=
         '<div><span>BlockAll</span>:<span class="span-left-margin fa fa-' +
         (profile.Filter.BlockAll == "enabled" ? "check green" : "times red") +
         '"></span></div>';
@@ -883,6 +1679,28 @@ export default {
             console.error(e);
           }
           context.categories = success.categories;
+        },
+        function(error) {
+          console.error(error);
+        }
+      );
+    },
+    getSources() {
+      var context = this;
+
+      nethserver.exec(
+        ["nethserver-squid/filter/read"],
+        {
+          action: "objects"
+        },
+        null,
+        function(success) {
+          try {
+            success = JSON.parse(success);
+          } catch (e) {
+            console.error(e);
+          }
+          context.sources = success.objects;
         },
         function(error) {
           console.error(error);
@@ -985,28 +1803,6 @@ export default {
           console.error(error);
         }
       );
-    },
-    initProfile() {
-      return {
-        Profile: "",
-        SrcType: "",
-        Description: "",
-        isLoading: false,
-        isEdit: false,
-        errors: this.initProfileErrors()
-      };
-    },
-    initProfileErrors() {
-      return {
-        Profile: {
-          hasError: false,
-          message: ""
-        },
-        Description: {
-          hasError: false,
-          message: ""
-        }
-      };
     },
     initConfigurationErrors() {
       return {
@@ -1261,18 +2057,15 @@ export default {
     },
     openCreateProfile() {
       this.currentProfile = this.initProfile();
-      $("#createProfileModal").modal("show");
+      $("#wizardProfileModal").modal("show");
     },
 
     openEditProfile(profile) {
-      this.currentProfile = JSON.parse(JSON.stringify(profile));
-      this.currentProfile.Profile = this.currentProfile.props.Host.name;
-      this.currentProfile.Type = this.currentProfile.props.Host.type;
-      this.currentProfile.SrcType = this.currentProfile.props.Host.type;
-      this.currentProfile.Description = this.currentProfile.props.Description;
+      this.currentProfile = this.initProfile(profile);
       this.currentProfile.errors = this.initProfileErrors();
       this.currentProfile.isEdit = true;
-      $("#createProfileModal").modal("show");
+      this.currentProfile.who.SrcType = this.currentProfile.who.Type;
+      $("#wizardProfileModal").modal("show");
     },
 
     openDeleteProfile(profile) {
@@ -1283,94 +2076,126 @@ export default {
     saveProfile(profile) {
       var context = this;
 
-      var profileObj = {
-        action: profile.isEdit ? "update-bypass" : "create-bypass",
-        Host: {
-          type: profile.Type,
-          name: profile.Profile
-        },
-        Description: profile.Description,
-        name: profile.isEdit ? profile.name : null,
-        type: "bypass-src"
-      };
-
-      context.currentProfile.isLoading = true;
-      context.$forceUpdate();
-      nethserver.exec(
-        ["nethserver-squid/filter/validate"],
-        profileObj,
-        null,
-        function(success) {
-          context.currentProfile.isLoading = false;
-          $("#createProfileModal").modal("hide");
-
-          // notification
-          nethserver.notifications.success = context.$i18n.t(
-            "filter.profile_" +
-              (context.currentProfile.isEdit ? "updated" : "created") +
-              "_ok"
-          );
-          nethserver.notifications.error = context.$i18n.t(
-            "filter.profile_" +
-              (context.currentProfile.isEdit ? "updated" : "created") +
-              "_error"
-          );
-
-          // update values
-          if (profile.isEdit) {
-            nethserver.exec(
-              ["nethserver-squid/filter/update"],
-              profileObj,
-              function(stream) {
-                console.info("profile", stream);
-              },
-              function(success) {
-                // get all
-                context.getProfiles();
-              },
-              function(error, data) {
-                console.error(error, data);
-              }
-            );
-          } else {
-            nethserver.exec(
-              ["nethserver-squid/filter/create"],
-              profileObj,
-              function(stream) {
-                console.info("profile", stream);
-              },
-              function(success) {
-                // get all
-                context.getProfiles();
-              },
-              function(error, data) {
-                console.error(error, data);
-              }
-            );
-          }
-        },
-        function(error, data) {
-          var errorData = {};
-          context.currentProfile.isLoading = false;
-          context.currentProfile.errors = context.initProfileErrors();
-
-          try {
-            errorData = JSON.parse(data);
-            for (var e in errorData.attributes) {
-              var attr = errorData.attributes[e];
-              if (attr.parameter == "Host") {
-                attr.parameter = "Profile";
-              }
-              context.currentProfile.errors[attr.parameter].hasError = true;
-              context.currentProfile.errors[attr.parameter].message =
-                attr.error;
-              context.$forceUpdate();
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        }
+      $("#profile-step-" + this.currentProfile.step + "-submit").trigger(
+        "click"
       );
+      if (
+        document
+          .getElementById("profile-step-" + this.currentProfile.step + "-form")
+          .checkValidity()
+      ) {
+        var profileObj = {
+          Time: context.currentProfile.when.Times,
+          name: context.currentProfile.name,
+          FilterElse: context.currentProfile.FilterElse,
+          Filter: {
+            BlockIpAccess: context.currentProfile.what.BlockIpAccess
+              ? "enabled"
+              : "disabled",
+            Categories: context.currentProfile.what.Categories,
+            BlockFileTypes: context.currentProfile.what.BlockFileTypes
+              ? "enabled"
+              : "disabled",
+            BlackList: context.currentProfile.what.BlackList
+              ? "enabled"
+              : "disabled",
+            BlockAll: context.currentProfile.what.BlockAll,
+            WhiteList: context.currentProfile.what.WhiteList
+              ? "enabled"
+              : "disabled",
+            Description: context.currentProfile.what.Description
+          },
+          Src: {
+            name: context.currentProfile.who.Src,
+            type: context.currentProfile.who.Type
+          },
+          Description: context.currentProfile.Description,
+          action: profile.isEdit ? "update-profile" : "create-profile"
+        };
+
+        context.currentProfile.isLoading = true;
+        context.$forceUpdate();
+        nethserver.exec(
+          ["nethserver-squid/filter/validate"],
+          profileObj,
+          null,
+          function(success) {
+            context.currentProfile.isLoading = false;
+            $("#wizardProfileModal").modal("hide");
+
+            // notification
+            nethserver.notifications.success = context.$i18n.t(
+              "filter.profile_" +
+                (context.currentProfile.isEdit ? "updated" : "created") +
+                "_ok"
+            );
+            nethserver.notifications.error = context.$i18n.t(
+              "filter.profile_" +
+                (context.currentProfile.isEdit ? "updated" : "created") +
+                "_error"
+            );
+
+            // update values
+            if (profile.isEdit) {
+              nethserver.exec(
+                ["nethserver-squid/filter/update"],
+                profileObj,
+                function(stream) {
+                  console.info("profile", stream);
+                },
+                function(success) {
+                  // get all
+                  context.getProfiles();
+                },
+                function(error, data) {
+                  console.error(error, data);
+                }
+              );
+            } else {
+              nethserver.exec(
+                ["nethserver-squid/filter/create"],
+                profileObj,
+                function(stream) {
+                  console.info("profile", stream);
+                },
+                function(success) {
+                  // get all
+                  context.getProfiles();
+                },
+                function(error, data) {
+                  console.error(error, data);
+                }
+              );
+            }
+          },
+          function(error, data) {
+            var errorData = {};
+            context.currentProfile.isLoading = false;
+            context.currentProfile.errors = context.initProfileErrors();
+            context.$forceUpdate();
+
+            try {
+              errorData = JSON.parse(data);
+              for (var e in errorData.attributes) {
+                var attr = errorData.attributes[e];
+                if (attr.parameter == "Host") {
+                  attr.parameter = "Profile";
+                }
+                context.currentProfile.errors[attr.parameter].hasError = true;
+                context.currentProfile.errors[attr.parameter].message =
+                  attr.error;
+                context.$forceUpdate();
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+        );
+      }
+    },
+
+    resetProfile() {
+      this.currentProfile = this.initProfile();
     },
 
     deleteProfile(profile) {
@@ -1448,6 +2273,97 @@ export default {
     },
     removeCategoryDefault(index) {
       this.defaultProfile.Categories.splice(index, 1);
+    },
+    addCategoryProfile(category) {
+      category = (category && category.name) || null;
+      if (category && category.length > 0) {
+        if (!this.categoryProfileAlreadyAdded(category)) {
+          this.currentProfile.what.Categories.push(category);
+        }
+      }
+    },
+    categoryProfileAlreadyAdded(category) {
+      return this.currentProfile.what.Categories.indexOf(category) > -1;
+    },
+    removeCategoryProfile(index) {
+      this.currentProfile.what.Categories.splice(index, 1);
+    },
+    dayAlreadyAdded(day) {
+      return this.currentProfile.when.empty.Days.indexOf(day) > -1;
+    },
+    addDayToWeekdays(day) {
+      if (day.length > 0 && day != "-") {
+        if (!this.dayAlreadyAdded(day)) {
+          this.currentProfile.when.empty.Days.push(day);
+        }
+      }
+    },
+    removeDayToWeekdays(index) {
+      this.currentProfile.when.empty.Days.splice(index, 1);
+    },
+    addTime() {
+      var context = this;
+
+      context.currentProfile.when.empty.isLoading = true;
+      nethserver.exec(
+        ["nethserver-squid/filter/validate"],
+        {
+          StartTime: context.currentProfile.when.empty.StartTime,
+          EndTime: context.currentProfile.when.empty.EndTime,
+          Days: context.currentProfile.when.empty.Days,
+          action: "Time"
+        },
+        null,
+        function(success) {
+          context.currentProfile.when.empty.isLoading = false;
+
+          context.currentProfile.when.Times.push(
+            context.currentProfile.when.empty
+          );
+          context.currentProfile.when.empty = {
+            StartTime: "",
+            EndTime: "",
+            Days: [],
+            Description: "",
+            dayToAdd: {},
+            isLoading: false,
+            errors: context.initProfileErrors().when
+          };
+
+          context.$forceUpdate();
+        },
+        function(error, data) {
+          var errorData = {};
+          context.currentProfile.when.empty.isLoading = false;
+          context.currentProfile.when.empty.errors = context.initProfileErrors().when;
+
+          try {
+            errorData = JSON.parse(data);
+            for (var e in errorData.attributes) {
+              var attr = errorData.attributes[e];
+              context.currentProfile.when.empty.errors[
+                attr.parameter
+              ].hasError = true;
+              context.currentProfile.when.empty.errors[attr.parameter].message =
+                attr.error;
+              context.$forceUpdate();
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      );
+    },
+    removeTimeFromTimes(index) {
+      this.currentProfile.when.Times.splice(index, 1);
+    },
+    printDays(days) {
+      var context = this;
+      return days
+        .map(function(d) {
+          return context.$i18n.t("filter." + d);
+        })
+        .join(", ");
     }
   }
 };
@@ -1479,6 +2395,66 @@ export default {
 }
 
 .border-broken {
-  border: 2px solid #cc0000 !important;
+  border: 2px solid #ec7a08 !important;
+}
+
+.wizard-pf-sidebar .list-group-item > a {
+  height: 100%;
+  padding-bottom: 10px;
+}
+
+.wizard-pf-sidebar .list-group-item.active > a {
+  height: 100%;
+  padding-bottom: 10px;
+  padding-left: 23px;
+}
+
+.wizard-pf-sidebar .list-group-item.active > a:after {
+  display: none;
+}
+
+.wizard-pf-sidebar .list-group-item > a {
+  white-space: unset !important;
+}
+
+.reduce-font-span {
+  font-size: 12px;
+}
+
+.adjust-wizard-spinner {
+  order: -2 !important;
+  margin: 0 !important;
+}
+
+.span-color {
+  color: #424242;
+}
+
+.adjust-divider-times {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.adjust-add-time-spinner {
+  margin-left: 10px;
+}
+
+.adjust-remove-time {
+  float: right;
+  margin-top: 3px;
+  margin-left: 10px;
+}
+
+.adjust-padding-time {
+  padding: 0px;
+}
+
+.adjust-background-time {
+  background: #21659c;
+  margin: 4px;
+}
+
+.adjust-blank-pad {
+  padding: 25px 120px;
 }
 </style>

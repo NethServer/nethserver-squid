@@ -65,7 +65,7 @@ sub parse_netdata
         my @lines = split("\r\n",$txt);
         shift @lines;
         foreach (@lines) {
-            my @values = map(int, split(",",$_));
+            my @values = map($_ ne 'null' ? int : 0, split(",",$_));
             push(@ret, \@values);
         }
     }

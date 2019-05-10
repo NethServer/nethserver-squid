@@ -40,6 +40,8 @@ if ($cmd eq 'configuration') {
     $db->set_prop($input->{'name'}, 'Description', $input->{'Description'});
     $db->set_prop($input->{'name'}, 'Domains', join(",",@{$input->{'Domains'}}));
     system("/sbin/e-smith/signal-event -j nethserver-squidguard-save");
+} elsif ($cmd eq 'download') {
+    system("/sbin/e-smith/signal-event -j nethserver-squidguard-downloadlists");
 } else {
     error();
 }

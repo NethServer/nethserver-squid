@@ -23,6 +23,7 @@
   "configure": "Configure",
   "charts": "Charts",
   "charts_not_updated": "Charts cannot be updated. Maybe Netdata is not running",
+  "charts_not_available": "Chart not available if proxy is disabled",
   "show_charts": "Show charts",
   "hide_charts": "Hide charts",
   "status": "Status",
@@ -80,7 +81,7 @@
     "proxy_counter": "Proxy counters",
     "proxy_clients_stats": "Proxy clients statistics",
     "requests": "Requests",
-    "net": "Net",
+    "net": "Bandwidth",
     "empty_piechart_label": "Statistics are not available",
     "filter_requests": "Requests",
     "filter_blocked": "Blocked",
@@ -140,7 +141,9 @@
     "destination_updated_ok": "Destination updated successfully!",
     "destination_updated_error": "Destination not updated.",
     "destination_deleted_ok": "Destination deleted successfully!",
-    "destination_deleted_error": "Destination not deleted."
+    "destination_deleted_error": "Destination not deleted.",
+    "proxy_is_disabled": "Proxy is disabled",
+    "proxy_is_disabled_desc": "Click on the button below to configure proxy"
   },
   "proxy_rules": {
     "menu_title": "Proxy rules",
@@ -224,7 +227,7 @@
     "f": "Friday",
     "a": "Saturday",
     "s": "Sunday",
-    "blocked_file_types": "Blocked file extensions (comma separated)",
+    "blocked_file_types": "Blocked file extensions",
     "domain_blacklist": "Global domains blacklist (one per line)",
     "domain_whitelist": "Global domains whitelist (one per line)",
     "enable_expression_url": "Enable expression matching on URLs",
@@ -258,7 +261,16 @@
     "final": "Final",
     "condition_not_match": "Otherwise apply the filter from this profile",
     "main_desc_wizard": "Profile creation wizard",
-    "second_desc_wizard": "Use this wizard to configure each step of profile:<br><br><div><b>1. Who</b> (the client associated with the profile)</div><div><b>2. What</b> (which sites can be browsed by the profiled client)</div><div><b>3. When</b> (validity of the filter in certain period of times)</div>"
+    "second_desc_wizard": "Use this wizard to configure each step of profile:<br><br><div><b>1. Who</b> (the client associated with the profile)</div><div><b>2. What</b> (which sites can be browsed by the profiled client)</div><div><b>3. When</b> (validity of the filter in certain period of times)</div>",
+    "default_profile": "Default profile",
+    "filter_is_disabled": "Filter is disabled",
+    "filter_is_disabled_desc": "Click on the button below to configure filter",
+    "categories_not_found": "Categories not yet downloaded",
+    "categories_not_found_desc": "Click on the button below to download categories from this list",
+    "categories_downloaded_ok": "Categories downloaded successfully!",
+    "categories_downloaded_error": "Categories not downloaded.",
+    "always": "Always",
+    "specify_time_range": "Specify time ranges"
   },
   "categories": {
     "menu_title": "Categories",
@@ -310,7 +322,9 @@
     "profiles": "Profiles",
     "parent_proxy": "Upstream proxy, port is optional (default 3128)",
     "safe_ports": "Safe ports are a list of ports accessible using the proxy. It accepts a comma-separated list of ports",
-    "redirect_port": "Override the default Squid listening port"
+    "redirect_port": "Override the default Squid listening port",
+    "destination": "You can insert valid FQDN domains or host separated with comma",
+    "blocked_file_types": "Insert a valid file extensions separeted with comma"
   },
   "validation": {
     "validation_failed": "Validation failed",
@@ -325,6 +339,7 @@
     "source_already_exists": "A bypass for the same source already exists",
     "object_not_found": "Object not found",
     "object_not_supported": "Object not supported",
-    "profile_not_found": "Prfile not found"
+    "profile_not_found": "Prfile not found",
+    "valid_fqdn_domain": "Must be valid FQDN domain(s)"
   }
 }

@@ -10,8 +10,9 @@
     ></doc-info>
 
     <div v-show="!view.isLoaded" class="spinner spinner-lg"></div>
+
     <div v-show="!view.menu.installed && view.isLoaded">
-      <div class="blank-slate-pf" id>
+      <div class="blank-slate-pf">
         <div class="blank-slate-pf-icon">
           <span class="pficon pficon pficon-add-circle-o"></span>
         </div>
@@ -29,9 +30,44 @@
       </div>
     </div>
 
-    <div v-show="view.menu.installed && view.isLoaded">
+    <div v-show="view.menu.installed && view.isLoaded && !source.downloaded" class="blank-slate-pf">
+      <div class="blank-slate-pf-icon">
+        <span class="fa fa-ban"></span>
+      </div>
+      <h1>{{$t('filter.categories_not_found')}}</h1>
+      <p>
+        {{$t('filter.categories_not_found_desc')}}:
+        <b>{{source.list | capitalize}}</b>.
+      </p>
+      <div class="blank-slate-pf-main-action">
+        <button @click="downloadCategories()" class="btn btn-primary btn-lg">{{$t('download')}}</button>
+      </div>
+    </div>
+
+    <div v-show="view.menu.installed && view.isLoaded && source.downloaded">
       <h3>{{ $t('filter.configuration') }}</h3>
-      <div class="panel panel-default">
+      <div v-if="!configuration.Filter" class="blank-slate-pf">
+        <h1>{{$t('filter.filter_is_disabled')}}</h1>
+        <p>{{$t('filter.filter_is_disabled_desc')}}.</p>
+        <div class="blank-slate-pf-main-action">
+          <button
+            v-if="proxyConfiguration.status"
+            @click="toggleStatus(false)"
+            class="btn btn-primary btn-lg"
+          >{{$t('filter.configure_filter')}}</button>
+
+          <a
+            v-if="!proxyConfiguration.status"
+            href="#/proxy"
+            class="external-smarthost span-left-margin"
+          >
+            <span class="pficon pficon-warning-triangle-o adjust-triangle"></span>
+            {{$t('filter.enable_proxy_before')}}
+            <span class="fa fa-external-link"></span>
+          </a>
+        </div>
+      </div>
+      <div v-show="configuration.Filter" class="panel panel-default">
         <div class="panel-heading">
           <button
             v-if="configuration.Filter"
@@ -40,7 +76,6 @@
             class="btn btn-primary right proxy-details"
           >{{$t('edit')}}</button>
           <toggle-button
-            v-if="proxyConfiguration.status"
             class="min-toggle right"
             :width="40"
             :height="20"
@@ -49,24 +84,28 @@
             :sync="true"
             @change="toggleStatus(false)"
           />
-          <a
-            v-if="!proxyConfiguration.status"
-            href="#/proxy"
-            class="right external-smarthost span-left-margin"
-          >
-            {{$t('filter.enable_proxy_before')}}
-            <span class="fa fa-external-link"></span>
-          </a>
-          <span
-            v-if="!proxyConfiguration.status"
-            class="pficon pficon-warning-triangle-o right adjust-triangle"
-          ></span>
 
           <span class="panel-title">
             {{$t('filter.enabled')}}
             <span
               :class="['fa', configuration.Filter ? 'fa-check green' : 'fa-times red']"
             ></span>
+
+            <span
+              data-toggle="tooltip-second"
+              data-placement="bottom"
+              data-html="true"
+              :title="configuration.DomainBlacklist.join('<br>')"
+              class="handle-overflow span-left-margin semi-bold color-link-hover"
+            >{{$t('filter.blacklist')}}</span>
+
+            <span
+              data-toggle="tooltip-second"
+              data-placement="bottom"
+              data-html="true"
+              :title="configuration.DomainWhitelist.join('<br>')"
+              class="handle-overflow span-left-margin semi-bold color-link-hover"
+            >{{$t('filter.whitelist')}}</span>
           </span>
         </div>
       </div>
@@ -75,7 +114,6 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <toggle-button
-            v-if="proxyConfiguration.status"
             class="min-toggle right"
             :width="40"
             :height="20"
@@ -89,6 +127,19 @@
             <span
               :class="['fa', configuration.AntiVirus ? 'fa-check green' : 'fa-times red']"
             ></span>
+          </span>
+        </div>
+      </div>
+
+      <h3 v-if="categories.length > 0">{{ $t('filter.default_profile') }}</h3>
+      <div v-if="categories.length > 0" class="panel panel-default">
+        <div class="panel-heading">
+          <button @click="openConfigureDefault()" class="btn btn-primary right">{{$t('configure')}}</button>
+          <span class="panel-title">
+            {{$t('filter.mode')}}:
+            <span
+              class="semi-bold"
+            >{{defaultProfile.BlockAll == 'enabled' ? $t('filter.block_all') : $t('filter.block_all')}}</span>
           </span>
         </div>
       </div>
@@ -108,10 +159,6 @@
       </div>
 
       <h3 v-if="profiles.length > 0">{{ $t('actions') }}</h3>
-      <a v-if="categories.length > 0" class="right adjust-clear" @click="openConfigureDefault()">
-        <span class="fa fa-user"></span>
-        {{$t('filter.configure_default')}}
-      </a>
       <button
         v-if="profiles.length > 0"
         @click="openCreateProfile()"
@@ -233,9 +280,21 @@
               <div
                 :class="['form-group', newConfiguration.errors.BlockedFileTypes.hasError ? 'has-error' : '']"
               >
-                <label class="col-sm-3 control-label">{{$t('filter.blocked_file_types')}}</label>
+                <label class="col-sm-3 control-label">
+                  {{$t('filter.blocked_file_types')}}
+                  <doc-info
+                    :placement="'top'"
+                    :title="$t('filter.blocked_file_types')"
+                    :chapter="'blocked_file_types'"
+                    :inline="true"
+                  ></doc-info>
+                </label>
                 <div class="col-sm-9">
-                  <input class="form-control" v-model="newConfiguration.BlockedFileTypes">
+                  <input
+                    placeholder="exe, zip"
+                    class="form-control"
+                    v-model="newConfiguration.BlockedFileTypes"
+                  >
                   <span
                     v-if="newConfiguration.errors.BlockedFileTypes.hasError"
                     class="help-block"
@@ -846,7 +905,27 @@
                     class="form-horizontal"
                     v-on:submit.prevent="validateStep()"
                   >
+                    <div class="form-group">
+                      <label
+                        class="col-sm-3 control-label"
+                        for="textInput-modal-markup"
+                      >{{$t('filter.always')}}</label>
+                      <div class="col-sm-4">
+                        <toggle-button
+                          class="min-toggle"
+                          :width="40"
+                          :height="20"
+                          :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
+                          :value="currentProfile.when.always"
+                          :sync="true"
+                          @change="toggleAlways()"
+                        />
+                      </div>
+                    </div>
+
+                    <legend v-show="!currentProfile.when.always">{{$t('filter.specify_time_range')}}</legend>
                     <div
+                      v-show="!currentProfile.when.always"
                       :class="['form-group', currentProfile.when.empty.errors.StartTime.hasError || currentProfile.when.empty.errors.EndTime.hasError ? 'has-error' : '']"
                     >
                       <label
@@ -887,6 +966,7 @@
                       </div>
                     </div>
                     <div
+                      v-show="!currentProfile.when.always"
                       :class="['form-group', currentProfile.when.empty.errors.Days.hasError ? 'has-error' : '']"
                     >
                       <label
@@ -912,7 +992,7 @@
                         >{{currentProfile.when.empty.errors.Days.message}}</span>
                       </div>
                     </div>
-                    <div class="form-group">
+                    <div v-show="!currentProfile.when.always" class="form-group">
                       <label class="col-sm-3 control-label" for="textInput-modal-markup"></label>
                       <div class="col-sm-9">
                         <ul class="list-inline compact">
@@ -934,7 +1014,7 @@
                         </ul>
                       </div>
                     </div>
-                    <div class="form-group">
+                    <div v-show="!currentProfile.when.always" class="form-group">
                       <label class="col-sm-3 control-label">{{$t('filter.description')}}</label>
                       <div class="col-sm-9">
                         <input
@@ -944,18 +1024,20 @@
                         >
                       </div>
                     </div>
+
                     <button
+                      v-show="!currentProfile.when.always"
                       class="btn btn-primary"
                       type="submit"
                       :disabled="currentProfile.when.empty.StartTime.length == 0 || currentProfile.when.empty.EndTime.length == 0 || currentProfile.when.empty.Days.length == 0"
                       @click="addTime()"
                     >{{$t('filter.add_time')}}</button>
                     <div
-                      v-if="currentProfile.when.empty.isLoading"
+                      v-if="currentProfile.when.empty.isLoading && !currentProfile.when.always"
                       class="spinner spinner-sm form-spinner-loader adjust-add-time-spinner"
                     ></div>
-                    <div class="divider adjust-divider-times"></div>
-                    <ul class="list-inline compact">
+                    <div class="form-group"></div>
+                    <ul v-show="!currentProfile.when.always" class="list-inline compact">
                       <li
                         v-for="(i, ki) in currentProfile.when.Times"
                         v-bind:key="ki"
@@ -977,13 +1059,12 @@
                         </span>
                       </li>
                     </ul>
+                    <div v-show="!currentProfile.when.always" class="divider adjust-divider-times"></div>
                     <div class="form-group"></div>
                     <div class="form-group"></div>
 
-                    <div class="form-group">
-                      <label
-                        class="col-sm-3 control-label"
-                      >{{$t('filter.condition_not_match')}} {{currentProfile.FilterElse}}</label>
+                    <div v-show="!currentProfile.when.always" class="form-group">
+                      <label class="col-sm-3 control-label">{{$t('filter.condition_not_match')}}</label>
                       <div class="col-sm-9">
                         <select class="form-control" v-model="currentProfile.FilterElse">
                           <option
@@ -1156,19 +1237,15 @@ export default {
         UrlWhitelist: []
       },
       newConfiguration: {
-        AntiVirus: false,
-        DomainWhitelist: [],
-        DomainBlacklist: [],
-        UrlBlacklist: [],
-        BlockedFileTypes: [],
-        Filter: true,
-        Expressions: false,
-        UrlWhitelist: [],
         errors: this.initConfigurationErrors()
       },
       proxyConfiguration: {},
       defaultProfile: {},
       categories: [],
+      source: {
+        list: null,
+        downloaded: false
+      },
       OpenIndicator: {
         render: createElement =>
           createElement("span", { class: { toggle: true } })
@@ -1227,6 +1304,7 @@ export default {
             isLoading: false,
             errors: this.initProfileErrors().when
           },
+          always: profile ? (profile.Time.length > 0 ? false : true) : true,
           Times: profile ? profile.Time : []
         },
         name: profile ? profile.name : "",
@@ -1389,14 +1467,15 @@ export default {
 
       return this.sources.filter(function(source) {
         return (
-          source.type.toLowerCase().includes(query.toLowerCase()) ||
-          source.name.toLowerCase().includes(query.toLowerCase()) ||
-          (source.Description &&
-            source.Description.toLowerCase().includes(query.toLowerCase())) ||
-          (source.IpAddress &&
-            source.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
-          (source.Address &&
-            source.Address.toLowerCase().includes(query.toLowerCase()))
+          source.type != "profile" &&
+          (source.type.toLowerCase().includes(query.toLowerCase()) ||
+            source.name.toLowerCase().includes(query.toLowerCase()) ||
+            (source.Description &&
+              source.Description.toLowerCase().includes(query.toLowerCase())) ||
+            (source.IpAddress &&
+              source.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
+            (source.Address &&
+              source.Address.toLowerCase().includes(query.toLowerCase())))
         );
       });
     },
@@ -1442,6 +1521,10 @@ export default {
     },
     toggleAdvancedProfileMode() {
       this.currentProfile.what.advanced = !this.currentProfile.what.advanced;
+      this.$forceUpdate();
+    },
+    toggleAlways() {
+      this.currentProfile.when.always = !this.currentProfile.when.always;
       this.$forceUpdate();
     },
     mapObjectIcon(obj, status) {
@@ -1677,6 +1760,7 @@ export default {
     getCategories() {
       var context = this;
 
+      context.view.isLoaded = false;
       nethserver.exec(
         ["nethserver-squid/categories/read"],
         {
@@ -1690,6 +1774,9 @@ export default {
             console.error(e);
           }
           context.categories = success.categories;
+          context.source = success.source;
+
+          context.view.isLoaded = true;
         },
         function(error) {
           console.error(error);
@@ -1755,6 +1842,10 @@ export default {
 
           context.defaultProfile.advanced = false;
           context.defaultProfile.isLoading = false;
+
+          setTimeout(function() {
+            $('[data-toggle="tooltip-second"]').tooltip();
+          }, 500);
         },
         function(error) {
           console.error(error);
@@ -1790,7 +1881,6 @@ export default {
     getProfiles() {
       var context = this;
 
-      context.view.isLoaded = false;
       nethserver.exec(
         ["nethserver-squid/filter/read"],
         {
@@ -1804,7 +1894,6 @@ export default {
             console.error(e);
           }
           context.profiles = success.profiles;
-          context.view.isLoaded = true;
 
           setTimeout(function() {
             $('[data-toggle="tooltip"]').tooltip();
@@ -2062,6 +2151,8 @@ export default {
                   attr.value;
               }
             }
+
+            context.$forceUpdate();
           } catch (e) {
             console.error(e);
           }
@@ -2069,6 +2160,23 @@ export default {
       );
     },
     openConfigureDefault() {
+      this.newConfiguration = JSON.parse(JSON.stringify(this.configuration));
+      this.newConfiguration.errors = this.initConfigurationErrors();
+      this.newConfiguration.DomainWhitelist = this.newConfiguration.DomainWhitelist.join(
+        "\n"
+      );
+      this.newConfiguration.DomainBlacklist = this.newConfiguration.DomainBlacklist.join(
+        "\n"
+      );
+      this.newConfiguration.UrlBlacklist = this.newConfiguration.UrlBlacklist.join(
+        "\n"
+      );
+      this.newConfiguration.UrlWhitelist = this.newConfiguration.UrlWhitelist.join(
+        "\n"
+      );
+      this.newConfiguration.BlockedFileTypes = this.newConfiguration.BlockedFileTypes.join(
+        ","
+      );
       $("#configureDefaultModal").modal("show");
     },
     openCreateProfile() {
@@ -2101,7 +2209,9 @@ export default {
           .checkValidity()
       ) {
         var profileObj = {
-          Time: context.currentProfile.when.Times,
+          Time: context.currentProfile.when.always
+            ? []
+            : context.currentProfile.when.Times,
           name: context.currentProfile.name,
           FilterElse: context.currentProfile.FilterElse,
           Filter: {
@@ -2212,6 +2322,7 @@ export default {
 
     resetProfile() {
       this.currentProfile = this.initProfile();
+      $("#wizardProfileModal").modal("hide");
     },
 
     deleteProfile(profile) {
@@ -2380,6 +2491,37 @@ export default {
           return context.$i18n.t("filter." + d);
         })
         .join(", ");
+    },
+    downloadCategories() {
+      var context = this;
+
+      // notification
+      nethserver.notifications.success = context.$i18n.t(
+        "filter.categories_downloaded_ok"
+      );
+      nethserver.notifications.error = context.$i18n.t(
+        "filter.categories_downloaded_error"
+      );
+
+      // update values
+      nethserver.exec(
+        ["nethserver-squid/categories/update"],
+        {
+          action: "download"
+        },
+        function(stream) {
+          console.info("download", stream);
+        },
+        function(success) {
+          // get all
+          context.getConfiguration();
+          context.getProfiles();
+          context.getCategories();
+        },
+        function(error, data) {
+          console.error(error, data);
+        }
+      );
     }
   }
 };
@@ -2472,5 +2614,9 @@ export default {
 
 .adjust-blank-pad {
   padding: 25px 120px;
+}
+
+.color-link-hover {
+  color: #318fd1;
 }
 </style>

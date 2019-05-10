@@ -44,13 +44,21 @@
             <span
               v-if="configuration.Lists == 'custom'"
             >({{configuration.CustomListURL}})</span>
+            <span
+              v-if="listCategories.length > 0"
+              data-toggle="tooltip-second"
+              data-placement="bottom"
+              data-html="true"
+              :title="listCategories.join('<br>')"
+              class="handle-overflow span-left-margin semi-bold color-link-hover"
+            >{{$t('categories.title')}}</span>
           </span>
         </div>
       </div>
 
       <div v-if="categories.length == 0" class="blank-slate-pf" id>
         <div class="blank-slate-pf-icon">
-          <span class="pficon pficon-middleware"></span>
+          <span class="fa fa-ban"></span>
         </div>
         <h1>{{$t('categories.no_categories_find')}}</h1>
         <p>{{$t('categories.no_categories_find_desc')}}.</p>
@@ -104,7 +112,7 @@
 
           <div class="list-view-pf-main-info small-list">
             <div class="list-view-pf-left">
-              <span class="list-view-pf-icon-sm pficon pficon-middleware"></span>
+              <span class="list-view-pf-icon-sm fa fa-ban"></span>
             </div>
             <div class="list-view-pf-body">
               <div class="list-view-pf-description rules-src-dst">
@@ -142,7 +150,10 @@
             v-on:submit.prevent="saveConfiguration(currentConfiguration)"
           >
             <div class="modal-body">
-              <div v-if="currentConfiguration.profiles.length > 0" class="alert alert-warning alert-dismissable">
+              <div
+                v-if="currentConfiguration.profiles.length > 0"
+                class="alert alert-warning alert-dismissable"
+              >
                 <span class="pficon pficon-warning-triangle-o"></span>
                 <strong>{{$t('warning')}}.</strong>
                 {{$t('categories.change_list_warning')}}:
@@ -275,7 +286,10 @@
           </div>
           <form class="form-horizontal" v-on:submit.prevent="deleteCategory(toDeleteCategory)">
             <div class="modal-body">
-              <div v-if="toDeleteCategory.profiles.length > 0" class="alert alert-warning alert-dismissable">
+              <div
+                v-if="toDeleteCategory.profiles.length > 0"
+                class="alert alert-warning alert-dismissable"
+              >
                 <span class="pficon pficon-warning-triangle-o"></span>
                 <strong>{{$t('warning')}}.</strong>
                 {{$t('categories.remove_category_warning')}}:
@@ -323,6 +337,7 @@ export default {
           vm.view.menu = success;
           vm.getConfiguration();
           vm.getCategories();
+          vm.getListCategories();
           vm.getLists();
         },
         function(error) {
@@ -352,6 +367,7 @@ export default {
         CustomListURL: ""
       },
       categories: [],
+      listCategories: [],
       lists: [],
       currentConfiguration: {
         Lists: "",
@@ -471,6 +487,34 @@ export default {
           }
           context.categories = success.categories;
           context.view.isLoaded = true;
+        },
+        function(error) {
+          console.error(error);
+        }
+      );
+    },
+    getListCategories() {
+      var context = this;
+
+      nethserver.exec(
+        ["nethserver-squid/categories/read"],
+        {
+          action: "categories",
+          filter: "downloaded"
+        },
+        null,
+        function(success) {
+          try {
+            success = JSON.parse(success);
+          } catch (e) {
+            console.error(e);
+          }
+          context.listCategories = success.categories.map(function(c) {
+            return c.name;
+          });
+          setTimeout(function() {
+            $('[data-toggle="tooltip-second"]').tooltip();
+          }, 500);
         },
         function(error) {
           console.error(error);
@@ -704,5 +748,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.color-link-hover {
+  color: #318fd1;
+}
 </style>

@@ -43,12 +43,20 @@
       <div class="col-sm-4">
         <div v-if="!view.isChartLoaded" class="spinner spinner-lg view-spinner"></div>
         <div
-          v-if="view.isChartLoaded && view.invalidChartsData"
+          v-if="view.isChartLoaded && view.invalidChartsData && proxy.status == 'enabled'"
           class="alert alert-warning alert-dismissable col-sm-12"
         >
           <span class="pficon pficon-warning-triangle-o"></span>
           <strong>{{$t('warning')}}!</strong>
           {{$t('charts_not_updated')}}.
+        </div>
+        <div
+          v-if="view.isChartLoaded && view.invalidChartsData && proxy.status == 'disabled'"
+          class="alert alert-info alert-dismissable col-sm-12"
+        >
+          <span class="pficon pficon-info"></span>
+          <strong>{{$t('info')}}:</strong>
+          {{$t('charts_not_available')}}.
         </div>
         <div v-show="view.isChartLoaded && !view.invalidChartsData" class="row">
           <div class="col-sm-12">
@@ -62,12 +70,20 @@
       <div class="col-sm-4">
         <div v-if="!view.isChartLoaded" class="spinner spinner-lg view-spinner"></div>
         <div
-          v-if="view.isChartLoaded && view.invalidChartsData"
+          v-if="view.isChartLoaded && view.invalidChartsData && proxy.status == 'enabled'"
           class="alert alert-warning alert-dismissable col-sm-12"
         >
           <span class="pficon pficon-warning-triangle-o"></span>
           <strong>{{$t('warning')}}!</strong>
           {{$t('charts_not_updated')}}.
+        </div>
+        <div
+          v-if="view.isChartLoaded && view.invalidChartsData && proxy.status == 'disabled'"
+          class="alert alert-info alert-dismissable col-sm-12"
+        >
+          <span class="pficon pficon-info"></span>
+          <strong>{{$t('info')}}:</strong>
+          {{$t('charts_not_available')}}.
         </div>
         <div v-show="view.isChartLoaded && !view.invalidChartsData" class="row">
           <div class="col-sm-12">
@@ -77,6 +93,40 @@
             <div id="chart-proxy-net" class="col-sm-12"></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>{{ $t('dashboard.today_proxy_traffic') }}</h3>
+      <div v-if="!view.isProxyLoaded" class="spinner spinner-lg view-spinner"></div>
+      <div v-if="view.isProxyLoaded" class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <h3>{{$t('dashboard.top_5_users')}}</h3>
+        <ul class="list-group">
+          <li v-for="(i,k) in proxyStats.top_users" v-bind:key="k" class="list-group-item">
+            <strong>{{k+1}}.</strong>
+            {{i.name}}
+            <span class="gray">({{i.bytes | byteFormat}} | {{i.percentage}}%)</span>
+          </li>
+        </ul>
+      </div>
+      <div
+        v-if="view.isProxyLoaded"
+        class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container mg-left-20"
+      >
+        <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
+        <span class="card-pf-utilization-card-details-description stats-description">
+          <span
+            class="card-pf-utilization-card-details-line-2 stats-text"
+          >{{$t('dashboard.total_users')}}</span>
+        </span>
+        <span
+          class="card-pf-utilization-card-details-count stats-count mg-left-20"
+        >{{proxyStats.traffic || 0 | byteFormat}}</span>
+        <span class="card-pf-utilization-card-details-description stats-description">
+          <span
+            class="card-pf-utilization-card-details-line-2 stats-text"
+          >{{$t('dashboard.total_traffic')}}</span>
+        </span>
       </div>
     </div>
 
@@ -136,12 +186,14 @@
             <span class="card-pf-utilization-card-details-count stats-count">
               {{proxy["client_bytes_out"] || 0 | byteFormat}}
               <span
-                class="semi-bold"
+                class="semi-bold min-size"
               >{{$t('download')}}</span>
             </span>
             <span class="card-pf-utilization-card-details-count stats-count mg-left-20">
               {{proxy["client_bytes_in"] || 0 | byteFormat}}
-              <span class="semi-bold">{{$t('upload')}}</span>
+              <span
+                class="semi-bold min-size"
+              >{{$t('upload')}}</span>
             </span>
             <span class="card-pf-utilization-card-details-description stats-description mg-left-10">
               <span
@@ -190,39 +242,6 @@
             </span>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <h3>{{ $t('dashboard.today_proxy_traffic') }}</h3>
-      <div v-if="!view.isProxyLoaded" class="spinner spinner-lg view-spinner"></div>
-      <div v-if="view.isProxyLoaded" class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-        <h3>{{$t('dashboard.top_5_users')}}</h3>
-        <ul class="list-group">
-          <li v-for="(i,k) in proxyStats.top_users" v-bind:key="k" class="list-group-item">
-            <strong>{{k+1}}.</strong>
-            {{i.name}}
-            <span class="gray">({{i.bytes | byteFormat}} | {{i.percentage}}%)</span>
-          </li>
-        </ul>
-      </div>
-      <div
-        v-if="view.isProxyLoaded"
-        class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container mg-left-20"
-      >
-        <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
-        <span class="card-pf-utilization-card-details-description stats-description">
-          <span
-            class="card-pf-utilization-card-details-line-2 stats-text"
-          >{{$t('dashboard.total_users')}}</span>
-        </span>
-        <span
-          class="card-pf-utilization-card-details-count stats-count mg-left-20"
-        >{{proxyStats.traffic || 0 | byteFormat}}</span>
-        <span class="card-pf-utilization-card-details-description stats-description">
-          <span
-            class="card-pf-utilization-card-details-line-2 stats-text"
-          >{{$t('dashboard.total_traffic')}}</span>
-        </span>
       </div>
     </div>
 
@@ -475,8 +494,14 @@ export default {
           if (!context.filterPieChart) {
             context.filterPieChart = generatePieChart("#filter-pie-chart", {
               names: {
-                requests: context.$t("dashboard.filter_requests"),
-                blocked: context.$t("dashboard.filter_blocked")
+                requests:
+                  (context.$i18n &&
+                    context.$i18n.t("dashboard.filter_requests")) ||
+                  "Requests",
+                blocked:
+                  (context.$i18n &&
+                    context.$i18n.t("dashboard.filter_blocked")) ||
+                  "Blocked"
               },
               colors: {
                 blocked: $.pfPaletteColors.red,
@@ -683,5 +708,9 @@ export default {
 
 .adjust-height {
   min-height: 132px;
+}
+
+.min-size {
+  font-size: 18px;
 }
 </style>

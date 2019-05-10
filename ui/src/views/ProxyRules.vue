@@ -189,7 +189,7 @@
                   for="textInput-modal-markup"
                 >{{$t('proxy_rules.action')}}</label>
                 <div class="col-sm-9">
-                  <select type="text" v-model="currentRule.Action" class="form-control">
+                  <select required type="text" v-model="currentRule.Action" class="form-control">
                     <option
                       v-for="(a,ak) in actions"
                       v-bind:key="ak"
@@ -468,7 +468,7 @@ export default {
           name: rule.Src,
           type: rule.Type
         },
-        Dst: rule.Dst.split("\n"),
+        Dst: rule.Dst.length > 0 ? rule.Dst.split("\n") : [],
         Description: rule.Description,
         name: rule.name
       };

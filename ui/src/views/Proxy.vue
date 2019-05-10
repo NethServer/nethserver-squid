@@ -12,7 +12,17 @@
     <div v-show="!view.isLoaded" class="spinner spinner-lg"></div>
 
     <h3 v-if="view.isLoaded">{{ $t('proxy.configuration') }}</h3>
-    <div v-if="view.isLoaded" class="panel panel-default">
+    <div v-if="view.isLoaded && !configuration.status" class="blank-slate-pf">
+      <h1>{{$t('proxy.proxy_is_disabled')}}</h1>
+      <p>{{$t('proxy.proxy_is_disabled_desc')}}.</p>
+      <div class="blank-slate-pf-main-action">
+        <button
+          @click="toggleStatus(false)"
+          class="btn btn-primary btn-lg"
+        >{{$t('proxy.configure_proxy')}}</button>
+      </div>
+    </div>
+    <div v-if="view.isLoaded && configuration.status" class="panel panel-default">
       <div class="panel-heading">
         <button
           v-if="configuration.status"
@@ -228,7 +238,12 @@
                 :class="['mg-left-5', props.row.props.status == 'enabled' ? '' : 'gray']"
                 @click="props.row.props.status == 'enabled' ? openEditDestination(props.row) : undefined"
               >
-                <strong>{{ (props.row.props.Host && props.row.props.Host.name) || props.row.props.Domains.join(',')}}</strong>
+                <strong
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  data-html="true"
+                  :title="(props.row.props.Host && props.row.props.Host.name) || props.row.props.Domains.join('<br>')"
+                >{{ (props.row.props.Host && props.row.props.Host.name) || props.row.props.Domains.join(',') | truncate}}</strong>
                 <span
                   class="gray mg-left-5"
                 >({{ props.row.props.Host && props.row.props.Host.type || 'domains'}})</span>
@@ -335,7 +350,7 @@
                 <label class="col-sm-3 control-label">{{$t('proxy.block_http')}}</label>
                 <div class="col-sm-1">
                   <input
-                    :disabled="newConfiguration.GreenMode == 'transparent' || newConfiguration.GreenMode == 'transparent_ssl' || newConfiguration.BlueMode == 'transparent' || newConfiguration.BlueMode == 'transparent_ssl'"
+                    :disabled="(newConfiguration.GreenMode == 'transparent' || newConfiguration.GreenMode == 'transparent_ssl') && (newConfiguration.BlueMode == 'transparent' || newConfiguration.BlueMode == 'transparent_ssl')"
                     type="checkbox"
                     class="form-control"
                     v-model="newConfiguration.PortBlock"
@@ -346,7 +361,7 @@
                   >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentSource.errors.PortBlock.message)}}</span>
                 </div>
                 <div
-                  v-if="newConfiguration.GreenMode == 'transparent' || newConfiguration.GreenMode == 'transparent_ssl' || newConfiguration.BlueMode == 'transparent' || newConfiguration.BlueMode == 'transparent_ssl'"
+                  v-if="(newConfiguration.GreenMode == 'transparent' || newConfiguration.GreenMode == 'transparent_ssl') && (newConfiguration.BlueMode == 'transparent' || newConfiguration.BlueMode == 'transparent_ssl')"
                   class="col-sm-8"
                 >
                   <div class="alert alert-warning alert-dismissable">
@@ -530,10 +545,15 @@
               <div
                 :class="['form-group', currentDestination.errors.Destination.hasError ? 'has-error' : '']"
               >
-                <label
-                  class="col-sm-3 control-label"
-                  for="textInput-modal-markup"
-                >{{$t('proxy.destination')}}</label>
+                <label class="col-sm-3 control-label" for="textInput-modal-markup">
+                  {{$t('proxy.destination')}}
+                  <doc-info
+                    :placement="'top'"
+                    :title="$t('proxy.destination')"
+                    :chapter="'destination'"
+                    :inline="true"
+                  ></doc-info>
+                </label>
                 <div class="col-sm-9">
                   <suggestions
                     v-model="currentDestination.Destination"
@@ -927,7 +947,7 @@ export default {
         nethserver.exec(
           ["nethserver-squid/proxy/update"],
           {
-            SafePorts: context.configuration.SafePorts,
+            SafePorts: context.configuration.SafePorts.split(","),
             status: "disabled",
             PortBlock: context.configuration.PortBlock,
             ParentProxy: context.configuration.ParentProxy,
@@ -1009,6 +1029,10 @@ export default {
           }
           context.sourceRows = success["sources"];
           context.destinationRows = success["destinations"];
+
+          setTimeout(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+          }, 500);
 
           context.view.isLoaded = true;
         },

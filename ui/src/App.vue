@@ -42,7 +42,7 @@
           v-bind:class="[getCurrentPath('proxy') ? 'active' : '', 'list-group-item']"
         >
           <a href="#/proxy">
-            <span class="pficon pficon-security"></span>
+            <span class="fa fa-server"></span>
             <span class="list-group-item-value">{{$t('proxy.menu_title')}}</span>
           </a>
         </li>
@@ -70,7 +70,7 @@
           v-bind:class="[getCurrentPath('categories') ? 'active' : '', 'list-group-item']"
         >
           <a href="#/categories">
-            <span class="fa fa-cubes"></span>
+            <span class="fa fa-ban"></span>
             <span class="list-group-item-value">{{$t('categories.menu_title')}}</span>
           </a>
         </li>

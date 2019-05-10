@@ -32,7 +32,19 @@ my $cmd = $input->{'action'};
 
 
 if ($cmd eq 'categories') {
-    system(('/usr/libexec/nethserver/api/nethserver-squid/categories/list-categories', $input->{'filter'} || ''));
+    my $db = esmith::ConfigDB->open_ro();
+    my $filter = $input->{'filter'} || '';
+    my $out = `/usr/libexec/nethserver/api/nethserver-squid/categories/list-categories $filter`;
+    my $ret = safe_decode_json($out);
+    my $downloaded = JSON::false;
+    foreach (@{$ret->{'categories'}}) {
+        if ($_->{'type'} ne 'custom') {
+            $downloaded = JSON::true;
+        }
+    }
+    $ret->{'source'} = { 'list' =>  $db->get_prop('squidguard', 'Lists'), 'downloaded' => $downloaded };
+
+    print encode_json($ret);
 } elsif ($cmd eq 'configuration') {
     my $ret;
     my $db = esmith::ConfigDB->open_ro(); 

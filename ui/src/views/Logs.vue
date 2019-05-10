@@ -160,7 +160,8 @@ export default {
           context.view.logsLoaded = true;
           context.logsContent = error;
         },
-        false
+        false,
+        "/usr/libexec/nethserver/api/nethserver-squid/logs/execute"
       );
     }
   }

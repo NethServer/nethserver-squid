@@ -322,6 +322,7 @@
     "invalid_time": "Invalid time format, use 24h format like '12:00'",
     "invalid_user": "Invalid user",
     "invalid_group": "Invalid group",
+    "source_already_exists": "A bypass for the same source already exists",
     "object_not_found": "Object not found",
     "object_not_supported": "Object not supported",
     "profile_not_found": "Prfile not found"

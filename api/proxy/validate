@@ -55,6 +55,16 @@ if ($data['action'] == 'configuration') {
     $hdb = new EsmithDatabase('hosts');
     $fdb = new EsmithDatabase('fwrules');
 
+    # search for existing bypass with the same Host
+    if ($data['action'] == 'create-bypass') {
+        foreach ($fdb->getAll('bypass-src') as $bypass) {
+            list($type, $name) = explode(";",$bypass['Host']);
+            if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
+                $v->addValidationError('Host', 'source_already_exists');
+            }
+        }
+    }
+
     $v->declareParameter('status', Validate::SERVICESTATUS);
     if (isset($data['Host']) && $data['Host']) {
         if (!$hdb->getKey($data['Host']['name'])) {

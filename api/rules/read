@@ -98,10 +98,9 @@ if ($cmd eq 'rule-list') {
     }
     foreach ($ndb->get_all_by_prop(type => 'provider')) {
         my $i = $ndb->get($_->prop('interface')) || next;
+        push(@actions, { type => 'provider', name => $_->key});
         if ($i->prop('ipaddr')) {
             push(@actions, { type => 'force', name => $_->key});
-        } else {
-            push(@actions, { type => 'provider', name => $_->key});
         }
     }
     $ret->{'actions'} = \@actions;

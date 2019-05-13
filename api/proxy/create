@@ -33,7 +33,14 @@ my $cmd = $input->{'action'};
 my $db = esmith::ConfigDB->open('fwrules');
 my @records = $db->get_all_by_prop('type' => $input->{'type'});
 
-my $name = sprintf("%s%d", $input->{'type'}, (scalar @records)+1);
+my $next = (scalar @records)+1;
+my $name = sprintf("%s%d", $input->{'type'}, $next);
+
+# find next free id
+while ($db->get($name)) {
+    $next++;
+    $name = sprintf("%s%d", $input->{'type'}, $next);
+}
 
 my $obj = {Description => $input->{'Description'}, type => $input->{'type'}, 'status' => 'enabled'};
 if ($input->{'Domains'}) {

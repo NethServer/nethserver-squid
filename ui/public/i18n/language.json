@@ -261,7 +261,7 @@
     "final": "Final",
     "condition_not_match": "Otherwise apply the filter from this profile",
     "main_desc_wizard": "Profile creation wizard",
-    "second_desc_wizard": "Use this wizard to configure each step of profile:<br><br><div><b>1. Who</b> (the client associated with the profile)</div><div><b>2. What</b> (which sites can be browsed by the profiled client)</div><div><b>3. When</b> (validity of the filter in certain period of times)</div>",
+    "second_desc_wizard": "Use this wizard to configure each step of profile:<br><br><div><b>1. Who</b> (the client associated with the profile)</div><div><b>2. What</b> (which sites can be browsed by the profiled client)</div><div><b>3. When</b> (validity of the filter in certain period of times) </div>",
     "default_profile": "Default profile",
     "filter_is_disabled": "Filter is disabled",
     "filter_is_disabled_desc": "Click on the button below to configure filter",

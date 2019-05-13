@@ -70,12 +70,12 @@ if ($data['action'] == 'configuration') {
         if (!$hdb->getKey($data['Host']['name'])) {
             $v->addValidationError('Host', 'object_not_found');
         }
-    } 
+    }
     if (isset($data['Domains']) && $data['Domains']) {
         $vh = $v->createValidator(Validate::HOSTNAME_FQDN);
         foreach ($data['Domains'] as $domain) {
             if (!$vh->evaluate($domain)) {
-                $v->addValidationError('Domains', 'valid_fqdn_domain');
+                $v->addValidationError('Destination', 'valid_fqdn_domain');
             }
         }
     }

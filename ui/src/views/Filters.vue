@@ -1068,7 +1068,7 @@
                       <div class="col-sm-9">
                         <select class="form-control" v-model="currentProfile.FilterElse">
                           <option
-                            v-if="s.type == 'profile'"
+                            v-show="s.type == 'profile'"
                             v-for="(s,sk) in sources"
                             v-bind:key="sk"
                             :value="s.name"

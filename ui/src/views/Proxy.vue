@@ -347,7 +347,15 @@
                 v-show="newConfiguration.advanced"
                 :class="['form-group', newConfiguration.errors.PortBlock.hasError ? 'has-error' : '']"
               >
-                <label class="col-sm-3 control-label">{{$t('proxy.block_http')}}</label>
+                <label class="col-sm-3 control-label">
+                  {{$t('proxy.block_http')}}
+                  <doc-info
+                    :placement="'top'"
+                    :title="$t('proxy.block_http')"
+                    :chapter="'block_http'"
+                    :inline="true"
+                  ></doc-info>
+                </label>
                 <div class="col-sm-1">
                   <input
                     :disabled="(newConfiguration.GreenMode == 'transparent' || newConfiguration.GreenMode == 'transparent_ssl') && (newConfiguration.BlueMode == 'transparent' || newConfiguration.BlueMode == 'transparent_ssl')"

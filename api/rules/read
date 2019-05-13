@@ -1,0 +1,110 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+use esmith::HostsDB;
+use esmith::NetworksDB;
+use JSON;
+
+require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
+
+my $input = readInput();
+my $cmd = $input->{'action'};
+
+my $ret = {};
+
+if ($cmd eq 'rule-list') {
+    my $db = esmith::ConfigDB->open_ro('squid');
+    my @rules;
+    foreach ($db->get_all()) {
+        my %props = $_->props;
+        $props{'name'} = $_->key;
+        if (!$props{'Dst'}) {
+            $props{'Dst'} = [];
+        } else {
+            $props{'Dst'} = [split(",",$props{'Dst'})];
+        }
+        for my $p (qw(Action Src)) {
+            my ($t, $k) = split(/;/, $props{$p});
+            $props{$p} = {'type' => $t, 'name' => $k};
+        }
+        push(@rules, \%props);
+    }
+
+    $ret->{'rules'} = \@rules;
+
+} elsif ($cmd eq 'source-list') {
+
+    my @sources;
+    my %roles;
+    my $hdb = esmith::HostsDB->open_ro();
+    my $ndb = esmith::NetworksDB->open_ro();
+    # Objects
+    foreach ($hdb->get_all()) {
+        my $type = $_->prop('type');
+        if ($type eq 'local' || $type eq 'host') {
+            my %props = $_->props;
+            $props{'name'} = $_->key;
+            push(@sources, \%props);
+        }
+    }
+    foreach ($ndb->get_all()) {
+        my $type = $_->prop('type');
+        my $role = $_->prop('role') || '';
+        if ($type eq 'iprange' || $type eq 'cidr' || $type eq 'zone') {
+            my %props = $_->props;
+            $props{'name'} = $_->key;
+            push(@sources, \%props);
+        }
+        if($role eq 'green' || $role eq 'orange' || $role eq 'blue') {
+            $roles{$role} = '';
+        }
+    };
+
+    foreach (keys %roles) {
+        push(@sources, { name => $_, type => 'role'});
+    }
+
+    $ret->{'sources'} = \@sources;
+
+} elsif ($cmd eq 'action-list') {
+
+    my @actions;
+    my $tdb = esmith::ConfigDB->open_ro('tc');
+    my $ndb = esmith::NetworksDB->open_ro();
+    foreach ($tdb->get_all()) {
+        push(@actions, { type => 'class', name => $_->key});
+    }
+    foreach ($ndb->get_all_by_prop(type => 'provider')) {
+        my $i = $ndb->get($_->prop('interface')) || next;
+        push(@actions, { type => 'provider', name => $_->key});
+        if ($i->prop('ipaddr')) {
+            push(@actions, { type => 'force', name => $_->key});
+        }
+    }
+    $ret->{'actions'} = \@actions;
+
+}
+
+print encode_json($ret);

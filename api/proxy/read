@@ -1,0 +1,96 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+use esmith::HostsDB;
+use JSON;
+
+require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
+
+my $input = readInput();
+my $cmd = $input->{'action'};
+
+my $ret = {};
+
+if ($cmd eq 'bypass-list') {
+    my $db = esmith::ConfigDB->open_ro('fwrules');
+    my (@destinations, @sources);
+    foreach ($db->get_all_by_prop('type' => 'bypass-dst')) {
+        my %props = $_->props;
+        my $obj = {'name' => $_->key, 'type' => 'bypass-dst'};
+        delete($props{'type'});
+        if ($props{'Domains'}) {
+            $props{'Domains'} = [split(",",$props{'Domains'}) ];
+        }
+        if ($props{'Host'}) {
+            my ($t, $k) = split(';', $props{'Host'});
+            $props{'Host'} = {'type' => $t, 'name' => $k};
+        }
+        $obj->{'props'} = \%props;
+        push(@destinations, $obj);
+    }
+    foreach ($db->get_all_by_prop('type' => 'bypass-src')) {
+        my %props = $_->props;
+        my $obj = {'name' => $_->key, 'type' => 'bypass-src'};
+        delete($props{'type'});
+        if ($props{'Host'}) {
+            my ($t, $k) = split(';', $props{'Host'});
+            $props{'Host'} = {'type' => $t, 'name' => $k};
+        } 
+        $obj->{'props'} = \%props;
+        push(@sources, $obj);
+    }
+
+    $ret->{'destinations'} = \@destinations;
+    $ret->{'sources'} = \@sources;
+
+} elsif ($cmd eq 'object-list') {
+
+    my @objects;
+    my $hdb = esmith::HostsDB->open_ro();
+    # Objects
+    foreach ($hdb->get_all()) {
+        my %props = $_->props;
+        $props{'name'} = $_->key;
+        push(@objects, \%props);
+    }
+
+    $ret->{'objects'} = \@objects;
+
+} elsif ($cmd eq 'configuration') {
+
+    my $db = esmith::ConfigDB->open_ro();
+    my $squid = $db->get('squid');
+    if ($squid) {
+        $ret->{'name'} = 'squid';
+        my %props = $squid->props;
+        $ret->{'type'} = $props{'type'};
+        foreach (qw(BlueMode GreenMode PortBlock ParentProxy status PortRedirect)) {
+            $ret->{'props'}{$_} = $props{$_};
+        }
+        $ret->{'props'}{'SafePorts'} = [ split(",",$props{'SafePorts'}) ];
+    }
+}
+
+print encode_json($ret);

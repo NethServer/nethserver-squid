@@ -1,0 +1,58 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+
+require '/usr/libexec/nethserver/api/nethserver-squid/lib/squid_function.pl';
+
+my $input = readInput();
+my $cmd = $input->{'action'};
+
+if ($cmd eq 'configuration') {
+    my $db = esmith::ConfigDB->open();
+    my $cdb = esmith::ConfigDB->open('contentfilter');
+    $db->set_prop('ufdb', 'status', $input->{'Filter'});
+    $db->set_prop('squidclamav', 'status', $input->{'AntiVirus'});
+    $db->set_prop('c-icap', 'status', $input->{'AntiVirus'});
+    $db->set_prop('squidguard','Expressions', $input->{'Expressions'});
+
+    foreach (qw(DomainWhitelist DomainBlacklist UrlBlacklist BlockedFileTypes UrlWhitelist)) {
+        $db->set_prop('squidguard', $_, join(',',@{$input->{$_}}));
+    }
+
+    foreach (qw(BlockIpAccess BlockFileTypes BlackList BlockAll WhiteList)) {
+        $cdb->set_prop('default', $_, $input->{'DefaultFilter'}{$_});
+    }
+    $cdb->set_prop('default', 'Categories', join(",",@{$input->{'DefaultFilter'}{'Categories'}}));
+
+} elsif ($cmd eq 'update-profile') {
+
+    delete_profile($input);
+    create_profile($input);
+
+} else {
+    error();
+}
+
+system("/sbin/e-smith/signal-event -j nethserver-squidguard-save");

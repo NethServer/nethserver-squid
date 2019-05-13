@@ -1,0 +1,194 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+use esmith::NetworksDB;
+use esmith::HostsDB;
+use JSON;
+
+require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
+
+sub get_record
+{
+    my $db = shift;
+    my $key = shift;
+
+    return {} if (!$key);
+
+    my ($type, $name) = split(/;/,$key);
+    my $obj = $db->get($name) || return undef;
+    my %props = $obj->props;
+    delete($props{'type'});
+    foreach (keys %props) {
+        if ($_ eq 'Categories' || $_ eq 'Days') {
+            $props{$_} = [split(",",$props{$_})];
+        }
+    }
+    $props{'name'} = $name;
+    $props{'type'} = $type;
+    return \%props;
+}
+
+sub get_object
+{
+    my $key = shift;
+    return {} if (!$key);
+    my ($type, $name) = split(/;/,$key);
+    return {name => $name, type => $type};
+}
+
+sub is_filter_broken
+{
+    my $filter = shift;
+
+    return 0 if (!$filter);
+
+    foreach (@{$filter->{'Categories'}}) {
+        return 1 if (! -d "/var/squidGuard/blacklists/$_");
+    }
+
+    return 0;
+}
+
+sub get_parent_profile
+{
+    my $db = shift;
+    my $filter = shift;
+
+    return '' if (!$filter);
+
+    foreach ($db->get_all_by_prop(type => 'profile')) {
+        return $_->key if ($_->prop('Filter') eq $filter);
+    }
+    return '';
+}
+
+my $input = readInput();
+my $cmd = $input->{'action'};
+
+my $ret = {};
+
+if ($cmd eq 'configuration') {
+    my $db = esmith::ConfigDB->open_ro();
+    my $cdb = esmith::ConfigDB->open_ro('contentfilter');
+    my $filter = $db->get('squidguard');
+    my %props;
+    if ($filter) {
+        $props{'Filter'} = $db->get_prop('ufdb', 'status') || 'disabled';
+        $props{'AntiVirus'} = $db->get_prop('squidclamav', 'status') || 'disabled';
+        $props{'Expressions'} = $db->get_prop('squidguard', 'Expressions');
+        foreach (qw(DomainBlacklist BlockedFileTypes DomainWhitelist UrlBlacklist UrlWhitelist)) {
+            $props{$_} = [split(",",$db->get_prop('squidguard', $_))];
+        }
+        $props{'DefaultFilter'} = get_record($cdb, 'filter;default');
+    }
+    $ret->{'configuration'} = \%props;
+} elsif ($cmd eq 'profiles') {
+    my @profiles;
+
+    my $db = esmith::ConfigDB->open_ro('contentfilter');
+    foreach my $p ($db->get_all_by_prop('type' => 'profile')) {
+        my $removable = $p->prop('Removable') || 'yes';
+        next if ($removable eq 'no');
+        my @times;
+        my $profile = { name => $p->key, type => 'profile',
+            'Description' => $p->prop('Description'), 
+            'Filter' => get_record($db, $p->prop('Filter')),
+            'FilterElse' => get_parent_profile($db, $p->prop('FilterElse')),
+            'Src' => get_object($p->prop('Src')),
+            'Time' => \@times,
+            'Removable' => $p->prop('Removable') || 'yes'
+
+        };
+        if ($p->prop('Time')) {
+            foreach (split(",",$p->prop('Time'))) {
+                push(@times, get_record($db, $_));
+            }
+        }
+
+        $profile->{'broken'} = is_filter_broken($profile->{'Filter'});
+        push(@profiles, $profile);
+    }
+    $ret->{'profiles'} = \@profiles;
+
+} elsif ($cmd eq 'objects') {
+    my $db = esmith::ConfigDB->open_ro();
+    my $ndb = esmith::NetworksDB->open_ro();
+    my $hdb = esmith::HostsDB->open_ro();
+    my $cdb = esmith::ConfigDB->open_ro('contentfilter');
+    my @objects;
+    if ($db->get_prop('squid', 'GreenMode') eq 'authenticated' || $db->get_prop('squid', 'BlueMode') eq 'authenticated') {
+        my $users = safe_decode_json(`/usr/libexec/nethserver/list-users`); 
+        foreach (keys %$users) {
+
+            push(@objects, {type => 'user', name => $_, gecos => $users->{$_}{'gecos'}});
+        }
+        my @groups = keys safe_decode_json(`/usr/libexec/nethserver/list-groups`); 
+        foreach (@groups) {
+            push(@objects, {type => 'group', name => $_});
+        }
+    }
+    foreach ($hdb->get_all()) {
+        my $type = $_->prop('type');
+        my %props = $_->props;
+        $props{'name'} = $_->key;
+        if ($type eq 'local' || $type eq 'host') {
+            $props{'type'} = 'host';
+        }
+        push(@objects, \%props);
+    }
+
+    foreach ($ndb->get_all_by_prop('type' => 'zone')) {
+        my %props = $_->props;
+        $props{'name'} = $_->key;
+        push(@objects, \%props);
+    }
+
+    # avoid duplicate roles
+    my %roles;
+    foreach ($ndb->get_all()) {
+        my $role = $_->prop('role') || next;
+        if ($role eq 'green' || $role eq 'blue' || $role eq 'orange') {
+            if(!$roles{$role}) {
+                $roles{$role} = {type => 'role', name => $role, Interfaces => [] };
+            }
+            push(@{$roles{$role}->{Interfaces}}, $_->key);
+        }
+    }
+    foreach (values %roles) {
+        $_->{'Interfaces'} = join(",", @{$_->{'Interfaces'}});
+        push(@objects, $_);
+    }
+
+    foreach ($cdb->get_all_by_prop(type => "profile")) {
+        push(@objects, {type => 'profile', name => $_->key, 'Description' => $_->prop('Description') || ''});
+    }
+
+    $ret->{'objects'} = \@objects;
+
+} else {
+    error();
+}
+
+print encode_json($ret);

@@ -1,0 +1,94 @@
+#!/usr/bin/php
+<?php
+/*
+ * Copyright (C) 2019 Nethesis S.r.l.
+ * http://www.nethesis.it - nethserver@nethesis.it
+ *
+ * This script is part of NethServer.
+ *
+ * NethServer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License,
+ * or any later version.
+ *
+ * NethServer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NethServer.  If not, see COPYING.
+*/
+
+
+require_once("/usr/libexec/nethserver/api/lib/Helpers.php");
+
+$data = readInput();
+
+$v = new LegacyValidator($data);
+if ($data['action'] == 'configuration') {
+    $modes = array('manual','authenticated','transparent','transparent_ssl');
+    $v->declareParameter('status', Validate::SERVICESTATUS);
+    $v->declareParameter('GreenMode', $v->createValidator()->memberOf($modes));
+    $v->declareParameter('BlueMode', $v->createValidator()->memberOf($modes));
+    $v->declareParameter('PortBlock', Validate::SERVICESTATUS);
+
+    $vp = $v->createValidator(Validate::PORTNUMBER);
+    if ($data['ParentProxy']) {
+        $parts = explode(':', $data['ParentProxy']);
+        $vh = $v->createValidator(Validate::HOSTADDRESS);
+        if (!$vh->evaluate($parts[0])) {
+            $v->addValidationError('ParentProxy', 'valid_parent_proxy');
+        }
+        if (isset($parts[1])) {
+            if (!$vp->evaluate($parts[1])) {
+                $v->addValidationError('ParentProxy', 'valid_parent_proxy');
+            }
+        }
+    }
+    foreach ($data['SafePorts'] as $port) {
+        if (!$vp->evaluate($port)) {
+            $v->addValidationError('SafePorts', 'valid_lessThan_65536');
+        }
+    }
+} else if ($data['action'] == 'update-bypass' || $data['action'] == 'create-bypass') {
+    $hdb = new EsmithDatabase('hosts');
+    $fdb = new EsmithDatabase('fwrules');
+
+    # search for existing bypass with the same Host
+    if ($data['action'] == 'create-bypass') {
+        foreach ($fdb->getAll('bypass-src') as $bypass) {
+            list($type, $name) = explode(";",$bypass['Host']);
+            if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
+                $v->addValidationError('Host', 'source_already_exists');
+            }
+        }
+    }
+
+    $v->declareParameter('status', Validate::SERVICESTATUS);
+    if (isset($data['Host']) && $data['Host']) {
+        if (!$hdb->getKey($data['Host']['name'])) {
+            $v->addValidationError('Host', 'object_not_found');
+        }
+    }
+    if (isset($data['Domains']) && $data['Domains']) {
+        $vh = $v->createValidator(Validate::HOSTNAME_FQDN);
+        foreach ($data['Domains'] as $domain) {
+            if (!$vh->evaluate($domain)) {
+                $v->addValidationError('Destination', 'valid_fqdn_domain');
+            }
+        }
+    }
+    if ($data['action'] == 'update-bypass') {
+        if (!$fdb->getKey($data['name'])) {
+            $v->addValidationError('name', 'bypass_not_found');
+        }
+    } # else on creation name is auto-generated, no validation required
+}
+
+# Validate the input
+if ($v->validate()) {
+    success();
+} else {
+    error($v);
+}

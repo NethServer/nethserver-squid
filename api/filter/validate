@@ -1,0 +1,135 @@
+#!/usr/bin/php
+<?php
+/*
+ * Copyright (C) 2019 Nethesis S.r.l.
+ * http://www.nethesis.it - nethserver@nethesis.it
+ *
+ * This script is part of NethServer.
+ *
+ * NethServer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License,
+ * or any later version.
+ *
+ * NethServer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NethServer.  If not, see COPYING.
+*/
+
+
+require_once("/usr/libexec/nethserver/api/lib/Helpers.php");
+require_once("/usr/libexec/nethserver/api/lib/users_functions.php");
+
+$data = readInput();
+
+function validate_filter($v, $data)
+{
+    $json = json_decode(shell_exec('/usr/libexec/nethserver/api/nethserver-squid/categories/list-categories'), true);
+    $categories = array();
+    if (isset($json['categories'])) {
+        foreach($json['categories'] as $cat) {
+            $categories[$cat['name']] = 1;
+        }
+    }
+    $dv = $v->createValidator(Validate::SERVICESTATUS);
+    foreach (array('BlockAll', 'BlockIpAccess', 'BlockFileTypes', 'WhiteList', 'BlackList') as $value) {
+        if(!$dv->evaluate($data[$value])) {
+            $v->addValidationError($value, 'it_can_be_enabled_or_disabled', $data[$value]);
+        }
+    }
+    foreach ($data['Categories'] as $cat) {
+        if(!isset($categories[$cat])) {
+            $v->addValidationError('DefaultFilter', 'category_not_found', $cat);
+        }
+    }
+}
+
+$db = new EsmithDatabase('contentfilter');
+$v = new LegacyValidator($data);
+if ($data['action'] == 'configuration') {
+    $v->declareParameter('AntiVirus', Validate::SERVICESTATUS);
+    $v->declareParameter('Filter', Validate::SERVICESTATUS);
+    $v->declareParameter('Expressions', Validate::SERVICESTATUS);
+
+    validate_filter($v, $data['DefaultFilter']);
+
+} else if ($data['action'] == 'update-profile') {
+    if (!$db->getKey($data['name'])) {
+        $v->addValidationError('name', 'profile_not_found');
+    }
+
+} else if ($data['action'] == 'create-profile') {
+    if ($data['action'] == 'update-profile') {
+    } else if ($data['action'] == 'create-profile') {
+        if ($db->getKey($data['name'])) {
+            $v->addValidationError('name', 'profile_already_exists');
+        }
+    }
+
+} else if ($data['action'] == 'Time') {
+    $days = array('m','t','w','h','f','a','s');
+    $tv = $v->createValidator(Validate::TIME);
+    foreach($data['Days'] as $day) {
+        if(!in_array($day, $days)) {
+            $v->addValidationError('Days', 'invalid_day');
+        }
+    }
+    if(!$tv->evaluate($data['StartTime'])) {
+        $v->addValidationError('StartTime', 'invalid_time');
+    }
+    if(!$tv->evaluate($data['EndTime'])) {
+        $v->addValidationError('EndTime', 'invalid_time');
+    }
+
+} else if ($data['action'] == 'Src') {
+    $users = list_users();
+    $groups = list_groups();
+
+    if ($data['type'] == 'user') {
+        if(!in_array($data['name'], array_keys($users))) {
+            $v->addValidationError('name', 'invalid_user');
+        }
+    } else if ($data['type'] == 'group') {
+        if(!in_array($data['name'], array_keys($groups))) {
+            $v->addValidationError('name', 'invalid_group');
+        }
+    } else if ($data['type'] == 'host' || $data['type'] == 'host-group' || $data['type'] == 'cidr' || $data['type'] == 'iprange') {
+        $hdb = new EsmithDatabase('hosts');
+        if (!$hdb->getKey($data['name'])) {
+            $v->addValidationError('name', 'object_not_found');
+        }
+    } else if ($data['type'] == 'zone') {
+        $ndb = new EsmithDatabase('hosts');
+        if (!$ndb->getKey($data['name'])) {
+            $v->addValidationError('name', 'object_not_found');
+        }
+    } else if ($data['type'] == 'role') {
+        if(!in_array($data['name'], array('green','blue','orange'))) {
+            $v->addValidationError('name', 'object_not_supported');
+        }
+    } else {
+        $v->addValidationError('name', 'object_not_supported');
+    }
+
+} else if ($data['action'] == 'FilterElse') {
+    if (!$db->getKey($data['name'])) {
+        $v->addValidationError('FilterElse', 'profile_not_found');
+    }
+
+} else if ($data['action'] == 'Filter') {
+    validate_filter($v, $data);
+
+} else {
+    error();
+}
+
+# Validate the input
+if ($v->validate()) {
+    success();
+} else {
+    error($v);
+}

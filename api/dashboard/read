@@ -1,0 +1,253 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+use JSON;
+use Socket;
+use JSON;
+use URI;
+use File::Path qw(make_path);
+use POSIX qw(strftime);
+
+require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
+
+sub get_stats
+{
+    my $action = shift;
+    my @lines = `squidclient mgr:$action`;
+    my $ret;
+
+    my $header = 1;
+    foreach (@lines) {
+         $header = 0 if /^\s*$/;
+         next if ($header);
+         chomp $_;
+         if ($_ =~ /(.*) = (.*)/) {
+             $ret->{$1} = $2;
+         }
+    }
+
+    return $ret;
+}
+
+sub read_netdata
+{
+    my $api = shift;
+    return `curl --connect-timeout 2 'http://localhost:19999/$api' 2>/dev/null`;
+}
+
+sub parse_netdata
+{
+    my $txt = shift;
+    my @ret;
+    if ($txt) {
+        my @lines = split("\r\n",$txt);
+        shift @lines;
+        foreach (@lines) {
+            my @values = map($_ ne 'null' ? int : 0, split(",",$_));
+            push(@ret, \@values);
+        }
+    }
+
+    return \@ret;
+}
+
+sub sorted_array
+{
+    my $hash = shift;
+    my $limit = 10;
+    my $i = 0;
+    my @ret;
+
+    # sort hash accordingly to value
+    foreach my $key (sort { $hash->{$b} <=> $hash->{$a} } keys %$hash) {
+        last if ($i >= $limit);
+        push(@ret, {"name" => $key, "hits" => $hash->{$key}});
+        $i++;
+    }
+
+    return \@ret;
+}
+
+
+
+my $input = readInput();
+my $cmd = $input->{'action'};
+
+my $ret = {};
+
+if ($cmd eq 'status') {
+    my $fdb = esmith::ConfigDB->open_ro('fwrules');
+    my $db = esmith::ConfigDB->open_ro();
+    $ret->{'proxy'}{'destination-bypass'} = scalar $fdb->get_all_by_prop('type' => 'bypass-dst');
+    $ret->{'proxy'}{'source-bypass'} = scalar $fdb->get_all_by_prop('type' => 'bypass-src');
+    $ret->{'proxy'}{'rules'} = scalar esmith::ConfigDB->open_ro('squid')->get_all();
+    $ret->{'proxy'}{'GreenMode'} = $db->get_prop('squid', 'GreenMode');
+    $ret->{'proxy'}{'BlueMode'} = $db->get_prop('squid', 'BlueMode');
+    $ret->{'proxy'}{'PortBlock'} = $db->get_prop('squid', 'PortBlock');
+    $ret->{'proxy'}{'status'} = $db->get_prop('squid', 'status');
+
+    my $info = get_stats('counters');
+    $ret->{'proxy'}{'client_requests'} = $info->{'client_http.requests'};
+    $ret->{'proxy'}{'client_hits'} = $info->{'client_http.hits'};
+    $ret->{'proxy'}{'client_errors'} = $info->{'client_http.errors'};
+    $ret->{'proxy'}{'client_bytes_in'} = $info->{'client_http.kbytes_in'}*1024;
+    $ret->{'proxy'}{'client_bytes_out'} = $info->{'client_http.kbytes_out'}*1024;
+
+    my $recent = get_stats('5min');
+    my $cpu = $recent->{'cpu_usage'};
+    chomp $cpu; # remove trailing '%' char
+    $ret->{'proxy'}{'cpu_usage'} = sprintf('%.2f',$cpu);
+
+
+    my $cdb = esmith::ConfigDB->open_ro('contentfilter');
+    $ret->{'filter'}{'profiles'} = scalar $cdb->get_all();
+    $ret->{'filter'}{'status'} = $db->get_prop('ufdb', 'status');
+    $ret->{'filter'}{'antivirus'} = $db->get_prop('squidclamav', 'status');
+
+    print encode_json($ret);
+} elsif ($cmd eq 'proxy-charts') {
+
+    my $time = $input->{'time'} || 900;
+    my $txt = read_netdata("/api/v1/data?chart=squid_local.clients_net&format=csv&before=0&after=-$time&options=abs,seconds");
+    my $net = parse_netdata($txt);
+    $txt = read_netdata("/api/v1/data?chart=squid_local.clients_requests&format=csv&before=0&after=-$time&options=abs,seconds");
+    my $requests = parse_netdata($txt);
+
+
+    print encode_json({
+            net => { 'data' => $net, 'labels' => ['time', 'in', 'out', 'hits'] },
+            requests => { 'data' => $requests, 'labels' => ['time', 'requests', 'hits', 'errors'] },
+        });
+} elsif ($cmd eq 'proxy-stats') {
+    my $ret = {traffic => 0, users => 0, top_users => []};
+
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+
+    my $limit = 5;
+    my $i = 0;
+    my $date = strftime "%Y%m%d", localtime;
+    my $total_file = "/var/lightsquid/$date/.total";
+
+    # run lightparser once
+    if (-f "/sbin/lightparser.pl" && ! -f $total_file) {
+         system("/sbin/lightparser.pl -t /var/log/squid/access.log 2>/dev/null");
+    }
+    if (-f $total_file) {
+        open(my $fh, '<', $total_file);
+        while (readline($fh)) {
+            last if ($i>=$limit);
+            if ($_ =~ /user: (\d+)/) {
+                $ret->{'users'} = int($1);
+            } elsif ($_ =~ /size: (\d+)/) {
+                $ret->{'traffic'} = int($1);
+            } else {
+                my ($host, $bytes, $conn, $other) = split(/\s+/, $_);
+                push(@{$ret->{'top_users'}}, {"name" => $host, "bytes" => int($bytes), "percentage" => sprintf('%.2f',($bytes/$ret->{'traffic'}*100))});
+
+                $i++;
+            }
+        }
+        close($fh);
+    }
+
+    print encode_json($ret);
+
+} elsif ($cmd eq 'filter-stats') {
+    my $ret;
+
+    my $spool_dir = '/var/spool/nethserver-cockpit/nethserver-squid';
+    my $spool_file = $spool_dir.'/filter-cache.json';
+    make_path($spool_dir);
+
+    # if the cache has non-zero size and been created in the last 60 minutes, just return it
+    if (-s $spool_file && ((stat $spool_file)[9])+3600 > time() ) {
+        system("cat $spool_file");
+    } else {
+        my $db = esmith::ConfigDB->open_ro();
+        my $url_http = $db->get_prop('squidguard', 'RedirectUrl') || "nethserver-block.cgi";
+        my $url_https = $db->get_prop('squidguard', 'RedirectUrlHTTPS') || "blocked.nethserver.org";
+        $url_https =~ s/:\d+//; # remove port
+        # access to https redirect url is logged using the IP address
+        my $address = inet_ntoa(inet_aton($url_https));
+
+        # do not count not initialized requestes and requests to cache, exclude also access to block url
+        my $requests = `grep -v -e TAG_NONE -e cache_object -e $url_http -e $url_https -e $address /var/log/squid/access.log | wc -l`;
+        chomp $requests;
+        my $blocked = `grep -e $url_http -e $url_https -e $address /var/log/squid/access.log | wc -l`;
+        chomp $blocked;
+
+        $ret->{'blocked'} = int($blocked);
+        $ret->{'requests'} = int($requests);
+
+        # Regexp from https://github.com/darold/squidanalyzer
+        my $ug_format_regex1 = qr/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}) .*(BLOCK) ([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+(.*)$/;
+
+        my %cache;
+        my %stats = (host => {}, ip => {}, profile => {}, category => {});
+        open(my $log, '<', '/var/log/ufdbguard/ufdbguardd.log');
+        while (readline($log)) {
+            if ($_ =~ /BLOCK/) {
+                if ($_ =~ $ug_format_regex1) {
+                    my $profile = $10;
+                    my $category = $11;
+                    my $ip = $9;
+                    my $login = lc($8);
+                    my $url = lc($12);
+                    # prepare url for URI library
+                    if(index($url, "http://") < 0) {
+                        $url =~ s/....$//;
+                        $url = "http://$url";
+                    }
+                    my $uri = URI->new($url);
+                    $stats{'host'}{$uri->host}++;
+                    if (!$cache{$ip}) {
+                        my $name = gethostbyaddr(inet_aton($ip), AF_INET);
+                        $cache{$ip} = $name ? $name : $ip;
+                    }
+                    $stats{'ip'}{$cache{$ip}}++;
+                    $stats{'profile'}{$profile}++;
+                    $stats{'category'}{$category}++;
+                }
+            }
+        }
+        close($log);
+
+        for (qw(host ip profile category)) {
+            $ret->{$_} = sorted_array($stats{$_});
+        }
+
+        # output and save
+        my $out = encode_json($ret);
+        print $out;
+
+        my $fh;
+        open($fh, '>', $spool_file) or exit(0); # ignore errors
+        print $fh $out;
+        close $fh;
+    }
+
+} else {
+    error();
+}

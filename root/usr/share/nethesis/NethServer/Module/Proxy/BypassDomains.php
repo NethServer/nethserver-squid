@@ -2,14 +2,15 @@
 namespace NethServer\Module\Proxy;
 
 /*
- * Copyright (C) 2017 Nethesis S.r.l.
+ * Copyright (C) 2019 Nethesis S.r.l.
+ * http://www.nethesis.it - nethserver@nethesis.it
  *
  * This script is part of NethServer.
  *
  * NethServer is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation, either version 3 of the License,
+ * or any later version.
  *
  * NethServer is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,57 +18,62 @@ namespace NethServer\Module\Proxy;
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NethServer.  If not, see COPYING.
  */
 
 use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * Configure squid byapss domains
- *
+ * Bypass transparent proxy
  */
-class BypassDomains extends \Nethgui\Controller\AbstractController
+class BypassDomains extends \Nethgui\Controller\TableController
 {
+    public $sortId = 30;
 
-    public $sortId = 20;
-
-
-    // Declare all parameters
     public function initialize()
     {
+        $columns = array(
+            'Key',
+            'Domains',
+            'Description',
+            'Actions',
+        );
+
+        $parameterSchema = array(
+            array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
+            array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
+        );
+
+        $filterCbk = function($key, $row) {
+            return isset($row['Domains']);  
+        };
+
+        $this
+            ->setTableAdapter($this->getPlatform()->getTableAdapter('fwrules', 'bypass-dst', $filterCbk))
+            ->setColumns($columns)
+            ->addRowAction(new \NethServer\Module\Proxy\BypassDomains\Modify('update')) 
+            ->addRowAction(new \NethServer\Module\Proxy\BypassDomains\Modify('delete'))
+            ->addTableAction(new \NethServer\Module\Proxy\BypassDomains\Modify('create')) 
+            ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
+        ;
+
         parent::initialize();
-
-        $this->declareParameter('BypassDomains', Validate::ANYTHING, array('configuration', 'squid', 'BypassDomains'));
     }
 
-    public function readBypassDomains($v)
+    public function prepareViewForColumnKey(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
-        return implode("\n", explode(",", $v));
-    }
-
-    public function writeBypassDomains($p)
-    {
-        return array(implode(',', array_filter(preg_split("/[,\s]+/", $p))));
-    }
-
-    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
-    {
-        parent::validate($report);
-        if (!$this->getRequest()->isMutation()) {
-            return;
+        if (!isset($values['status']) || ($values['status'] == 'disabled')) {
+            $rowMetadata['rowCssClass'] = trim($rowMetadata['rowCssClass'] . ' user-locked');
         }
-
-        $hostnameValidator = $this->createValidator(Validate::HOSTNAME_FQDN);
-        $domains = array_filter(preg_split('/[,\s]+/', $this->parameters['BypassDomains']));
-        foreach ($domains as $domain){
-            if( ! $hostnameValidator->evaluate($domain)) {
-                $report->addValidationErrorMessage($this, 'BypassDomains', 'valid_bypass', array($domain));
-            }
-        }
+        return strval($key);
     }
 
-    protected function onParametersSaved($changes)
+    public function prepareViewForColumnDomains(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
-        $this->getPlatform()->signalEvent('nethserver-squid-save &');
+        if (!isset($values['Domains'])) {
+            return '';
+        }
+        return str_replace(',', ', ', $values['Domains']);
     }
+
 }

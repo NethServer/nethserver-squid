@@ -25,8 +25,8 @@ import Router from "vue-router";
 import VueToggleButton from "vue-js-toggle-button";
 import VueGoodTable from "vue-good-table";
 
-import 'vue-select/dist/vue-select.css';
-import vSelect from 'vue-select'
+import "vue-select/dist/vue-select.css";
+import vSelect from "vue-select";
 
 import "v-suggestions/dist/v-suggestions.css";
 import VueSuggestions from "v-suggestions";
@@ -53,7 +53,7 @@ Vue.mixin(UtilService);
 Vue.config.productionTip = false;
 Vue.component("doc-info", DocInfo);
 Vue.component("suggestions", VueSuggestions);
-Vue.component('v-select', vSelect)
+Vue.component("v-select", vSelect);
 
 Vue.use(VueToggleButton);
 Vue.use(VueGoodTable);
@@ -103,6 +103,10 @@ const router = new Router({
     {
       path: "/about",
       component: About
+    },
+    {
+      path: "*",
+      redirect: "/"
     }
   ]
 });

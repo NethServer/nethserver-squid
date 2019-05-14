@@ -323,7 +323,7 @@
     "parent_proxy": "Upstream proxy, port is optional (default 3128)",
     "safe_ports": "Safe ports are a list of ports accessible using the proxy. It accepts a comma-separated list of ports",
     "redirect_port": "Override the default Squid listening port",
-    "destination": "Insert single firewall objects (sources) or valid FQDN domains. Multiple FQDN domains can be entered comma separated",
+    "destination": "Insert single firewall objects (sources) or valid FQDN domains. Multiple FQDN domains can be entered comma-separated",
     "blocked_file_types": "Insert a comma-separated list of extensions",
     "block_http": "Block all outgoing connections on port TCP 80 and 443 from Green and Blue networks. Use only when proxy is in 'Authenticated' or 'Manual' mode."
   },

@@ -22,8 +22,8 @@
   "no": "No",
   "configure": "Configure",
   "charts": "Charts",
-  "charts_not_updated": "Charts cannot be updated. Maybe Netdata is not running",
-  "charts_not_available": "Chart not available if proxy is disabled",
+  "charts_not_updated": "Charts cannot be updated.",
+  "charts_not_available": "Charts not available if proxy is disabled.",
   "show_charts": "Show charts",
   "hide_charts": "Hide charts",
   "status": "Status",
@@ -36,7 +36,7 @@
   "info": "Info",
   "warning": "Warning",
   "package_required": "Missing packages",
-  "package_required_desc": "To access this page you have to install the required packages showed below",
+  "package_required_desc": "To access this page install the required packages showed below",
   "install_package": "Install package",
   "install_packages": "Install packages",
   "packages_installed_ok": "Packages installed successfully!",
@@ -118,7 +118,7 @@
     "authenticated": "Authenticated",
     "transparent": "Transparent",
     "transparent_ssl": "Transparent SSL",
-    "we_suggest_no_block": "We suggest you to not use this option if proxy mode is 'Trasparent' or 'Transparent SSL'",
+    "we_suggest_no_block": "Please enable Block only when proxy is in 'Authenticated' or 'Manual' mode.",
     "configuration_updated_ok": "Configuration updated successfully!",
     "configuration_updated_error": "Configuration not updated.",
     "edit_configuration": "Edit configuration",
@@ -241,8 +241,8 @@
     "block_access_ip_address": "Block access to web sites using ip address",
     "block_file_extensions": "Block file extensions",
     "mode": "Mode",
-    "block_all": "Block all, allow selected categories",
-    "allow_all": "Allow all, block selected categories",
+    "block_all": "Allow selected categories, block the rest",
+    "allow_all": "Block selected categories, allow the rest",
     "block_all_short": "Allow selected categories",
     "allow_all_short": "Block selected categories",
     "select_categories": "Select one or more categories",
@@ -323,9 +323,9 @@
     "parent_proxy": "Upstream proxy, port is optional (default 3128)",
     "safe_ports": "Safe ports are a list of ports accessible using the proxy. It accepts a comma-separated list of ports",
     "redirect_port": "Override the default Squid listening port",
-    "destination": "You can insert valid FQDN domains or host separated with comma",
-    "blocked_file_types": "Insert a valid file extensions separeted with comma",
-    "block_http": "Block all connections on port TCP 80 and 443 from Green and Blue networks if proxy is in 'Transparent' mode"
+    "destination": "Insert single firewall objects (sources) or valid FQDN domains. Multiple FQDN domains can be entered comma-separated",
+    "blocked_file_types": "Insert a comma-separated list of extensions",
+    "block_http": "Block all outgoing connections on port TCP 80 and 443 from Green and Blue networks. Use only when proxy is in 'Authenticated' or 'Manual' mode."
   },
   "validation": {
     "validation_failed": "Validation failed",
@@ -340,7 +340,7 @@
     "source_already_exists": "A bypass for the same source already exists",
     "object_not_found": "Object not found",
     "object_not_supported": "Object not supported",
-    "profile_not_found": "Prfile not found",
+    "profile_not_found": "Profile not found",
     "valid_fqdn_domain": "Must be valid FQDN domain(s)"
   }
 }

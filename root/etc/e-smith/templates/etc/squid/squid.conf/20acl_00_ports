@@ -1,6 +1,7 @@
 # Safe ports
 acl SSL_ports port 443
 acl SSL_ports port 980		# httpd-admin (server-manager)
+acl SSL_ports port 9090		# Cockpit Web UI
 acl Safe_ports port 80		# http
 acl Safe_ports port 21		# ftp
 acl Safe_ports port 443		# https

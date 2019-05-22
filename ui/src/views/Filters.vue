@@ -110,27 +110,6 @@
         </div>
       </div>
 
-      <h3>{{ $t('filter.antivirus') }}</h3>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <toggle-button
-            class="min-toggle right"
-            :width="40"
-            :height="20"
-            :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
-            :value="configuration.AntiVirus"
-            :sync="true"
-            @change="toggleAntivirus()"
-          />
-          <span class="panel-title">
-            {{$t('filter.enabled')}}
-            <span
-              :class="['fa', configuration.AntiVirus ? 'fa-check green' : 'fa-times red']"
-            ></span>
-          </span>
-        </div>
-      </div>
-
       <h3 v-if="categories.length > 0">{{ $t('filter.default_profile') }}</h3>
       <div v-if="categories.length > 0" class="panel panel-default">
         <div class="panel-heading">
@@ -139,7 +118,7 @@
             {{$t('filter.mode')}}:
             <span
               class="semi-bold"
-            >{{defaultProfile.BlockAll == 'enabled' ? $t('filter.block_all') : $t('filter.block_all')}}</span>
+            >{{defaultProfile.BlockAll == 'enabled' ? $t('filter.block_all') : $t('filter.allow_all')}}</span>
           </span>
         </div>
       </div>
@@ -267,6 +246,27 @@
           </div>
         </li>
       </ul>
+
+      <h3>{{ $t('filter.antivirus') }}</h3>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <toggle-button
+            class="min-toggle right"
+            :width="40"
+            :height="20"
+            :color="{checked: '#0088ce', unchecked: '#bbbbbb'}"
+            :value="configuration.AntiVirus"
+            :sync="true"
+            @change="toggleAntivirus()"
+          />
+          <span class="panel-title">
+            {{$t('filter.enabled')}}
+            <span
+              :class="['fa', configuration.AntiVirus ? 'fa-check green' : 'fa-times red']"
+            ></span>
+          </span>
+        </div>
+      </div>
     </div>
     <!-- MODALS -->
     <div class="modal" id="configureFilterModal" tabindex="-1" role="dialog" data-backdrop="static">
@@ -1680,9 +1680,13 @@ export default {
           : "times red") +
         '"></span></div>';
       html +=
-        '<div><span>BlockAll</span>:<span class="span-left-margin fa fa-' +
-        (profile.Filter.BlockAll == "enabled" ? "check green" : "times red") +
-        '"></span></div>';
+        "<div><span>" +
+        context.$i18n.t("filter.mode") +
+        "</span>: " +
+        (profile.Filter.BlockAll == "enabled"
+          ? context.$i18n.t("filter.block_all_short")
+          : context.$i18n.t("filter.allow_all_short")) +
+        "</div>";
       html +=
         '<div><span>BlackList</span>:<span class="span-left-margin fa fa-' +
         (profile.Filter.BlackList == "enabled" ? "check green" : "times red") +

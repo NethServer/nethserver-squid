@@ -301,7 +301,8 @@
     "description": "Description",
     "domains": "Domains (one per line)",
     "change_list_warning": "By changing the source of the blacklist, the current configurations on theese profiles are lost",
-    "remove_category_warning": "By removing this category, theese filters are lost"
+    "remove_category_warning": "By removing this category, theese filters are lost",
+    "list_categories": "Categories list"
   },
   "settings": {
     "menu_title": "Settings",

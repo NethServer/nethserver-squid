@@ -565,7 +565,7 @@ export default {
                 height: 150,
                 strokeWidth: 1,
                 strokeBorderWidth: 1,
-                ylabel: context.$i18n.t("dashboard.requests"),
+                ylabel: context.$i18n && context.$i18n.t("dashboard.requests") || 'Requests',
                 axisLineColor: "white",
                 labelsDiv: document.getElementById(
                   "chart-status-proxy-requests"

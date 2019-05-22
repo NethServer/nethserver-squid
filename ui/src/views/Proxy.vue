@@ -1292,7 +1292,11 @@ export default {
           name: destination.Destination
         };
       } else {
-        destinationObj["Domains"] = destination.Destination.split(",");
+        destinationObj["Domains"] = destination.Destination.split(",").map(
+          function(d) {
+            return d.trim();
+          }
+        );
       }
 
       context.currentDestination.isLoading = true;

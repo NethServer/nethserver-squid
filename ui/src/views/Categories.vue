@@ -44,14 +44,12 @@
             <span
               v-if="configuration.Lists == 'custom'"
             >({{configuration.CustomListURL}})</span>
-            <span
+            <a
               v-if="listCategories.length > 0"
-              data-toggle="tooltip-second"
-              data-placement="bottom"
-              data-html="true"
-              :title="listCategories.join('<br>')"
+              data-toggle="modal"
+              data-target="#listCategoriesModal"
               class="handle-overflow span-left-margin semi-bold color-link-hover"
-            >{{$t('categories.title')}}</span>
+            >{{$t('categories.list_categories')}}</a>
           </span>
         </div>
       </div>
@@ -306,6 +304,28 @@
             <div class="modal-footer">
               <button class="btn btn-default" type="button" data-dismiss="modal">{{$t('cancel')}}</button>
               <button class="btn btn-danger" type="submit">{{$t('delete')}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="listCategoriesModal" tabindex="-1" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{$t('categories.title')}}</h4>
+          </div>
+          <form class="form-horizontal" v-on:submit.prevent="undefined">
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-modal-markup">{{$t('list')}}</label>
+                <div class="col-sm-9">
+                  <pre type="text" class="form-control min-list-cat">{{listCategories.join('\n')}}</pre>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" type="button" data-dismiss="modal">{{$t('cancel')}}</button>
             </div>
           </form>
         </div>
@@ -751,5 +771,10 @@ export default {
 <style scoped>
 .color-link-hover {
   color: #318fd1;
+  cursor: pointer;
+}
+
+.min-list-cat {
+  min-height: 350px;
 }
 </style>

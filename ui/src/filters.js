@@ -130,12 +130,7 @@ var Filters = {
     return value.length > 0 ? value.split(",").join("\n") : "-";
   },
   truncate: function(val) {
-    var str = val;
-
-    if (str.length > 20) {
-      str = val.substring(0, val.length - (20 + 3)) + "...";
-    }
-    return str;
+    return val.length > 20 ? val.substr(0, 20 - 1) + "..." : val;
   }
 };
 

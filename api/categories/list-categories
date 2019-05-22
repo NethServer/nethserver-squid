@@ -43,6 +43,7 @@ function parseIndex()
                         $last = trim($fields[1]);
                         # Add to the list only existing categories
                         if (file_exists("/var/squidGuard/blacklists/$last")) {
+                            $last = basename($last); # make sure to correctly catch subcategories
                             $index[$last] = array("type" => "downloaded", "name" => $last, "domains" => array(), 'profiles' => listParentProfiles($cdb, $last));
                         }
                     } else {

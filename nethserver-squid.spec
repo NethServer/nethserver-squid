@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.7.4
+Version: 1.8.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -48,6 +48,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue May 28 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.0-1
+- Web proxy Cockpit UI - NethServer/dev#5746
+
 * Fri Jan 18 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.4-1
 - nethserver-squid : failure of template expansion on armhfp - Bug NethServer/dev#5680
 

@@ -126,6 +126,10 @@ if ($cmd eq 'status') {
     $ret->{'filter'}{'status'} = $db->get_prop('ufdb', 'status');
     $ret->{'filter'}{'antivirus'} = $db->get_prop('squidclamav', 'status');
 
+    # calculate Lightsquid URL
+    my $hostname = $input->{'hostname'} || '';
+    $ret->{'url'} = "https://$hostname:980/".$db->get_prop('lightsquid','alias');
+
     print encode_json($ret);
 } elsif ($cmd eq 'proxy-charts') {
 

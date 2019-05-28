@@ -126,6 +126,24 @@ if ($cmd eq 'status') {
     $ret->{'filter'}{'status'} = $db->get_prop('ufdb', 'status');
     $ret->{'filter'}{'antivirus'} = $db->get_prop('squidclamav', 'status');
 
+    # find latest modified signature
+    my $av_db = -1;
+    opendir(DIR, "/var/lib/squidclamav");
+    while (my $file = readdir(DIR)) {
+        next if ($file =~ m/^\./);
+        my $fname = "/var/lib/squidclamav/$file";
+
+        if (-l $fname) {
+            $fname = readlink($fname);
+        }
+        my $timestamp = (stat($fname))[9];
+        if ($timestamp > $av_db) {
+            $av_db = $timestamp;
+        }
+    }
+    closedir(DIR);
+    $ret->{'filter'}{'antivirus_db'} = $av_db;
+
     # calculate Lightsquid URL
     my $hostname = $input->{'hostname'} || '';
     $ret->{'url'} = "https://$hostname:980/".$db->get_prop('lightsquid','alias');

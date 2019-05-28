@@ -262,14 +262,24 @@
           <div class="panel-body status-body">
             <div v-if="!view.isLoaded" class="spinner spinner-lg view-spinner"></div>
             <p v-if="view.isLoaded && filter.status == 'enabled'">
-              <strong class="col-xs-7 col-sm-7 col-md-7 col-lg-7">{{$t('dashboard.antivirus')}}:</strong>
+              <strong class="col-xs-5 col-sm-5 col-md-5 col-lg-5">{{$t('dashboard.antivirus')}}:</strong>
               <span
                 :class="[filter.antivirus == 'enabled' ? 'pficon pficon-ok' : 'pficon pficon-error-circle-o']"
               ></span>
+              <span
+                v-show="filter.antivirus_db"
+                class="gray adjust-virus-date"
+              >({{$t('dashboard.updated')}}: {{filter.antivirus_db | dateFormat}})</span>
             </p>
             <p v-if="view.isLoaded && filter.status == 'enabled'">
-              <strong class="col-xs-7 col-sm-7 col-md-7 col-lg-7">{{$t('dashboard.profiles')}}:</strong>
+              <strong class="col-xs-5 col-sm-5 col-md-5 col-lg-5">{{$t('dashboard.profiles')}}:</strong>
               <span>{{filter.profiles}}</span>
+            </p>
+            <p v-if="view.isLoaded && filter.status == 'enabled'">
+              <strong class="col-xs-5 col-sm-5 col-md-5 col-lg-5">{{$t('dashboard.lightsquid')}}:</strong>
+              <a target="_blank" :href="url" class="btn btn-primary">
+                <span class="fa fa-external-link"></span>
+                {{$t('dashboard.open')}}</a>
             </p>
             <div
               v-if="view.isLoaded && filter.status == 'disabled'"
@@ -399,6 +409,7 @@ export default {
         antivirus: "disabled",
         profiles: 0
       },
+      url: "",
       filterStats: {
         ip: [],
         host: [],
@@ -425,7 +436,8 @@ export default {
       nethserver.exec(
         ["nethserver-squid/dashboard/read"],
         {
-          action: "status"
+          action: "status",
+          hostname: window.location.hostname
         },
         null,
         function(success) {
@@ -436,6 +448,7 @@ export default {
           }
           context.proxy = success["proxy"];
           context.filter = success["filter"];
+          context.url = success["url"];
 
           context.view.isLoaded = true;
         },
@@ -565,7 +578,9 @@ export default {
                 height: 150,
                 strokeWidth: 1,
                 strokeBorderWidth: 1,
-                ylabel: context.$i18n && context.$i18n.t("dashboard.requests") || 'Requests',
+                ylabel:
+                  (context.$i18n && context.$i18n.t("dashboard.requests")) ||
+                  "Requests",
                 axisLineColor: "white",
                 labelsDiv: document.getElementById(
                   "chart-status-proxy-requests"
@@ -712,5 +727,10 @@ export default {
 
 .min-size {
   font-size: 18px;
+}
+
+.adjust-virus-date {
+  vertical-align: text-bottom;
+  margin-left: 10px;
 }
 </style>

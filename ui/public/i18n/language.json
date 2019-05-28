@@ -93,7 +93,10 @@
     "total_users": "Total users",
     "total_traffic": "Total traffic",
     "today_proxy_traffic": "Today proxy traffic",
-    "no_data_found": "No data found"
+    "no_data_found": "No data found",
+    "lightsquid": "LightSquid",
+    "open": "Open",
+    "updated": "Updated"
   },
   "proxy": {
     "menu_title": "Proxy",

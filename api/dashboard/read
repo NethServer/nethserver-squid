@@ -35,7 +35,7 @@ require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
 sub get_stats
 {
     my $action = shift;
-    my @lines = `squidclient mgr:$action`;
+    my @lines = `squidclient mgr:$action 2>/dev/null`;
     my $ret;
 
     my $header = 1;
@@ -112,11 +112,11 @@ if ($cmd eq 'status') {
     $ret->{'proxy'}{'client_requests'} = $info->{'client_http.requests'};
     $ret->{'proxy'}{'client_hits'} = $info->{'client_http.hits'};
     $ret->{'proxy'}{'client_errors'} = $info->{'client_http.errors'};
-    $ret->{'proxy'}{'client_bytes_in'} = $info->{'client_http.kbytes_in'}*1024;
-    $ret->{'proxy'}{'client_bytes_out'} = $info->{'client_http.kbytes_out'}*1024;
+    $ret->{'proxy'}{'client_bytes_in'} = $info->{'client_http.kbytes_in'} ? $info->{'client_http.kbytes_in'}*1024 : 0;
+    $ret->{'proxy'}{'client_bytes_out'} = $info->{'client_http.kbytes_out'} ? $info->{'client_http.kbytes_out'}*1024 : 0;
 
     my $recent = get_stats('5min');
-    my $cpu = $recent->{'cpu_usage'};
+    my $cpu = $recent->{'cpu_usage'} || 0;
     chomp $cpu; # remove trailing '%' char
     $ret->{'proxy'}{'cpu_usage'} = sprintf('%.2f',$cpu);
 

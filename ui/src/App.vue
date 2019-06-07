@@ -107,11 +107,11 @@ export default {
   name: "App",
   watch: {
     $route: function(val) {
-      localStorage.setItem("path", val.path);
+      localStorage.setItem("squid-path", val.path);
     }
   },
   mounted() {
-    var path = localStorage.getItem("path") || "/";
+    var path = localStorage.getItem("squid-path") || "/";
     this.$router.push(path);
   },
   methods: {

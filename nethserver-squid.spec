@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.8.0
+Version: 1.8.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -48,6 +48,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Jun 11 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.1-1
+- api: correctly handle clamd@squidclamav
+- ui. set last visited route
+
 * Tue May 28 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.0-1
 - Web proxy Cockpit UI - NethServer/dev#5746
 

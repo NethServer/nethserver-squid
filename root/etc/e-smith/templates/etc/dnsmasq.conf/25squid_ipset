@@ -13,6 +13,26 @@
         $OUT.="#\n";
         $OUT.="# 25squid_ipset - Squid domain bypass using ipset\n";
         $OUT.="#\n";
-        $OUT.="ipset=/".join("/",@list)."/squid-bypass\n\n\n";
+        # dnsmasq config parser supports lines of max 1024 characters
+        # the available characters for user input are:
+        # 1024 - (fixed prefix and suffix) - (number of '/' chars)
+        my $separators = 0;
+        my $fixed = 20;
+        my $line = '';
+
+        foreach (@list) {
+             # output the line if it exceed max parser length (fixed to 1000 for safety)
+             if (length($line) + $fixed + $separators > 1000) {
+                 $OUT .= "ipset=/".$line."squid-bypass\n";
+                 $separators = 0;
+                 $line = '';
+             } else {
+                 $line .= $_."/";
+                 $separators++;
+             }
+        }
+        if ($line) { # print remaining line
+            $OUT .= "ipset=/".$line."squid-bypass\n\n\n";
+        }
     }
 }

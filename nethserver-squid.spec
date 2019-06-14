@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.8.1
+Version: 1.8.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -48,6 +48,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Jun 14 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.2-1
+- dnsmasq fails with many web proxy domain bypass - Bug NethServer/dev#5775
+
 * Tue Jun 11 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.1-1
 - api: correctly handle clamd@squidclamav
 - ui. set last visited route

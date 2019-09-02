@@ -7,7 +7,7 @@
   "homepage": "https://github.com/NethServer/nethserver-squid",
   "provides": ["nethserver-squid"],
   "release": {
-    "version": "1.0.0"
+    "version": "_RELEASE_"
   },
   "tags": ["squid", "proxy", "filter"],
   "license": "GPL-3.0",

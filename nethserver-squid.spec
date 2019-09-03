@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.8.2
+Version: 1.8.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Sep 03 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.3-1
+- Cockpit. List correct application version - NethServer/dev#5819
+
 * Fri Jun 14 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.2-1
 - dnsmasq fails with many web proxy domain bypass - Bug NethServer/dev#5775
 

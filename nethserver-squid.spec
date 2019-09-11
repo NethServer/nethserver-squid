@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.8.3
+Version: 1.8.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Sep 11 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.4-1
+- Improve charts unavailable label (#39) - Thanks to dnutan
+
 * Tue Sep 03 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.3-1
 - Cockpit. List correct application version - NethServer/dev#5819
 

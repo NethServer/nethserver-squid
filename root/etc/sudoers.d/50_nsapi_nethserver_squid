@@ -1,0 +1,30 @@
+#
+# nsapi_nethserver_squid
+#
+Cmnd_Alias NSAPI_NETHSERVER_SQUID = \
+    /usr/libexec/nethserver/api/nethserver-squid/dashboard/read, \
+    /usr/libexec/nethserver/api/nethserver-squid/feature/read, \
+    /usr/libexec/nethserver/api/nethserver-squid/feature/update, \
+    /usr/libexec/nethserver/api/nethserver-squid/proxy/create, \
+    /usr/libexec/nethserver/api/nethserver-squid/proxy/delete, \
+    /usr/libexec/nethserver/api/nethserver-squid/proxy/read, \
+    /usr/libexec/nethserver/api/nethserver-squid/proxy/update, \
+    /usr/libexec/nethserver/api/nethserver-squid/proxy/validate, \
+    /usr/libexec/nethserver/api/nethserver-squid/rules/create, \
+    /usr/libexec/nethserver/api/nethserver-squid/rules/delete, \
+    /usr/libexec/nethserver/api/nethserver-squid/rules/read, \
+    /usr/libexec/nethserver/api/nethserver-squid/rules/update, \
+    /usr/libexec/nethserver/api/nethserver-squid/rules/validate, \
+    /usr/libexec/nethserver/api/nethserver-squid/categories/create, \
+    /usr/libexec/nethserver/api/nethserver-squid/categories/delete, \
+    /usr/libexec/nethserver/api/nethserver-squid/categories/read, \
+    /usr/libexec/nethserver/api/nethserver-squid/categories/update, \
+    /usr/libexec/nethserver/api/nethserver-squid/categories/validate, \
+    /usr/libexec/nethserver/api/nethserver-squid/filter/create, \
+    /usr/libexec/nethserver/api/nethserver-squid/filter/delete, \
+    /usr/libexec/nethserver/api/nethserver-squid/filter/read, \
+    /usr/libexec/nethserver/api/nethserver-squid/filter/update, \
+    /usr/libexec/nethserver/api/nethserver-squid/filter/validate, \
+    /usr/libexec/nethserver/api/nethserver-squid/logs/execute
+
+Defaults!NSAPI_NETHSERVER_SQUID !requiretty

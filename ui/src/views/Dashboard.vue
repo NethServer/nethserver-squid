@@ -275,7 +275,7 @@
               <strong class="col-xs-5 col-sm-5 col-md-5 col-lg-5">{{$t('dashboard.profiles')}}:</strong>
               <span>{{filter.profiles}}</span>
             </p>
-            <p v-if="view.isLoaded && filter.status == 'enabled'">
+            <p v-if="view.isLoaded">
               <strong class="col-xs-5 col-sm-5 col-md-5 col-lg-5">{{$t('dashboard.lightsquid')}}:</strong>
               <a target="_blank" :href="url" class="btn btn-primary">
                 <span class="fa fa-external-link"></span>

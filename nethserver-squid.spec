@@ -26,6 +26,9 @@ NethServer squid configuration
 perl createlinks
 sed -i 's/_RELEASE_/%{version}/' %{name}.json
 
+# build contentfilter DB
+mkdir -p root/%{_nsdbconfdir}/contentfilter/{migrate,force,defaults}
+ 
 %install
 rm -rf %{buildroot}
 (cd root; find . -depth -print | cpio -dump %{buildroot})
@@ -47,6 +50,7 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 %dir %{_nseventsdir}/%{name}-update
+%dir %{_nsdbconfdir}/contentfilter
 
 %changelog
 * Wed Sep 11 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.4-1

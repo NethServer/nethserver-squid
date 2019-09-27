@@ -121,7 +121,7 @@ if ($cmd eq 'status') {
     $ret->{'proxy'}{'cpu_usage'} = sprintf('%.2f',$cpu);
 
 
-    my $cdb = esmith::ConfigDB->open_ro('contentfilter');
+    my $cdb = esmith::ConfigDB->open_ro('contentfilter') || esmith::ConfigDB->create('contentfilter');
     $ret->{'filter'}{'profiles'} = scalar $cdb->get_all();
     $ret->{'filter'}{'status'} = $db->get_prop('ufdb', 'status');
     $ret->{'filter'}{'antivirus'} = $db->get_prop('squidclamav', 'status');

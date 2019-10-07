@@ -193,8 +193,8 @@
     "rule_deleted_ok": "Rule deleted successfully!",
     "rule_deleted_error": "Rule not deleted.",
     "class": "Priority",
-    "provider": "Divert",
-    "force": "Force",
+    "provider": "Divert to",
+    "force": "Force to",
     "no_rules_find": "No rules found",
     "no_rules_find_desc": "Click on the button below to create new one"
   },

@@ -249,7 +249,7 @@
     "block_all_short": "Allow selected categories",
     "allow_all_short": "Block selected categories",
     "select_categories": "Select one or more categories",
-    "category_not_found": "Cateogry not found",
+    "category_not_found": "Category not found",
     "categories": "Categories",
     "profile_broken": "This profile uses invalid categories",
     "general": "General",
@@ -303,8 +303,8 @@
     "name": "Name",
     "description": "Description",
     "domains": "Domains (one per line)",
-    "change_list_warning": "By changing the source of the blacklist, the current configurations on theese profiles are lost",
-    "remove_category_warning": "By removing this category, theese filters are lost",
+    "change_list_warning": "Changing the source of the blacklists, the current configurations on these profiles will be lost",
+    "remove_category_warning": "Removing this category, these filters will be lost",
     "list_categories": "Categories list"
   },
   "settings": {
@@ -325,7 +325,7 @@
     "categories": "Categories",
     "profiles": "Profiles",
     "parent_proxy": "Upstream proxy, port is optional (default 3128)",
-    "safe_ports": "Safe ports are a list of ports accessible using the proxy. It accepts a comma-separated list of ports",
+    "safe_ports": "Safe ports are a list of ports accessible using the proxy. Insert a comma-separated list of ports",
     "redirect_port": "Override the default Squid listening port",
     "destination": "Insert single firewall objects (sources) or valid FQDN domains. Multiple FQDN domains can be entered comma-separated",
     "blocked_file_types": "Insert a comma-separated list of extensions",

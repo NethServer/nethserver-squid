@@ -10,8 +10,6 @@
 
     my $ndb = esmith::NetworksDB->open_ro();
     if ( $ndb->blue() ) {
-        my $ip = $_->prop('ipaddr') || next;
-        my $mask = $_->prop('netmask') || next;
         $OUT.="access_log daemon:/var/log/squid/access_blue.log squid blue\n";
     }
 

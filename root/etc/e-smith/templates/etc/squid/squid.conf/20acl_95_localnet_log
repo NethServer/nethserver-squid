@@ -9,11 +9,8 @@
     $OUT.="access_log daemon:/var/log/squid/access.log squid localnet\n";
 
     my $ndb = esmith::NetworksDB->open_ro();
-    foreach ( $ndb->blue() ) {
-        my $ip = $_->prop('ipaddr') || next;
-        my $mask = $_->prop('netmask') || next;
-        $OUT.="access_log daemon:/var/log/squid/access.log squid blue\n";
-        last;
+    if ( $ndb->blue() ) {
+        $OUT.="access_log daemon:/var/log/squid/access_blue.log squid blue\n";
     }
 
 }

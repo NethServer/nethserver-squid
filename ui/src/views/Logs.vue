@@ -28,6 +28,7 @@
         <div class="col-xs-12 col-sm-3 col-md-2">
           <select id="selectLogPath" class="selectpicker form-control" v-model="view.path" v-on:change="handleLogs()">
             <option selected>/var/log/squid/access.log</option>
+            <option selected>/var/log/squid/access_blue.log</option>
             <option>/var/log/ufdbguard/ufdbguardd.log</option>
           </select>
         </div>

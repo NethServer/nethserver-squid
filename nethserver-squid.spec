@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.9.1
+Version: 1.10.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Oct 15 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.0-1
+- Squid: corrupted access log - Bug NethServer/dev#5865
+
 * Thu Oct 10 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.9.1-1
 - Cockpit: improve English labels - NethServer/dev#5856
 

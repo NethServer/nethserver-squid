@@ -25,10 +25,16 @@
     <h2>{{$t('logs.title')}}</h2>
     <form class="form-horizontal">
       <div class="form-group">
-        <div class="col-xs-12 col-sm-3 col-md-2">
-          <select id="selectLogPath" class="selectpicker form-control" v-model="view.path" v-on:change="handleLogs()">
+        <div class="col-xs-12 col-sm-3 col-md-4">
+          <select
+            id="selectLogPath"
+            class="combobox form-control"
+            v-model="view.path"
+            v-on:change="handleLogs()"
+            :disabled="view.follow"
+          >
             <option selected>/var/log/squid/access.log</option>
-            <option selected>/var/log/squid/access_blue.log</option>
+            <option>/var/log/squid/access_blue.log</option>
             <option>/var/log/ufdbguard/ufdbguardd.log</option>
           </select>
         </div>
@@ -42,27 +48,33 @@
         </div>
       </div>
     </form>
-    <form role="form" class="search-pf has-button form-horizontal">
+    <form role="form" class="search-pf has-button form-horizontal" v-on:submit.prevent="">
       <div class="form-group has-clear">
         <div class="search-pf-input-group">
           <label for="search1" class="sr-only">Search</label>
           <input
-          v-model.lazy="view.filter"
-          v-on:change="handleLogs()"
-          v-bind:placeholder="$t('logs.filter_label')"
-          id="log-filter"
-          class="filter form-control"
-          type="search"
+            v-model="view.filter"
+            v-bind:placeholder="$t('logs.filter_label')"
+            id="log-filter"
+            class="filter form-control"
+            type="search"
           >
-          <button type="button" class="clear" aria-hidden="true"><span class="pficon pficon-close"></span></button>
+          <button type="button" class="clear" aria-hidden="true">
+            <span class="pficon pficon-close"></span>
+          </button>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" type="button"><span class="fa fa-search"></span></button>
+        <button class="btn btn-primary" type="submit" @click="handleLogs()">
+          <span class="fa fa-search"></span>
+        </button>
       </div>
     </form>
     <div v-if="!view.logsLoaded" id="loader" class="spinner spinner-lg view-spinner"></div>
-    <pre v-else id="logs-output" class="logs">{{view.logsContent}}</pre>
+    <div v-else>
+      <pre v-if="view.logsContent" id="logs-output" class="logs">{{view.logsContent}}</pre>
+      <pre v-else id="logs-output" class="logs">-- No entries --</pre>
+    </div>
   </div>
 </template>
 
@@ -71,7 +83,6 @@ export default {
   name: "Logs",
   mounted() {
     var context = this;
-    window.jQuery('#selectLogPath').selectpicker();
     (function($) {
       $(document).ready(function() {
         // Hide the clear button if the search input is empty
@@ -132,7 +143,8 @@ export default {
           lines: this.view.follow ? null : this.view.lines,
           mode: "file",
           filter: this.view.filter,
-          paths: [this.view.path]
+          paths: [this.view.path],
+          format_time: this.view.path === "/var/log/ufdbguard/ufdbguardd.log" ? false : true
         },
         this.view.follow
         ? function(stream) {
@@ -161,8 +173,7 @@ export default {
           context.view.logsLoaded = true;
           context.logsContent = error;
         },
-        false,
-        "/usr/libexec/nethserver/api/nethserver-squid/logs/execute"
+        true
       );
     }
   }

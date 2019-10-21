@@ -24,7 +24,6 @@ Cmnd_Alias NSAPI_NETHSERVER_SQUID = \
     /usr/libexec/nethserver/api/nethserver-squid/filter/delete, \
     /usr/libexec/nethserver/api/nethserver-squid/filter/read, \
     /usr/libexec/nethserver/api/nethserver-squid/filter/update, \
-    /usr/libexec/nethserver/api/nethserver-squid/filter/validate, \
-    /usr/libexec/nethserver/api/nethserver-squid/logs/execute
+    /usr/libexec/nethserver/api/nethserver-squid/filter/validate
 
 Defaults!NSAPI_NETHSERVER_SQUID !requiretty

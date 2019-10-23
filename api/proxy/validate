@@ -52,7 +52,7 @@ if ($data['action'] == 'configuration') {
         }
     }
 
-    if (!$vp->evaluate($data['PortRedirect'])) {
+    if ($data['PortRedirect'] && !$vp->evaluate($data['PortRedirect'])) {
         $v->addValidationError('PortRedirect', 'valid_lessThan_65536');
     }
 } else if ($data['action'] == 'update-bypass' || $data['action'] == 'create-bypass') {

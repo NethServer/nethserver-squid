@@ -362,11 +362,11 @@
                     type="checkbox"
                     class="form-control"
                     v-model="newConfiguration.PortBlock"
-                  >
+                  />
                   <span
                     v-if="newConfiguration.errors.PortBlock.hasError"
                     class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentSource.errors.PortBlock.message)}}</span>
+                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.PortBlock.message)}}</span>
                 </div>
                 <div
                   v-if="(newConfiguration.GreenMode == 'transparent' || newConfiguration.GreenMode == 'transparent_ssl') && (newConfiguration.BlueMode == 'transparent' || newConfiguration.BlueMode == 'transparent_ssl')"
@@ -397,11 +397,11 @@
                     placeholder="192.168.0.1:8080"
                     class="form-control"
                     v-model="newConfiguration.ParentProxy"
-                  >
+                  />
                   <span
                     v-if="newConfiguration.errors.ParentProxy.hasError"
                     class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentSource.errors.ParentProxy.message)}}</span>
+                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.ParentProxy.message)}}</span>
                 </div>
               </div>
               <div
@@ -418,11 +418,11 @@
                   ></doc-info>
                 </label>
                 <div class="col-sm-9">
-                  <input class="form-control" v-model="newConfiguration.SafePorts">
+                  <input class="form-control" v-model="newConfiguration.SafePorts" />
                   <span
                     v-if="newConfiguration.errors.SafePorts.hasError"
                     class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentSource.errors.SafePorts.message)}}</span>
+                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.SafePorts.message)}}</span>
                 </div>
               </div>
               <div
@@ -439,11 +439,11 @@
                   ></doc-info>
                 </label>
                 <div class="col-sm-9">
-                  <input class="form-control" v-model="newConfiguration.PortRedirect">
+                  <input class="form-control" v-model="newConfiguration.PortRedirect" />
                   <span
                     v-if="newConfiguration.errors.PortRedirect.hasError"
                     class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+currentSource.errors.PortRedirect.message)}}</span>
+                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.PortRedirect.message)}}</span>
                 </div>
               </div>
             </div>
@@ -514,7 +514,7 @@
                   for="textInput-modal-markup"
                 >{{$t('proxy.description')}}</label>
                 <div class="col-sm-9">
-                  <input type="text" v-model="currentSource.Description" class="form-control">
+                  <input type="text" v-model="currentSource.Description" class="form-control" />
                   <span
                     v-if="currentSource.errors.Description.hasError"
                     class="help-block"
@@ -600,7 +600,7 @@
                   for="textInput-modal-markup"
                 >{{$t('proxy.description')}}</label>
                 <div class="col-sm-9">
-                  <input type="text" v-model="currentDestination.Description" class="form-control">
+                  <input type="text" v-model="currentDestination.Description" class="form-control" />
                   <span
                     v-if="currentDestination.errors.Description.hasError"
                     class="help-block"
@@ -1081,6 +1081,7 @@ export default {
             : [],
         status: this.newConfiguration.status ? "enabled" : "disabled",
         PortBlock: this.newConfiguration.PortBlock ? "enabled" : "disabled",
+        PortRedirect: this.newConfiguration.PortRedirect,
         ParentProxy: this.newConfiguration.ParentProxy,
         GreenMode: this.newConfiguration.GreenMode,
         BlueMode: this.newConfiguration.BlueMode,
@@ -1134,6 +1135,8 @@ export default {
               context.newConfiguration.errors[attr.parameter].message =
                 attr.error;
             }
+
+            context.$forceUpdate();
           } catch (e) {
             console.error(e);
           }

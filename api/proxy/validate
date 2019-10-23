@@ -51,6 +51,10 @@ if ($data['action'] == 'configuration') {
             $v->addValidationError('SafePorts', 'valid_lessThan_65536');
         }
     }
+
+    if (!$vp->evaluate($data['PortRedirect'])) {
+        $v->addValidationError('PortRedirect', 'valid_lessThan_65536');
+    }
 } else if ($data['action'] == 'update-bypass' || $data['action'] == 'create-bypass') {
     $hdb = new EsmithDatabase('hosts');
     $fdb = new EsmithDatabase('fwrules');

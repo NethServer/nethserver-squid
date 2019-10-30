@@ -132,7 +132,7 @@
           :columns="sourceColumns"
           :rows="sourceRows"
           :lineNumbers="false"
-          :defaultSortBy="{field: 'name', type: 'asc'}"
+          :defaultSortBy="{field: 'props.Host.name', type: 'asc'}"
           :globalSearch="true"
           :paginate="true"
           styleClass="table"
@@ -221,7 +221,7 @@
           :columns="destinationColumns"
           :rows="destinationRows"
           :lineNumbers="false"
-          :defaultSortBy="{field: 'name', type: 'asc'}"
+          :defaultSortBy="{field: 'props.Host.name', type: 'asc'}"
           :globalSearch="true"
           :paginate="true"
           styleClass="table"
@@ -708,12 +708,12 @@ export default {
       sourceColumns: [
         {
           label: this.$i18n.t("proxy.source"),
-          field: "name",
+          field: "props.Host.name",
           filterable: true
         },
         {
           label: this.$i18n.t("proxy.description"),
-          field: "name",
+          field: "props.Description",
           filterable: true
         },
         {
@@ -727,12 +727,12 @@ export default {
       destinationColumns: [
         {
           label: this.$i18n.t("proxy.destination"),
-          field: "name",
+          field: "props.Host.name",
           filterable: true
         },
         {
           label: this.$i18n.t("proxy.description"),
-          field: "name",
+          field: "props.Description",
           filterable: true
         },
         {

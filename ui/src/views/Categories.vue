@@ -624,6 +624,9 @@ export default {
             function(success) {
               // get configuration
               context.getConfiguration();
+
+              // get categories list
+              context.getListCategories();
             },
             function(error, data) {
               console.error(error, data);

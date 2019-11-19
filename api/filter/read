@@ -65,7 +65,8 @@ sub is_filter_broken
     return 0 if (!$filter);
 
     foreach (@{$filter->{'Categories'}}) {
-        return 1 if (! -d "/var/squidGuard/blacklists/$_");
+        my @dirs = glob("/var/squidGuard/blacklists/*/$_"); # sub-categories
+        return 1 if (! -d "/var/squidGuard/blacklists/$_" && scalar(@dirs) == 0);
     }
 
     return 0;

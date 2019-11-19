@@ -462,7 +462,7 @@
                     :components="{OpenIndicator}"
                   >
                     <template slot="option" slot-scope="option">
-                      {{ option.name }}
+                      {{ option.name }} <span class="gray" v-if="option.type != 'custom'">({{ option.info }})</span>
                       <span
                         class="gray"
                         v-if="option.type == 'custom'"
@@ -800,7 +800,7 @@
                           required
                         >
                           <template slot="option" slot-scope="option">
-                            {{ option.name }}
+                            {{ option.name }} <span class="gray" v-if="option.type != 'custom'">({{ option.info }})</span>
                             <span
                               class="gray"
                               v-if="option.type == 'custom'"

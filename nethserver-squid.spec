@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.2
+Version: 1.10.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Nov 19 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.3-1
+- Cockpit: web content filter categories list not updated - Bug NethServer/dev#5917
+
 * Fri Nov 15 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.2-1
 - cockpit: web proxy src bypass ignored - Bug NethServer/dev#5892
 

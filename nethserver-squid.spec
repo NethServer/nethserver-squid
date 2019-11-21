@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.3
+Version: 1.10.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Thu Nov 21 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.4-1
+- Email: domain menu not correctly shown - Bug Nethserver/dev#5942
+
 * Tue Nov 19 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.3-1
 - Cockpit: web content filter categories list not updated - Bug NethServer/dev#5917
 

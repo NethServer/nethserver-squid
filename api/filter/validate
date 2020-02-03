@@ -63,11 +63,9 @@ if ($data['action'] == 'configuration') {
     }
 
 } else if ($data['action'] == 'create-profile') {
-    if ($data['action'] == 'update-profile') {
-    } else if ($data['action'] == 'create-profile') {
-        if ($db->getKey($data['name'])) {
-            $v->addValidationError('name', 'profile_already_exists');
-        }
+    $v->declareParameter('name', Validate::USERNAME);
+    if ($db->getKey($data['name'])) {
+        $v->addValidationError('name', 'profile_already_exists');
     }
 
 } else if ($data['action'] == 'Time') {

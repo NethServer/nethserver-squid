@@ -347,6 +347,7 @@
     "profile_not_found": "Profile not found",
     "valid_fqdn_domain": "Must be valid FQDN domain(s)",
     "valid_lessThan_65536": "Must be less than 65536",
-    "valid_parent_proxy": "Must be a valid hostname, port (if defined) must be integer less than 65536"
+    "valid_parent_proxy": "Must be a valid hostname, port (if defined) must be integer less than 65536",
+    "valid_username": "First character must be a letter, than only lower letters, numbers and symbols like '-' and '_'"
   }
 }

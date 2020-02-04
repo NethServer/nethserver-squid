@@ -294,7 +294,7 @@
                     placeholder="exe, zip"
                     class="form-control"
                     v-model="newConfiguration.BlockedFileTypes"
-                  >
+                  />
                   <span
                     v-if="newConfiguration.errors.BlockedFileTypes.hasError"
                     class="help-block"
@@ -462,7 +462,11 @@
                     :components="{OpenIndicator}"
                   >
                     <template slot="option" slot-scope="option">
-                      {{ option.name }} <span class="gray" v-if="option.type != 'custom'">({{ option.info }})</span>
+                      {{ option.name }}
+                      <span
+                        class="gray"
+                        v-if="option.type != 'custom'"
+                      >({{ option.info }})</span>
                       <span
                         class="gray"
                         v-if="option.type == 'custom'"
@@ -624,13 +628,13 @@
                   <li :class="['list-group-item', currentProfile.step == 1 ? 'active' : '']">
                     <a>
                       <span class="wizard-pf-substep-number">{{$t('filter.who')}}:</span>
-                      <br>
+                      <br />
                       <span class="wizard-pf-substep-title reduce-font-span span-color">
                         {{currentProfile.who.Src || '-'}}
                         <span
                           v-if="currentProfile.who.Src.length > 0"
                         >
-                          <br>
+                          <br />
                           ({{currentProfile.who.Type}})
                         </span>
                       </span>
@@ -642,23 +646,23 @@
                   >
                     <a>
                       <span class="wizard-pf-substep-number">{{$t('filter.what')}}:</span>
-                      <br>
+                      <br />
                       <span class="wizard-pf-substep-title reduce-font-span span-color">
                         {{$t('filter.categories')}}:
                         <span
                           class="semi-bold"
                         >{{currentProfile.what.Categories.length == 0 ? '-' : currentProfile.what.Categories.join(', ')}}</span>
-                        <br>
+                        <br />
                         {{$t('filter.blacklist')}}:
                         <span
                           :class="['fa', currentProfile.what.BlackList ? 'fa-check green' : 'fa-times red']"
                         ></span>
-                        <br>
+                        <br />
                         {{$t('filter.whitelist')}}:
                         <span
                           :class="['fa', currentProfile.what.WhiteList ? 'fa-check green' : 'fa-times red']"
                         ></span>
-                        <br>
+                        <br />
                         {{$t('filter.mode')}}:
                         {{currentProfile.what.BlockAll == 'enabled' ? $t('filter.block_all_short') : $t('filter.allow_all_short')}}
                       </span>
@@ -670,7 +674,7 @@
                   >
                     <a>
                       <span class="wizard-pf-substep-number">{{$t('filter.when')}}:</span>
-                      <br>
+                      <br />
                       <span class="wizard-pf-substep-title reduce-font-span span-color">
                         {{currentProfile.when.Times.length}}
                         <span
@@ -802,7 +806,11 @@
                           required
                         >
                           <template slot="option" slot-scope="option">
-                            {{ option.name }} <span class="gray" v-if="option.type != 'custom'">({{ option.info }})</span>
+                            {{ option.name }}
+                            <span
+                              class="gray"
+                              v-if="option.type != 'custom'"
+                            >({{ option.info }})</span>
                             <span
                               class="gray"
                               v-if="option.type == 'custom'"
@@ -853,7 +861,7 @@
                           v-model="currentProfile.what.Description"
                           type="text"
                           class="form-control"
-                        >
+                        />
                       </div>
                     </div>
 
@@ -943,7 +951,7 @@
                           type="text"
                           placeholder="00:15"
                           v-model="currentProfile.when.empty.StartTime"
-                        >
+                        />
                         <span
                           v-if="currentProfile.when.empty.errors.StartTime.hasError"
                           class="help-block"
@@ -959,7 +967,7 @@
                           type="text"
                           placeholder="23:30"
                           v-model="currentProfile.when.empty.EndTime"
-                        >
+                        />
                         <span
                           v-if="currentProfile.when.empty.errors.EndTime.hasError"
                           class="help-block"
@@ -1025,7 +1033,7 @@
                           v-model="currentProfile.when.empty.Description"
                           type="text"
                           class="form-control"
-                        >
+                        />
                       </div>
                     </div>
 
@@ -1055,9 +1063,9 @@
                             <span class="fa fa-times"></span>
                           </a>
                           {{i.Description}}
-                          <br>
+                          <br />
                           {{i.StartTime}} - {{i.EndTime}}
-                          <br>
+                          <br />
                           {{$t('days')}}:
                           <span class="semi-bold">{{printDays(i.Days)}}</span>
                         </span>
@@ -1107,7 +1115,7 @@
                           required
                           type="text"
                           class="form-control"
-                        >
+                        />
                         <span v-if="currentProfile.errors.name.hasError" class="help-block">
                           {{$t('validation.validation_failed')}}:
                           {{$t('validation.'+currentProfile.errors.name.message)}}
@@ -1121,7 +1129,7 @@
                           v-model="currentProfile.Description"
                           type="text"
                           class="form-control"
-                        >
+                        />
                       </div>
                     </div>
 

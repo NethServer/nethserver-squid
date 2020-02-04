@@ -476,10 +476,7 @@
                   </span>
                 </div>
                 <div class="col-sm-2">
-                  <a
-                    class="adjust-clear"
-                    @click="defaultProfile.Categories = []"
-                  >{{$t('clear_all')}}</a>
+                  <a class="adjust-clear" @click="selectAll('default')">{{$t('select_all')}}</a>
                 </div>
               </div>
               <div class="form-group">
@@ -499,6 +496,11 @@
                       </span>
                     </li>
                   </ul>
+                  <a
+                    v-show="defaultProfile.Categories && defaultProfile.Categories.length > 0"
+                    class="adjust-clear-bottom"
+                    @click="defaultProfile.Categories = []"
+                  >{{$t('clear_all')}}</a>
                 </div>
               </div>
 
@@ -817,10 +819,7 @@
                         </span>
                       </div>
                       <div class="col-sm-2">
-                        <a
-                          class="adjust-clear"
-                          @click="currentProfile.what.Categories = []"
-                        >{{$t('clear_all')}}</a>
+                        <a class="adjust-clear" @click="selectAll('current')">{{$t('select_all')}}</a>
                       </div>
                     </div>
                     <div class="form-group">
@@ -840,6 +839,11 @@
                             </span>
                           </li>
                         </ul>
+                        <a
+                          v-show="currentProfile.what.Categories && currentProfile.what.Categories.length > 0"
+                          class="adjust-clear-bottom"
+                          @click="currentProfile.what.Categories = []"
+                        >{{$t('clear_all')}}</a>
                       </div>
                     </div>
                     <div class="form-group">
@@ -1527,6 +1531,20 @@ export default {
       this.currentProfile.when.always = !this.currentProfile.when.always;
       this.$forceUpdate();
     },
+    selectAll(obj) {
+      var cats = this.categories.map(function(i) {
+        return i.name;
+      });
+
+      if (obj == "current") {
+        this.currentProfile.what.Categories = cats;
+      }
+
+      if (obj == "default") {
+        this.defaultProfile.Categories = cats;
+      }
+      this.$forceUpdate();
+    },
     mapObjectIcon(obj, status) {
       switch (obj.type) {
         case "host":
@@ -1777,7 +1795,9 @@ export default {
           } catch (e) {
             console.error(e);
           }
-          context.categories = success.categories;
+          context.categories = success.categories.sort(function(a, b) {
+            return a.name > b.name ? 1 : -1;
+          });
           context.source = success.source;
 
           context.view.isLoaded = true;
@@ -2622,5 +2642,10 @@ export default {
 
 .color-link-hover {
   color: #318fd1;
+}
+
+.adjust-clear-bottom {
+  margin-top: 8px;
+  display: block;
 }
 </style>

@@ -46,6 +46,7 @@
   "always": "Always",
   "weekdays": "Days of week",
   "clear_all": "Clear all",
+  "select_all": "Select all",
   "about": {
     "title": "About",
     "website": "Web site",

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.5
+Version: 1.10.6
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Feb 05 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.6-1
+- Cockpit - Web Filter. Add "Select all" button for content filter categories - Nethserver/dev#6047
+
 * Mon Dec 02 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.5-1
 - Cockpit: DNS host proxy bypass ignored - Bug NethServer/dev#5971
 

@@ -163,3 +163,13 @@ event_templates($event, qw(
 event_services($event, qw(
     squid restart
 ));
+
+#--------------------------------------------------
+# actions for post-restore-config event
+#--------------------------------------------------
+
+$event = "post-restore-config";
+
+event_actions($event, qw(
+    nethserver-squid-network-reset 03
+));

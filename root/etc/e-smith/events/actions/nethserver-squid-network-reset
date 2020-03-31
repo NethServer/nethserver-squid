@@ -28,10 +28,7 @@ use esmith::ConfigDB;
 my $ndb = esmith::NetworksDB->open();
 my $cdb = esmith::ConfigDB->open('squid');
 
-# ARGV[0] is the name of the event
-# ARGV[1] is the first real parameter
-if (defined($ARGV[1]) && $ARGV[1] eq '--skip-network') {
-
+if (grep(/^--skip-network$/, @ARGV)) {
     # Delete all network interfaces
     foreach my $item ($cdb->get_all()) {
         my $src = $item->prop('Src') || next;

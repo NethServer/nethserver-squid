@@ -29,7 +29,7 @@ my $ndb = esmith::NetworksDB->open();
 my $cdb = esmith::ConfigDB->open('squid');
 
 if (grep(/^--skip-network$/, @ARGV)) {
-    # Delete all network interfaces
+    # Disable squid priority rules using non existing zones
     foreach my $item ($cdb->get_all()) {
         my $src = $item->prop('Src') || next;
         if ($src =~ m/^zone;(.*)/) {

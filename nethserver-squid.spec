@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.7
+Version: 1.10.8
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Apr 07 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.8-1
+- Restore configuration without network override - NethServer/dev#6099
+
 * Mon Mar 02 2020 Davide Principi <davide.principi@nethesis.it> - 1.10.7-1
 - Failed validation for proxy destination bypass - Bug NethServer/dev#6069
 

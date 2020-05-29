@@ -1205,11 +1205,16 @@ export default {
           }
 
           vm.view.menu = success;
-          vm.getCategories();
-          vm.getConfiguration();
-          vm.getProxyConfiguration();
-          vm.getProfiles();
-          vm.getSources();
+
+          if (vm.view.menu.installed) {
+            vm.getCategories();
+            vm.getConfiguration();
+            vm.getProxyConfiguration();
+            vm.getProfiles();
+            vm.getSources();
+          } else {
+            vm.view.isLoaded = true;
+          }
         },
         function(error) {
           console.error(error);

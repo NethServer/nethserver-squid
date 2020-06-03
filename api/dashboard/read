@@ -128,9 +128,11 @@ if ($cmd eq 'status') {
 
     # find latest modified signature
     my $av_db = -1;
-    my $av_dir_exists = opendir(DIR, "/var/lib/squidclamav");
+    my $squidclamav_dir = "/var/lib/squidclamav";
 
-    if (defined($av_dir_exists)) {
+    if (-d $squidclamav_dir) {
+        opendir(DIR, $squidclamav_dir);
+
         while (my $file = readdir(DIR)) {
             next if ($file =~ m/^\./);
             my $fname = "/var/lib/squidclamav/$file";

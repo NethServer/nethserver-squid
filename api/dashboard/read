@@ -117,31 +117,37 @@ if ($cmd eq 'status') {
 
     my $recent = get_stats('5min');
     my $cpu = $recent->{'cpu_usage'} || 0;
-    chomp $cpu; # remove trailing '%' char
+    chop $cpu; # remove trailing '%' char
     $ret->{'proxy'}{'cpu_usage'} = sprintf('%.2f',$cpu);
 
 
     my $cdb = esmith::ConfigDB->open_ro('contentfilter');
-    $ret->{'filter'}{'profiles'} = scalar $cdb->get_all();
+    $ret->{'filter'}{'profiles'} = defined($cdb) ? scalar $cdb->get_all() : 0;
     $ret->{'filter'}{'status'} = $db->get_prop('ufdb', 'status');
     $ret->{'filter'}{'antivirus'} = $db->get_prop('squidclamav', 'status');
 
     # find latest modified signature
     my $av_db = -1;
-    opendir(DIR, "/var/lib/squidclamav");
-    while (my $file = readdir(DIR)) {
-        next if ($file =~ m/^\./);
-        my $fname = "/var/lib/squidclamav/$file";
+    my $squidclamav_dir = "/var/lib/squidclamav";
 
-        if (-l $fname) {
-            $fname = readlink($fname);
+    if (-d $squidclamav_dir) {
+        opendir(DIR, $squidclamav_dir);
+
+        while (my $file = readdir(DIR)) {
+            next if ($file =~ m/^\./);
+            my $fname = "/var/lib/squidclamav/$file";
+
+            if (-l $fname) {
+                $fname = readlink($fname);
+            }
+            my $timestamp = (stat($fname))[9] || -1;
+
+            if ($timestamp > $av_db) {
+                $av_db = $timestamp;
+            }
         }
-        my $timestamp = (stat($fname))[9];
-        if ($timestamp > $av_db) {
-            $av_db = $timestamp;
-        }
+        closedir(DIR);
     }
-    closedir(DIR);
     $ret->{'filter'}{'antivirus_db'} = $av_db;
 
     # calculate Lightsquid URL

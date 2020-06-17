@@ -113,7 +113,9 @@
         v-if="view.isProxyLoaded"
         class="col-xs-12 col-sm-6 col-md-4 col-lg-4 stats-container mg-left-20"
       >
-        <span class="card-pf-utilization-card-details-count stats-count">{{proxyStats.users || 0}}</span>
+        <span class="card-pf-utilization-card-details-count stats-count" :title="proxyStats.users || 0">
+          {{proxyStats.users || 0 | humanFormat}}
+        </span>
         <span class="card-pf-utilization-card-details-description stats-description">
           <span
             class="card-pf-utilization-card-details-line-2 stats-text"
@@ -136,8 +138,8 @@
         <div class="row-inline-block">
           <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
-              class="card-pf-utilization-card-details-count stats-count"
-            >{{proxy["source-bypass"]}}</span>
+              class="card-pf-utilization-card-details-count stats-count" :title="proxy['source-bypass']"
+            >{{proxy["source-bypass"] | humanFormat}}</span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
@@ -146,8 +148,8 @@
           </div>
           <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
-              class="card-pf-utilization-card-details-count stats-count"
-            >{{proxy["destination-bypass"]}}</span>
+              class="card-pf-utilization-card-details-count stats-count" :title="proxy['destination-bypass']"
+            >{{proxy["destination-bypass"] | humanFormat}}</span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
@@ -155,7 +157,9 @@
             </span>
           </div>
           <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <span class="card-pf-utilization-card-details-count stats-count">{{proxy["rules"]}}</span>
+            <span class="card-pf-utilization-card-details-count stats-count" :title="proxy['rules']">
+              {{proxy["rules"] | humanFormat}}
+            </span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
@@ -203,8 +207,8 @@
           </div>
           <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
-              class="card-pf-utilization-card-details-count stats-count"
-            >{{proxy["client_requests"] || 0}}</span>
+              class="card-pf-utilization-card-details-count stats-count" :title="proxy['client_requests'] || 0"
+            >{{proxy["client_requests"] || 0 | humanFormat}}</span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
@@ -213,8 +217,8 @@
           </div>
           <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
-              class="card-pf-utilization-card-details-count stats-count"
-            >{{proxy["client_hits"] || 0}}</span>
+              class="card-pf-utilization-card-details-count stats-count" :title="proxy['client_hits'] || 0"
+            >{{proxy["client_hits"] || 0 | humanFormat}}</span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
@@ -223,8 +227,8 @@
           </div>
           <div class="stats-container col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <span
-              class="card-pf-utilization-card-details-count stats-count"
-            >{{proxy["client_errors"] || 0}}</span>
+              class="card-pf-utilization-card-details-count stats-count" :title="proxy['client_errors'] || 0"
+            >{{proxy["client_errors"] || 0 | humanFormat}}</span>
             <span class="card-pf-utilization-card-details-description stats-description">
               <span
                 class="card-pf-utilization-card-details-line-2 stats-text"
@@ -315,7 +319,7 @@
           <li v-for="(i,k) in filterStats.ip" v-bind:key="k" class="list-group-item">
             <strong>{{k+1}}.</strong>
             {{i.name}}
-            <span class="gray">({{i.hits}})</span>
+            <span class="gray" :title="i.hits">({{i.hits | humanFormat}})</span>
           </li>
         </ul>
         <div v-if="filterStats.ip.length == 0" class="alert alert-info alert-dismissable">
@@ -330,7 +334,7 @@
           <li v-for="(i,k) in filterStats.host" v-bind:key="k" class="list-group-item">
             <strong>{{k+1}}.</strong>
             {{i.name}}
-            <span class="gray">({{i.hits}})</span>
+            <span class="gray" :title="i.hits">({{i.hits | humanFormat}})</span>
           </li>
         </ul>
         <div v-if="filterStats.host.length == 0" class="alert alert-info alert-dismissable">
@@ -345,7 +349,7 @@
           <li v-for="(i,k) in filterStats.category" v-bind:key="k" class="list-group-item">
             <strong>{{k+1}}.</strong>
             {{i.name}}
-            <span class="gray">({{i.hits}})</span>
+            <span class="gray" :title="i.hits">({{i.hits | humanFormat}})</span>
           </li>
         </ul>
         <div v-if="filterStats.category.length == 0" class="alert alert-info alert-dismissable">
@@ -360,7 +364,7 @@
           <li v-for="(i,k) in filterStats.profile" v-bind:key="k" class="list-group-item">
             <strong>{{k+1}}.</strong>
             {{i.name}}
-            <span class="gray">({{i.hits}})</span>
+            <span class="gray" :title="i.hits">({{i.hits | humanFormat}})</span>
           </li>
         </ul>
         <div v-if="filterStats.profile.length == 0" class="alert alert-info alert-dismissable">

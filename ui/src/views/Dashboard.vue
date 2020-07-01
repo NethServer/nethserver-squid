@@ -297,7 +297,7 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <div v-if="!view.isFilterChartLoaded" class="spinner spinner-lg view-spinner"></div>
+        <div v-show="!view.isFilterChartLoaded" class="spinner spinner-lg view-spinner"></div>
         <div v-show="view.isFilterChartLoaded" class="row">
           <div class="col-sm-12">
             <div
@@ -525,6 +525,10 @@ export default {
                 requests: $.pfPaletteColors.green
               },
               columns: []
+            },
+            {
+              width: window.innerWidth * 0.4,
+              height: 175
             });
           }
           context.filterPieChart.load({

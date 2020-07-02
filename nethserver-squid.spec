@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.9
+Version: 1.10.10
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Thu Jul 02 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.10-1
+- Human readable numbers in Cockpit dashboards - NethServer/dev#6206
+
 * Wed Jun 03 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.9-1
 - Cockpit: Web proxy status unavailable - Bug NethServer/dev#6185
 

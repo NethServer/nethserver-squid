@@ -1258,6 +1258,7 @@ export default {
       },
       proxyConfiguration: {},
       defaultProfile: {},
+      defaultProfileLoaded: {},
       categories: [],
       source: {
         list: null,
@@ -1875,6 +1876,8 @@ export default {
           context.defaultProfile.BlockFileTypes =
             context.defaultProfile.BlockFileTypes == "enabled";
 
+          context.defaultProfileLoaded = JSON.parse(JSON.stringify(context.defaultProfile));
+
           context.categoryToAdd = {};
 
           context.defaultProfile.advanced = false;
@@ -2214,6 +2217,10 @@ export default {
       this.newConfiguration.BlockedFileTypes = this.newConfiguration.BlockedFileTypes.join(
         ","
       );
+
+      this.defaultProfile = JSON.parse(JSON.stringify(this.defaultProfileLoaded));
+      this.defaultProfile.categoryToAdd = {};
+
       $("#configureDefaultModal").modal("show");
     },
     openCreateProfile() {
@@ -2431,6 +2438,7 @@ export default {
           this.defaultProfile.Categories.push(category);
         }
       }
+      this.defaultProfile.categoryToAdd = {};
     },
     categoryDefaultAlreadyAdded(category) {
       return this.defaultProfile.Categories.indexOf(category) > -1;
@@ -2445,6 +2453,7 @@ export default {
           this.currentProfile.what.Categories.push(category);
         }
       }
+      this.currentProfile.what.categoryToAdd = {};
     },
     categoryProfileAlreadyAdded(category) {
       return this.currentProfile.what.Categories.indexOf(category) > -1;
@@ -2659,6 +2668,6 @@ export default {
 
 .adjust-clear-bottom {
   margin-top: 8px;
-  display: block;
+  display: inline-block;
 }
 </style>

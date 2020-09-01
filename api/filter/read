@@ -96,7 +96,7 @@ if ($cmd eq 'configuration') {
     my $filter = $db->get('squidguard');
     my %props;
     if ($filter) {
-        $props{'Filter'} = $db->get_prop('ufdb', 'status') || 'disabled';
+        $props{'Filter'} = $db->get_prop('ufdbGuard', 'status') || 'disabled';
         $props{'AntiVirus'} = $db->get_prop('squidclamav', 'status') || 'disabled';
         $props{'Expressions'} = $db->get_prop('squidguard', 'Expressions');
         foreach (qw(DomainBlacklist BlockedFileTypes DomainWhitelist UrlBlacklist UrlWhitelist)) {

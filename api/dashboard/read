@@ -123,7 +123,7 @@ if ($cmd eq 'status') {
 
     my $cdb = esmith::ConfigDB->open_ro('contentfilter');
     $ret->{'filter'}{'profiles'} = defined($cdb) ? scalar $cdb->get_all() : 0;
-    $ret->{'filter'}{'status'} = $db->get_prop('ufdb', 'status');
+    $ret->{'filter'}{'status'} = $db->get_prop('ufdbGuard', 'status');
     $ret->{'filter'}{'antivirus'} = $db->get_prop('squidclamav', 'status');
 
     # find latest modified signature

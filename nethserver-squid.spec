@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.11
+Version: 1.10.12
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Thu Sep 03 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.12-1
+- Web filter configuration not applied - Bug NethServer/dev#6258
+
 * Wed Sep 02 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.11-1
 - Cockpit: minor cosmetic issues in web filter - Bug NethServer/dev#6259
 

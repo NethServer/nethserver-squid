@@ -875,7 +875,7 @@ export default {
         return (
           source.type.toLowerCase().includes(query.toLowerCase()) ||
           source.name.toLowerCase().includes(query.toLowerCase()) ||
-          source.Description.toLowerCase().includes(query.toLowerCase()) ||
+          (source.Description && source.Description.toLowerCase().includes(query.toLowerCase())) ||
           (source.IpAddress &&
             source.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
           (source.Address &&

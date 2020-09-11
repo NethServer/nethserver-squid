@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.12
+Version: 1.10.13
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Sep 11 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.13-1
+- Web Proxy & Filter: hosts not showing in source bypass selection - Bug NethServer/dev#6267
+
 * Thu Sep 03 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.12-1
 - Web filter configuration not applied - Bug NethServer/dev#6258
 

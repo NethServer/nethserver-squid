@@ -25,7 +25,7 @@
 NAME=squid-bypass
 TIMEOUT=43200 # 12 hours
 
-ipset list $NAME 2>/dev/null
+ipset list $NAME >/dev/null
 
 # Create the ipset if not exists
 if [ $? -gt 0 ]; then

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.13
+Version: 1.10.14
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Nov 24 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.14-1
+- update event: restart netdata (#63)
+- [Cosmetic] Discard ipset output (#62)
+
 * Fri Sep 11 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.13-1
 - Web Proxy & Filter: hosts not showing in source bypass selection - Bug NethServer/dev#6267
 

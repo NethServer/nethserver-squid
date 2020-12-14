@@ -63,7 +63,7 @@ if ($cmd eq 'rule-list') {
     # Objects
     foreach ($hdb->get_all()) {
         my $type = $_->prop('type');
-        if ($type eq 'local' || $type eq 'host' || $type eq 'remote') {
+        if ($type eq 'local' || $type eq 'host' || $type eq 'host-group' || $type eq 'cidr' || $type eq 'iprange' || $type eq 'remote') {
             my %props = $_->props;
             $props{'name'} = $_->key;
             $props{'type'} = 'host' if ($props{'type'} eq 'local' || $props{'type'} eq 'remote');

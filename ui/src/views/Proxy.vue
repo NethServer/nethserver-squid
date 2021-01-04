@@ -59,13 +59,13 @@
     <h3 v-if="view.isLoaded">
       {{ $t('proxy.bypass') }}
       <span
-        v-if="(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') && !(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
+        v-if="(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl' || configuration.GreenMode == 'authenticated') && !(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl' || configuration.BlueMode == 'authenticated')"
       >
         ({{ $t('proxy.valid_for')}}
         <span class="green">{{$t('proxy.green_trusted')}}</span>)
       </span>
       <span
-        v-if="(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl') && !(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl')"
+        v-if="(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl' || configuration.BlueMode == 'authenticated') && !(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl' || configuration.GreenMode == 'authenticated')"
       >
         ({{ $t('proxy.valid_for')}}
         <span class="blue">{{$t('proxy.blue_zones')}}</span>)
@@ -73,7 +73,7 @@
     </h3>
 
     <div
-      v-if="view.isLoaded && ((configuration.GreenMode != 'transparent' && configuration.GreenMode != 'transparent_ssl') && (configuration.BlueMode != 'transparent' && configuration.BlueMode != 'transparent_ssl'))"
+      v-if="view.isLoaded && ((configuration.GreenMode != 'transparent' && configuration.GreenMode != 'transparent_ssl' && configuration.GreenMode != 'authenticated') && (configuration.BlueMode != 'transparent' && configuration.BlueMode != 'transparent_ssl' && configuration.BlueMode != 'authenticated'))"
       class="blank-slate-pf"
       id
     >
@@ -91,7 +91,7 @@
     </div>
 
     <ul
-      v-if="view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
+      v-if="view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl' || configuration.GreenMode == 'authenticated') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl' || configuration.BlueMode == 'authenticated' )"
       class="nav nav-tabs nav-tabs-pf"
     >
       <li>
@@ -113,7 +113,7 @@
     </ul>
 
     <div
-      v-if=" view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
+      v-if=" view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl' || configuration.GreenMode == 'authenticated') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl' || configuration.BlueMode == 'authenticated')"
       class="tab-content"
     >
       <div class="tab-pane fade active" id="source-tab" role="tabpanel" aria-labelledby="hosts-tab">

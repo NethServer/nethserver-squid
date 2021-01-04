@@ -127,7 +127,7 @@
     "configuration_updated_error": "Configuration not updated.",
     "edit_configuration": "Edit configuration",
     "bypass_warning": "Bypass not available",
-    "bypass_warning_desc": "Source or Destination bypasses are available only with 'Transparent' or 'Transparent SSL' proxy mode",
+    "bypass_warning_desc": "Source and Destination bypasses are available only with 'Transparent', 'Transparent SSL' or 'Authenticated' proxy mode",
     "add_source": "Add source",
     "edit_source": "Edit source",
     "delete_source": "Delete source",

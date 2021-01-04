@@ -16,7 +16,7 @@
 
     foreach ($db->get_all_by_prop('type' => 'bypass-dst')) {
         next if ($_->prop('status') eq 'disabled');
-        my $h = $_->prop('Host') || next;
+        my $h = $_->prop('Host') || $_->prop('Domains') || next;
         my $address = $fw->getAddress($h);
         $OUT .= "    // Bypass destination: ".$_->key.": $h\n";
         if ($h =~ /cidr/) {
@@ -31,6 +31,12 @@
         } elsif ($h =~ /host/) {
             $OUT .= '    if (isInNet(host,"'.$address.'", "255.255.255.255"))';
             $OUT .= "\n        return \"DIRECT\";\n";
+        } elsif ($_->prop('Domains')) {
+            @Domains = split(',', $h);
+            foreach my $d(@Domains){
+                $OUT .= '    if (dnsDomainIs(host,"'.$d.'"))';
+                $OUT .= "\n        return \"DIRECT\";\n";
+            }
         } else {
             next;
         }

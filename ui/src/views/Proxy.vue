@@ -56,44 +56,18 @@
       </div>
     </div>
 
-    <h3 v-if="view.isLoaded">
+    <h3 v-if="view.isLoaded && configuration.status">
       {{ $t('proxy.bypass') }}
-      <span
-        v-if="(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') && !(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
-      >
-        ({{ $t('proxy.valid_for')}}
-        <span class="green">{{$t('proxy.green_trusted')}}</span>)
-      </span>
-      <span
-        v-if="(configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl') && !(configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl')"
-      >
-        ({{ $t('proxy.valid_for')}}
-        <span class="blue">{{$t('proxy.blue_zones')}}</span>)
-      </span>
+      <doc-info
+        :placement="'top'"
+        :title="$t('proxy.bypass_desc_title')"
+        :chapter="'bypass_desc'"
+        :inline="true"
+      ></doc-info>
+
     </h3>
 
-    <div
-      v-if="view.isLoaded && ((configuration.GreenMode != 'transparent' && configuration.GreenMode != 'transparent_ssl') && (configuration.BlueMode != 'transparent' && configuration.BlueMode != 'transparent_ssl'))"
-      class="blank-slate-pf"
-      id
-    >
-      <div class="blank-slate-pf-icon">
-        <span class="pficon pficon-info"></span>
-      </div>
-      <h1>{{$t('proxy.bypass_warning')}}</h1>
-      <p>{{$t('proxy.bypass_warning_desc')}}.</p>
-      <div class="blank-slate-pf-main-action">
-        <button
-          @click="toggleStatus(true)"
-          class="btn btn-primary btn-lg"
-        >{{$t('proxy.edit_configuration')}}</button>
-      </div>
-    </div>
-
-    <ul
-      v-if="view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
-      class="nav nav-tabs nav-tabs-pf"
-    >
+    <ul class="nav nav-tabs nav-tabs-pf" v-if="view.isLoaded && configuration.status">
       <li>
         <a
           class="nav-link"
@@ -112,10 +86,7 @@
       </li>
     </ul>
 
-    <div
-      v-if=" view.isLoaded && (configuration.GreenMode == 'transparent' || configuration.GreenMode == 'transparent_ssl') || (configuration.BlueMode == 'transparent' || configuration.BlueMode == 'transparent_ssl')"
-      class="tab-content"
-    >
+    <div class="tab-content" v-if="view.isLoaded && configuration.status">
       <div class="tab-pane fade active" id="source-tab" role="tabpanel" aria-labelledby="hosts-tab">
         <h3>{{$t('actions')}}</h3>
         <button

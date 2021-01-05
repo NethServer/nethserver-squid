@@ -329,7 +329,7 @@
     "destination": "Insert single firewall objects (sources) or valid FQDN domains. Multiple FQDN domains can be entered comma-separated",
     "blocked_file_types": "Insert a comma-separated list of extensions",
     "block_http": "Block all outgoing connections on port TCP 80 and 443 from Green and Blue networks. Use only when proxy is in 'Authenticated' or 'Manual' mode.",
-    "bypass_desc": "Source and destination bypasses are applied at firewall rule level only if proxy mode is set to 'Transparent' or 'Transparent SSL'. <br/> When proxy mode is set to 'Manual' or 'Authenticated' bypasses are available only if the client is using Web Proxy Auto-Discovery Protocol (WPAD). The PAC file is available at <code>/var/www/html/wpad.dat</code>."
+    "bypass_desc": "Source and destination bypasses are applied at firewall rule level only if proxy mode is set to <b>Transparent</b> or <b>Transparent SSL</b>. <br/> When proxy mode is set to <b>Manual</b> or <b>Authenticated</b> bypasses are available only if the client is using Web Proxy Auto-Discovery Protocol (WPAD). The PAC file is available at <code>/var/www/html/wpad.dat</code>."
   },
   "validation": {
     "validation_failed": "Validation failed",

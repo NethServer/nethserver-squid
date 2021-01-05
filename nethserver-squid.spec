@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.10.15
+Version: 1.11.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Jan 05 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.11.0-1
+- Support domain destination bypass inside WPAD - NethServer/dev#6379
+
 * Wed Dec 16 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.10.15-1
 - Squid: object host-group, cidr, iprange not available in cockpit - Bug NethServer/dev#6361
 

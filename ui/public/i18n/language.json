@@ -110,7 +110,6 @@
     "enabled": "Enabled",
     "green_trusted": "GREEN & Trusted",
     "blue_zones": "BLUE",
-    "valid_for": "Valid for",
     "configure_proxy": "Configure proxy",
     "mode_green_zones": "Mode GREEN zones",
     "mode_blue_zones": "Mode BLUE zones",
@@ -126,8 +125,6 @@
     "configuration_updated_ok": "Configuration updated successfully!",
     "configuration_updated_error": "Configuration not updated.",
     "edit_configuration": "Edit configuration",
-    "bypass_warning": "Bypass not available",
-    "bypass_warning_desc": "Source and Destination bypasses are available only with 'Transparent', 'Transparent SSL' or 'Authenticated' proxy mode",
     "add_source": "Add source",
     "edit_source": "Edit source",
     "delete_source": "Delete source",
@@ -147,7 +144,8 @@
     "destination_deleted_ok": "Destination deleted successfully!",
     "destination_deleted_error": "Destination not deleted.",
     "proxy_is_disabled": "Proxy is disabled",
-    "proxy_is_disabled_desc": "Click on the button below to configure proxy"
+    "proxy_is_disabled_desc": "Click on the button below to configure proxy",
+    "bypass_desc_title": "Proxy bypass"
   },
   "proxy_rules": {
     "menu_title": "Proxy rules",
@@ -330,7 +328,8 @@
     "redirect_port": "Override the default Squid listening port",
     "destination": "Insert single firewall objects (sources) or valid FQDN domains. Multiple FQDN domains can be entered comma-separated",
     "blocked_file_types": "Insert a comma-separated list of extensions",
-    "block_http": "Block all outgoing connections on port TCP 80 and 443 from Green and Blue networks. Use only when proxy is in 'Authenticated' or 'Manual' mode."
+    "block_http": "Block all outgoing connections on port TCP 80 and 443 from Green and Blue networks. Use only when proxy is in 'Authenticated' or 'Manual' mode.",
+    "bypass_desc": "Source and destination bypasses are applied at firewall rule level only if proxy mode is set to 'Transparent' or 'Transparent SSL'. <br/> When proxy mode is set to 'Manual' or 'Authenticated' bypasses are available only if the client is using Web Proxy Auto-Discovery Protocol (WPAD). The PAC file is available at <code>/var/www/html/wpad.dat</code>."
   },
   "validation": {
     "validation_failed": "Validation failed",

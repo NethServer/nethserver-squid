@@ -138,7 +138,7 @@
                 >{{$t('proxy_rules.source')}}</label>
                 <div class="col-sm-9">
                   <suggestions
-                    v-model="currentRule.Src"
+                    v-model="currentRule.SrcName"
                     :options="autoOptions"
                     :onInputChange="filterSrcAuto"
                     :onItemSelected="selectSrcAuto"
@@ -315,7 +315,7 @@ export default {
       });
     },
     selectSrcAuto(item) {
-      this.currentRule.Src = item.name;
+      this.currentRule.SrcName = item.name;
       this.currentRule.Type = item.type;
       this.currentRule.SrcType =
         item.name +
@@ -336,7 +336,7 @@ export default {
         },
         name: null,
         Dst: [],
-        Src: "",
+        SrcName: "",
         SrcType: "",
         Type: "",
         type: "rule",
@@ -442,9 +442,16 @@ export default {
     },
     openEdit(rule) {
       this.currentRule = JSON.parse(JSON.stringify(rule));
-      this.currentRule.Src = this.currentRule.Src.name;
+      this.currentRule.SrcName = this.currentRule.Src.name;
       this.currentRule.Type = this.currentRule.Src.type;
-      this.currentRule.SrcType = this.currentRule.Src.type;
+      this.currentRule.SrcType =         
+        this.currentRule.Src.name + " " +
+        (this.currentRule.Src.IpAddress ? this.currentRule.Src.IpAddress + " " : "") +
+        (this.currentRule.Src.Address ? this.currentRule.Src.Address + " " : "") +
+        (this.currentRule.Src.Start && this.currentRule.Src.End ? this.currentRule.Src.Start + " - " + this.currentRule.Src.End + " " : "") +
+        "(" +
+        (this.currentRule.Src.type !== '' ?  this.currentRule.Src.type : this.currentRule.Src.name) +
+        ")";
       this.currentRule.Dst = this.currentRule.Dst.join("\n");
       this.currentRule.errors = this.initErrors();
       this.currentRule.isEdit = true;
@@ -465,7 +472,7 @@ export default {
           name: rule.Action.name
         },
         Src: {
-          name: rule.Src,
+          name: rule.SrcName,
           type: rule.Type
         },
         Dst: rule.Dst.length > 0 ? rule.Dst.split("\n") : [],

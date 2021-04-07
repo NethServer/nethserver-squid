@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.11.0
+Version: 1.11.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Apr 07 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.11.1-1
+- Source lost when editing proxy rules - Bug NethServer/dev#6474
+
 * Tue Jan 05 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.11.0-1
 - Support domain destination bypass inside WPAD - NethServer/dev#6379
 

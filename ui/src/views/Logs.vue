@@ -35,6 +35,7 @@
           >
             <option selected>/var/log/squid/access.log</option>
             <option>/var/log/squid/access_blue.log</option>
+            <option>/var/log/squid/cache.log</option>
             <option>/var/log/ufdbguard/ufdbguardd.log</option>
           </select>
         </div>

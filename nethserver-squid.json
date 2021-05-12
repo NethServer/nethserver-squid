@@ -1,8 +1,8 @@
 {
   "id": "nethserver-squid",
   "name": "Web Proxy & Filter",
-  "summary": "NethServer configuration for a caching web proxy",
-  "description": "NethServer squid configuration",
+  "summary": "Configuration for Squid caching web proxy",
+  "description": "Configuration for Squid caching web proxy",
   "url": "",
   "homepage": "https://github.com/NethServer/nethserver-squid",
   "provides": ["nethserver-squid"],

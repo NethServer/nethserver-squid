@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.12.1
+Version: 1.12.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri May 14 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.2-1
+- White-label support on Cockpit applications - NethServer/dev#6510
+
 * Mon May 10 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.1-1
 - Squid: an object can be bypassed as source and as destination both - Bug NethServer/dev#6505
 

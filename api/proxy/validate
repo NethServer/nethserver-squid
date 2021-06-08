@@ -62,9 +62,11 @@ if ($data['action'] == 'configuration') {
     # search for existing bypass with the same Host
     if ($data['action'] == 'create-bypass') {
         foreach ($fdb->getAll($data['type']) as $bypass) {
-            list($type, $name) = explode(";",$bypass['Host']);
-            if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
-                $v->addValidationError('Host', $data['type'].'_already_exists');
+            if (isset($bypass['Host'])) { # skip records with only Domains prop
+                list($type, $name) = explode(";",$bypass['Host']);
+                if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
+                    $v->addValidationError('Host', $data['type'].'_already_exists');
+                }
             }
         }
     }

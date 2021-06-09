@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.12.2
+Version: 1.12.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Jun 09 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.3-1
+- Squid: bad destination bypass validator - Bug NethServer/dev#6520
+
 * Fri May 14 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.2-1
 - White-label support on Cockpit applications - NethServer/dev#6510
 

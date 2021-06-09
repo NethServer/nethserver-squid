@@ -341,6 +341,7 @@
     "invalid_time": "Invalid time format, use 24h format like '12:00'",
     "invalid_user": "Invalid user",
     "invalid_group": "Invalid group",
+    "dst_domain_already_exists": "A bypass already exists for entered domain(s)",
     "bypass-dst_already_exists": "A bypass for the same destination already exists",
     "bypass-src_already_exists": "A bypass for the same source already exists",
     "source_already_exists": "A bypass for the same source already exists",

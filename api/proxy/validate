@@ -64,7 +64,7 @@ if ($data['action'] == 'configuration') {
         foreach ($fdb->getAll($data['type']) as $bypass) {
             if (isset($bypass['Host'])) { # skip records with only Domains prop
                 list($type, $name) = explode(";",$bypass['Host']);
-                if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
+                if (isset($data['Host']) && $data['Host']['name'] == $name && $data['Host']['type'] == $type) {
                     $v->addValidationError('Host', $data['type'].'_already_exists');
                 }
             }
@@ -82,6 +82,16 @@ if ($data['action'] == 'configuration') {
         foreach ($data['Domains'] as $domain) {
             if (!$vh->evaluate($domain)) {
                 $v->addValidationError('Destination', 'valid_fqdn_domain');
+            }
+        }
+        foreach ($fdb->getAll('bypass-dst') as $bypass) {
+            if (isset($bypass['Domains'])) {
+                foreach ($data['Domains'] as $domain) {
+                    foreach (explode(",",$bypass['Domains']) as $d)
+                    if(trim($domain) == $d) {
+                        $v->addValidationError('Host', 'dst_domain_already_exists');
+                    }
+                }
             }
         }
     }

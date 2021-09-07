@@ -217,7 +217,7 @@
                 >{{ (props.row.props.Host && props.row.props.Host.name) || props.row.props.Domains.join(',') | truncate}}</strong>
                 <span
                   class="gray mg-left-5"
-                >({{ props.row.props.Host && props.row.props.Host.type || 'domains'}})</span>
+                >({{ props.row.props.Host && props.row.props.Host.type || null}})</span>
               </a>
             </td>
             <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">
@@ -1142,11 +1142,11 @@ export default {
       this.currentDestination.Type =
         (this.currentDestination.props.Host &&
           this.currentDestination.props.Host.type) ||
-        "domains";
+        null;
       this.currentDestination.DstType =
         (this.currentDestination.props.Host &&
           this.currentDestination.props.Host.type) ||
-        "domains";
+        null;
       this.currentDestination.Description = this.currentDestination.props.Description;
       this.currentDestination.errors = this.initDestinationErrors();
       this.currentDestination.isEdit = true;

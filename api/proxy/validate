@@ -84,11 +84,11 @@ if ($data['action'] == 'configuration') {
                 $v->addValidationError('Destination', 'valid_fqdn_domain');
             }
         }
-        foreach ($fdb->getAll('bypass-dst') as $bypass) {
+        foreach ($fdb->getAll('bypass-dst') as $key => $bypass) {
             if (isset($bypass['Domains'])) {
                 foreach ($data['Domains'] as $domain) {
                     foreach (explode(",",$bypass['Domains']) as $d)
-                    if(trim($domain) == $d) {
+                    if(trim($domain) == $d && $key != $data["name"]) {
                         $v->addValidationError('Host', 'dst_domain_already_exists');
                     }
                 }

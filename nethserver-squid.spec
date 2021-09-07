@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.12.3
+Version: 1.12.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Sep 07 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.4-1
+- Proxy filter: can't update bypass destinations - Bug NethServer/dev#6551
+
 * Wed Jun 09 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.3-1
 - Squid: bad destination bypass validator - Bug NethServer/dev#6520
 

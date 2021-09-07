@@ -217,7 +217,7 @@
                 >{{ (props.row.props.Host && props.row.props.Host.name) || props.row.props.Domains.join(',') | truncate}}</strong>
                 <span
                   class="gray mg-left-5"
-                >({{ props.row.props.Host && props.row.props.Host.type || null}})</span>
+                >({{ props.row.props.Host && props.row.props.Host.type || "domains"}})</span>
               </a>
             </td>
             <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">

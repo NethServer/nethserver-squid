@@ -51,7 +51,7 @@
         }
 
         # Supported objects: host, cidr, zone, iprange
-        if ($src !~ /^(host|cidr|zone|iprange|role)/ || !$src_addr) {
+        if ($src !~ /^(host;|cidr;|zone;|iprange;|role;)/ || !$src_addr) {
             next;
         }
         $OUT .= "\n# Rule ".$rule->key.": src: $src action: $action dst: $dst\n";

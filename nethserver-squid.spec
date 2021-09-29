@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.12.4
+Version: 1.12.5
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Sep 29 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.5-1
+- Squid crashes when a divert rule use a host-group as source - Bug NethServer/dev#6574
+
 * Tue Sep 07 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.12.4-1
 - Proxy filter: can't update bypass destinations - Bug NethServer/dev#6551
 

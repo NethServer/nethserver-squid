@@ -99,7 +99,7 @@ if ($cmd eq 'configuration') {
         $props{'Filter'} = $db->get_prop('ufdbGuard', 'status') || 'disabled';
         $props{'AntiVirus'} = $db->get_prop('squidclamav', 'status') || 'disabled';
         $props{'Expressions'} = $db->get_prop('squidguard', 'Expressions');
-        foreach (qw(DomainBlacklist BlockedFileTypes DomainWhitelist UrlBlacklist UrlWhitelist)) {
+        foreach (qw(DomainBlacklist BlockedFileTypes DomainWhitelist)) {
             $props{$_} = [split(",",$db->get_prop('squidguard', $_))];
         }
         $props{'DefaultFilter'} = get_record($cdb, 'filter;default');

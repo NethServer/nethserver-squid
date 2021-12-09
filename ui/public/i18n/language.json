@@ -233,8 +233,6 @@
     "domain_blacklist": "Global domains blacklist (one per line)",
     "domain_whitelist": "Global domains whitelist (one per line)",
     "enable_expression_url": "Enable expression matching on URLs",
-    "url_blacklist": "Blocked URLs blacklist (one per line)",
-    "url_whitelist": "Blocked URLs whitelist (one per line)",
     "enable_proxy_before": "Enable proxy before configuring the content filter",
     "antivirus": "Antivirus",
     "configure_default": "Edit default profile",

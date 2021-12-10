@@ -38,7 +38,7 @@ if ($cmd eq 'configuration') {
     $db->set_prop('c-icap', 'status', $input->{'AntiVirus'});
     $db->set_prop('squidguard','Expressions', $input->{'Expressions'});
 
-    foreach (qw(DomainWhitelist DomainBlacklist UrlBlacklist BlockedFileTypes UrlWhitelist)) {
+    foreach (qw(DomainWhitelist DomainBlacklist BlockedFileTypes)) {
         $db->set_prop('squidguard', $_, join(',',@{$input->{$_}}));
     }
 

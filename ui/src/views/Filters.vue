@@ -346,38 +346,6 @@
                   />
                 </div>
               </div>
-              <div
-                v-show="newConfiguration.Expressions"
-                :class="['form-group', newConfiguration.errors.UrlBlacklist.hasError ? 'has-error' : '']"
-              >
-                <label class="col-sm-3 control-label">{{$t('filter.url_blacklist')}}</label>
-                <div class="col-sm-9">
-                  <textarea
-                    class="form-control min-textarea-height"
-                    v-model="newConfiguration.UrlBlacklist"
-                  ></textarea>
-                  <span
-                    v-if="newConfiguration.errors.UrlBlacklist.hasError"
-                    class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.UrlBlacklist.message)}}</span>
-                </div>
-              </div>
-              <div
-                v-show="newConfiguration.Expressions"
-                :class="['form-group', newConfiguration.errors.UrlWhitelist.hasError ? 'has-error' : '']"
-              >
-                <label class="col-sm-3 control-label">{{$t('filter.url_whitelist')}}</label>
-                <div class="col-sm-9">
-                  <textarea
-                    class="form-control min-textarea-height"
-                    v-model="newConfiguration.UrlWhitelist"
-                  ></textarea>
-                  <span
-                    v-if="newConfiguration.errors.UrlWhitelist.hasError"
-                    class="help-block"
-                  >{{$t('validation.validation_failed')}}: {{$t('validation.'+newConfiguration.errors.UrlWhitelist.message)}}</span>
-                </div>
-              </div>
             </div>
             <div class="modal-footer no-mg-top">
               <div v-if="newConfiguration.isLoading" class="spinner spinner-sm form-spinner-loader"></div>
@@ -1247,11 +1215,9 @@ export default {
         AntiVirus: false,
         DomainWhitelist: [],
         DomainBlacklist: [],
-        UrlBlacklist: [],
         BlockedFileTypes: [],
         Filter: true,
-        Expressions: false,
-        UrlWhitelist: []
+        Expressions: false
       },
       newConfiguration: {
         errors: this.initConfigurationErrors()
@@ -1954,15 +1920,7 @@ export default {
           hasError: false,
           message: ""
         },
-        UrlBlacklist: {
-          hasError: false,
-          message: ""
-        },
         BlockedFileTypes: {
-          hasError: false,
-          message: ""
-        },
-        UrlWhitelist: {
           hasError: false,
           message: ""
         },
@@ -1991,13 +1949,11 @@ export default {
           AntiVirus: context.configuration.AntiVirus ? "disabled" : "enabled",
           DomainWhitelist: context.configuration.DomainWhitelist,
           DomainBlacklist: context.configuration.DomainBlacklist,
-          UrlBlacklist: context.configuration.UrlBlacklist,
           BlockedFileTypes: context.configuration.BlockedFileTypes,
           Filter: context.configuration.Filter ? "enabled" : "disabled",
           Expressions: context.configuration.Expressions
             ? "enabled"
             : "disabled",
-          UrlWhitelist: context.configuration.UrlWhitelist,
           DefaultFilter: context.configuration.DefaultFilter,
           action: "configuration"
         },
@@ -2031,12 +1987,6 @@ export default {
         context.newConfiguration.DomainBlacklist = context.newConfiguration.DomainBlacklist.join(
           "\n"
         );
-        context.newConfiguration.UrlBlacklist = context.newConfiguration.UrlBlacklist.join(
-          "\n"
-        );
-        context.newConfiguration.UrlWhitelist = context.newConfiguration.UrlWhitelist.join(
-          "\n"
-        );
         context.newConfiguration.BlockedFileTypes = context.newConfiguration.BlockedFileTypes.join(
           ", "
         );
@@ -2058,14 +2008,12 @@ export default {
             AntiVirus: context.configuration.AntiVirus ? "enabled" : "disabled",
             DomainWhitelist: context.configuration.DomainWhitelist,
             DomainBlacklist: context.configuration.DomainBlacklist,
-            UrlBlacklist: context.configuration.UrlBlacklist,
             BlockedFileTypes: context.configuration.BlockedFileTypes,
             DefaultFilter: context.configuration.DefaultFilter,
             Filter: "disabled",
             Expressions: context.configuration.Expressions
               ? "enabled"
               : "disabled",
-            UrlWhitelist: context.configuration.UrlWhitelist,
             action: "configuration"
           },
           function(stream) {
@@ -2099,10 +2047,6 @@ export default {
           this.newConfiguration.DomainBlacklist.length > 0
             ? this.newConfiguration.DomainBlacklist.split("\n")
             : [],
-        UrlBlacklist:
-          this.newConfiguration.UrlBlacklist.length > 0
-            ? this.newConfiguration.UrlBlacklist.split("\n")
-            : [],
         BlockedFileTypes:
           this.newConfiguration.BlockedFileTypes.length > 0
             ? this.newConfiguration.BlockedFileTypes.split(",").map(function(
@@ -2113,10 +2057,6 @@ export default {
             : [],
         Filter: this.newConfiguration.Filter ? "enabled" : "disabled",
         Expressions: this.newConfiguration.Expressions ? "enabled" : "disabled",
-        UrlWhitelist:
-          this.newConfiguration.UrlWhitelist.length > 0
-            ? this.newConfiguration.UrlWhitelist.split("\n")
-            : [],
         DefaultFilter: {
           BlockIpAccess: this.defaultProfile.BlockIpAccess
             ? "enabled"
@@ -2206,12 +2146,6 @@ export default {
         "\n"
       );
       this.newConfiguration.DomainBlacklist = this.newConfiguration.DomainBlacklist.join(
-        "\n"
-      );
-      this.newConfiguration.UrlBlacklist = this.newConfiguration.UrlBlacklist.join(
-        "\n"
-      );
-      this.newConfiguration.UrlWhitelist = this.newConfiguration.UrlWhitelist.join(
         "\n"
       );
       this.newConfiguration.BlockedFileTypes = this.newConfiguration.BlockedFileTypes.join(

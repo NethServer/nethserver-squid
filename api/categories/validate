@@ -27,7 +27,7 @@ $data = readInput();
 
 $v = new LegacyValidator($data);
 if ($data['action'] == 'configuration') {
-    $v->declareParameter('Lists', $v->createValidator()->memberOf(array('toulouse','shalla','custom')));
+    $v->declareParameter('Lists', $v->createValidator()->memberOf(array('toulouse','custom')));
     $v->declareParameter('CustomListURL', Validate::ANYTHING);
 
 } else if ($data['action'] == 'update-category' || $data['action'] == 'create-category') {

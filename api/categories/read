@@ -64,7 +64,7 @@ if ($cmd eq 'categories') {
 
     print encode_json($ret);
 } elsif ($cmd eq 'lists') {
-    print encode_json({'lists' => ['toulouse','shalla','custom']})
+    print encode_json({'lists' => ['toulouse','custom']})
 } else {
     error();
 }

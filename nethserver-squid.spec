@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.13.0
+Version: 1.14.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Mon Jan 17 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.0-1
+- Web filter: remove Shalla list - NethServer/dev#6624
+
 * Tue Dec 14 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.13.0-1
 - ufdbGuard: not used property  UrlBlacklist & UrlWhitelist - Bug NethServer/dev#6609
 

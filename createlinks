@@ -174,3 +174,13 @@ $event = "post-restore-config";
 event_actions($event, qw(
     nethserver-squid-network-reset 03
 ));
+
+#--------------------------------------------------
+# actions for post-restore-data event
+#--------------------------------------------------
+
+$event = "post-restore-data";
+
+event_actions($event, 
+   'nethserver-squid-fix-rsync-perms' => '10',
+);

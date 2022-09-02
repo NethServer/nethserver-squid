@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.14.0
+Version: 1.14.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Sep 02 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.1-1
+- rsync disaster recovery introduces permissions issue - Bug NethServer/dev#6691
+
 * Mon Jan 17 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.0-1
 - Web filter: remove Shalla list - NethServer/dev#6624
 

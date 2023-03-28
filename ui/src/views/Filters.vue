@@ -2178,9 +2178,6 @@ export default {
     saveProfile(profile) {
       var context = this;
 
-      $("#profile-step-" + this.currentProfile.step + "-submit").trigger(
-        "click"
-      );
       if (
         document
           .getElementById("profile-step-" + this.currentProfile.step + "-form")

@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.14.1
+Version: 1.14.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Mon Apr 03 2023 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.2-1
+- Cockpit: nethserver-squidguard-save fired twice when editing a custom filter profile - Bug NethServer/dev#6738
+
 * Fri Sep 02 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.1-1
 - rsync disaster recovery introduces permissions issue - Bug NethServer/dev#6691
 

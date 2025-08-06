@@ -1,0 +1,7 @@
+#
+# 20_acl_00_cve_2025_54574
+# CVE 2025-5474
+# GHSA-w4gv-vw3f-29g3
+#
+acl URN proto URN
+http_access deny URN

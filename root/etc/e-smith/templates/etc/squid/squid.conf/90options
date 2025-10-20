@@ -6,3 +6,4 @@ shutdown_lifetime 1 seconds
 buffered_logs on
 max_filedesc 16384
 logfile_rotate 0
+email_err_data off

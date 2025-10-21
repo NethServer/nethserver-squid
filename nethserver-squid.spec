@@ -1,6 +1,6 @@
 Summary: NethServer squid configuration
 Name: nethserver-squid
-Version: 1.14.3
+Version: 1.14.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name}
@@ -49,6 +49,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Oct 21 2025 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.4-1
+- fix: add mitigation for CVE-2025-62168 (#82)
+
 * Thu Aug 07 2025 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.14.3-1
 - Add mitigation for CVE-2025-54574 NethServer/nethserver-squid#81
 
